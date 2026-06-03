@@ -75,3 +75,19 @@ project_root/
 │       ├── main.py                  # API gọi Model LLM Fine-tuned (TV5)
 │       └── requirements.txt         
 └── docker-compose.yml               # Quản lý chạy toàn bộ hệ thống
+
+---
+
+## 🤖 6. Hướng dẫn Prompt cho Antigravity (Dành cho thành viên team)
+
+Để Antigravity AI code chính xác 100% và không bị lệch khỏi kiến trúc dự án, khi giao việc cho Antigravity, **BẮT BUỘC** phải gắn kèm câu lệnh mồi (Prompt) theo khuôn mẫu dưới đây:
+
+> "Antigravity, hãy đọc file `SR.md`, file `Antigravity.md` và file `README.md` trong thư mục của tao (ví dụ `document/README.md`). Dựa vào các yêu cầu đó và các quy định bắt buộc trong file `common/README.md`, hãy code cho tao tính năng [TÊN TÍNH NĂNG]."
+
+**Ví dụ thực tế:**
+* *"Antigravity, hãy đọc file `SR.md`, file `Antigravity.md` và file `chat/README.md`. Dựa vào các yêu cầu đó và các quy định bắt buộc trong file `common/README.md`, hãy code cho tao API tạo ChatSession mới."*
+
+Việc cung cấp câu lệnh mồi này sẽ ép tôi (Antigravity) phải tự động load lại "Hiến pháp dự án" trước khi gõ code, đảm bảo:
+1. Mọi Entity đều tự động kế thừa `BaseEntity`.
+2. Mọi dữ liệu JSON trả về đều được bọc trong `ApiResponse`.
+3. Mọi tương tác Qdrant đều chuẩn xác với `QdrantPayloadDTO`.
