@@ -7,7 +7,7 @@ Tài liệu này đóng vai trò là bản đồ kiến trúc hệ thống và c
 ## 📌 1. Tổng quan & Ngữ cảnh Dự án
 * **Mục tiêu:** Xây dựng một chatbot học thuật cho phép sinh viên tra cứu và hỏi đáp dựa trên tài liệu môn học (slide, giáo trình, bài giảng).
 * **Nghiên cứu Cốt lõi:** Tiến hành thử nghiệm đối chứng và đánh giá hiệu năng giữa hai phương pháp: **RAG (Retrieval-Augmented Generation)** và **Fine-tuning** trong môi trường xử lý ngôn ngữ tự nhiên tiếng Việt.
-* **Công nghệ Sử dụng (Stack):** Java 17+, Spring Boot 3.x, Spring Security (JWT), LangChain4j / Spring AI, **Supabase Cloud Database (PostgreSQL)** tích hợp extension `vector`, và một cầu nối Python FastAPI để huấn luyện/gọi mô hình LLM.
+* **Công nghệ Sử dụng (Stack):** Java 17+, Spring Boot 3.x, Spring Security (JWT), LangChain4j / Spring AI, **Supabase Cloud Database (PostgreSQL/pgvector)** làm Source of Truth, **Qdrant Vector Database** để nén và tìm kiếm ANN tốc độ cao, và một cầu nối Python FastAPI để huấn luyện/gọi mô hình LLM.
 * **Thời gian Triển khai:** Phát triển thần tốc trong 2 tuần (Sprint MVP).
 
 ---
@@ -16,27 +16,29 @@ Tài liệu này đóng vai trò là bản đồ kiến trúc hệ thống và c
 Hệ thống được module hóa thành 3 phân hệ độc lập, chạy song song theo mô hình "ghép cặp chéo" gồm 6 thành viên. Khi phân tích hoặc viết code, AI cần tuân thủ nghiêm ngặt ranh giới trách nhiệm này:
 
 ### 🧩 Phân hệ 1: Kiến trúc Cốt lõi & Bảo mật
-* **Thành viên 1 (Trưởng nhóm - Core & Base):** Chịu trách nhiệm khởi tạo dự án, kết nối và cấu hình **Supabase Connection Pool (HikariCP)**, xử lý lỗi tập trung (`@ControllerAdvice`), định nghĩa các Base DTO và chuẩn hóa dữ liệu API trả về.
-* **Thành viên 2 (Bảo mật & Xác thực):** Chịu trách nhiệm triển khai chuỗi lọc bảo mật Spring Security, cấu hình bộ lọc kiểm tra JWT (`OncePerRequestFilter`), quản lý định danh và phân quyền Endpoint (`/api/auth/**`).
+* **Thành viên 1 (Trưởng nhóm - Core Infrastructure & Benchmark Dataset):** Chịu trách nhiệm phân tích yêu cầu, thiết kế kiến trúc hệ thống (SRS, ERD, Use Case, Tech Stack), và phân tích hướng phát triển mở rộng. Thiết lập kiến trúc Microservices (Java Spring Boot + Python FastAPI), kết nối **Supabase Connection Pool (HikariCP)**, xử lý lỗi tập trung (`@ControllerAdvice`), xây dựng các lớp nền tảng (ApiResponse, Global Exception Handler, Base Entity, Common Utilities). Thiết lập Docker/CI/CD và quản lý Git Flow. Xây dựng bộ dữ liệu đánh giá (Benchmark Dataset) gồm bộ câu hỏi kiểm thử và tập đáp án tham chiếu (Ground Truth).
+* **Thành viên 2 (Security & User Management):** Chịu trách nhiệm thiết kế bảng người dùng, triển khai Spring Security Filter Chain, cấu hình JWT Authentication (Access + Refresh Token), quản lý RBAC (`ROLE_STUDENT`, `ROLE_ADMIN`). Xây dựng hệ thống Audit Log và kiểm tra/xác thực dữ liệu đầu vào (Validation).
 
 ### 🧩 Phân hệ 2: Luồng dữ liệu RAG (Java Thuần & Supabase Vector)
-* **Thành viên 3 (Nạp & Xử lý dữ liệu):** Chịu trách nhiệm đọc file (Apache Tika), thuật toán cắt nhỏ văn bản theo ngữ nghĩa tiếng Việt (Text Splitting), gọi mô hình tạo Embedding và đồng bộ dữ liệu vector trực tiếp lên bảng lưu trữ của **Supabase**.
-* **Thành viên 4 (Điều phối RAG):** Chịu trách nhiệm quản lý phiên chat (`chat_sessions`), thực hiện gọi hàm tìm kiếm vector tương đồng (Similarity Search) từ tầng lưu trữ của Supabase, tối ưu hóa câu lệnh tiếng Việt (Prompt Engineering) và điều phối LLM thông qua LangChain4j.
+* **Thành viên 3 (Document Processing & Data Ingestion):** Chịu trách nhiệm đọc file (Apache Tika), thuật toán `VietnameseTextSplitter`, tiền xử lý dữ liệu văn bản, gọi mô hình Embedding, lưu trữ gốc lên **Supabase** và đồng bộ vector sang **Qdrant**. Xây dựng giao diện quản lý tài liệu (danh sách, xóa, xem thông tin). Thu thập và chuẩn hóa tài liệu phục vụ RAG và Fine-tuning.
+* **Thành viên 4 (RAG Orchestrator):** Chịu trách nhiệm xây dựng cơ chế truy xuất bằng Vector Search qua **Qdrant** (ANN Search), tích hợp LangChain4j, thiết kế Prompt Template tiếng Việt. Xây dựng Session Management, Chat Memory và luồng RAG hoàn chỉnh (Embedding Query → Qdrant Retrieval → Context Building → Response Generation). Hiển thị nguồn tài liệu được sử dụng để sinh câu trả lời.
 
 ### 🧩 Phân hệ 3: Mô hình Fine-tuning & Thống kê (Hybrid AI)
-* **Thành viên 5 (Cầu nối AI Bridge):** Chịu trách nhiệm xây dựng microservice Python FastAPI (để load và expose API mô hình tiếng Việt đã được chạy Fine-tune LoRA) và viết logic `WebClient` phía Java để điều hướng các request chat sang Python.
-* **Thành viên 6 (Xuất dữ liệu & Thống kê):** Chịu trách nhiệm quản lý thông tin Profile sinh viên, viết hàm tương tác với Supabase để gom lịch sử chat cũ xuất ra file định dạng `.jsonl` làm tập dữ liệu huấn luyện, và tính toán chỉ số đo lường hiệu năng (Latency mạng + xử lý bằng `System.currentTimeMillis()`, số lượng token, điểm đánh giá từ user).
-
+* **Thành viên 5 (Fine-tuning & AI Bridge):** Chịu trách nhiệm chuẩn bị dữ liệu huấn luyện, xây dựng script Fine-tuning (QLoRA), huấn luyện mô hình trên Colab/Kaggle, dựng FastAPI Model Server (đóng gói Docker). Xây dựng API giao tiếp Java ↔ Python, tích hợp `WebClient` để gọi FastAPI từ Spring Boot và xử lý luồng Fine-tuning hoàn chỉnh.
+* **Thành viên 6 (Analytics & Evaluation):** Chịu trách nhiệm thiết kế bảng lưu kết quả đánh giá, xây dựng hệ thống ghi nhận (Latency, số lượng request, loại model). Xây dựng API Feedback (Thumbs Up/Down, Rating 1-5 sao), xuất dữ liệu JSONL, Dashboard thống kê (thời gian phản hồi TB, số cuộc hội thoại, mức độ hài lòng). Xây dựng công cụ đánh giá tự động (Faithfulness Score, Answer Relevancy Score) và thực hiện benchmark so sánh RAG vs Fine-tuning.
 ---
 
 ## 🗄️ 3. Thiết kế Cơ sở Dữ liệu (Supabase / PostgreSQL Schema)
 Tất cả các thực thể nằm trên Cloud Supabase. Đảm bảo các cấu hình mapping JPA tuân thủ cấu trúc quan hệ và dữ liệu vector (đã bật extension `vector` trên Supabase) sau:
 
-* `users`: `id` (PK), `username`, `password` (BCrypt), `role` (STUDENT, ADMIN)
-* `documents`: `id` (PK), `title`, `file_path`, `status` (PROCESSING, READY), `uploaded_by` (FK)
-* `document_chunks`: `id` (PK), `document_id` (FK), `content` (TEXT), `embedding` (Kiểu dữ liệu `vector` trên Supabase - 1536 hoặc 384 chiều tùy thuộc vào mô hình embedding sử dụng)
-* `chat_sessions`: `id` (PK), `user_id` (FK), `title`, `created_at`
-* `chat_messages`: `id` (PK), `session_id` (FK), `sender` (USER, BOT), `content` (TEXT), `approach` (RAG, FINETUNE), `latency_ms` (BIGINT - lưu ý chỉ số này bao gồm cả Network Latency đến Supabase), `user_rating` (INT), `created_at`
+* `subjects`: `id` (PK), `code` (UK - VD: JAVA_OOP, CSHARP_BASIC), `name`, `description` (TEXT), `is_active`, `created_at`
+* `users`: `id` (PK), `username` (UK - MSSV), `email` (UK), `password` (BCrypt), `role` (STUDENT, ADMIN), `is_active`, `created_at`, `updated_at`
+* `documents`: `id` (PK), `title`, `file_path`, `file_type` (PDF, TXT), `file_size`, `status` (PROCESSING, READY, ERROR), `uploaded_by` (FK → users), `subject_id` (FK → subjects), `created_at`, `updated_at`
+* `document_chunks`: `id` (PK), `document_id` (FK → documents), `content` (TEXT), `embedding` (Kiểu dữ liệu `vector` trên Supabase - 384 hoặc 1536 chiều), `chunk_index` (INT), `created_at`
+* `chat_sessions`: `id` (PK), `user_id` (FK → users), `subject_id` (FK → subjects), `title`, `created_at`, `updated_at`
+* `chat_messages`: `id` (PK), `session_id` (FK → chat_sessions), `sender` (USER, BOT), `content` (TEXT), `code_snippet` (TEXT - code gửi kèm nếu có), `detected_language` (Java, CSharp, Python, NULL), `approach` (RAG, FINETUNE), `latency_ms` (BIGINT), `user_rating` (INT 1-5), `feedback_type` (THUMBS_UP, THUMBS_DOWN, NULL), `created_at`
+* `audit_logs`: `id` (PK), `user_id` (FK → users), `action` (LOGIN, UPLOAD, ADMIN_ACTION), `entity_type`, `entity_id`, `details` (TEXT), `ip_address`, `created_at`
+* `evaluation_results`: `id` (PK), `approach` (RAG, FINETUNE), `question`, `generated_answer` (TEXT), `ground_truth` (TEXT), `faithfulness_score` (FLOAT), `relevancy_score` (FLOAT), `recall_at_k` (FLOAT), `precision_at_k` (FLOAT), `k_value` (INT), `latency_ms`, `evaluated_at`
 
 ---
 
@@ -53,13 +55,23 @@ Khi đọc mã nguồn hoặc nhận yêu cầu viết code từ repo này, AI p
 
 ## 📂 5. Cấu trúc Thư mục Mục tiêu
 ```text
-src/main/java/com/edu/chatbot/
-├── config/                # Cấu hình hệ thống (HikariCP Supabase, Async, Cors)
-├── security/              # Cấu hình Spring Security & Bộ lọc JWT Filter (Thành viên 2)
-├── controller/            # Các REST Controller phân tách theo tính năng
-├── domain/                # Các thực thể JPA Entities (Ánh xạ sang Supabase)
-├── repository/            # Tầng Spring Data JPA & pgvector/Supabase Repositories
-├── service/               # Interface định nghĩa các nghiệp vụ cốt lõi
-│   ├── impl/              # Lớp triển khai chi tiết logic (Thành viên 3, 4, 5, 6)
-│   └── Base/              # Các class Base dùng chung & Bộ xử lý lỗi tập trung (Thành viên 1)
-└── dto/                   # Định nghĩa cấu trúc dữ liệu Request/Response Payload
+project_root/
+├── services/
+│   ├── core_backend/                # Microservice Java (Spring Boot) - Core API
+│   │   ├── src/main/java/com/edu/chatbot/
+│   │   │   ├── common/              # Lớp Base, Exception, Utils, DTO (TV1)
+│   │   │   ├── security/            # Cấu hình JWT, Auth (TV2)
+│   │   │   ├── document/            # Logic upload, chunking (TV3)
+│   │   │   ├── chat/                # Logic RAG, gọi LLM (TV4)
+│   │   │   ├── finetune/            # Logic gọi WebClient sang Model Python (TV5)
+│   │   │   └── analytics/           # Logic Dashboard, Auto Eval (TV6)
+│   │   └── pom.xml                  # Cấu hình Maven chung cho Backend Java
+│   │
+│   ├── embedding_service/           # Microservice Python (FastAPI) - Sinh Vector
+│   │   ├── main.py                  # API FastAPI (ONNX)
+│   │   └── requirements.txt         
+│   │
+│   └── finetune_service/            # Microservice Python (FastAPI) - AI Model
+│       ├── main.py                  # API gọi Model LLM Fine-tuned (TV5)
+│       └── requirements.txt         
+└── docker-compose.yml               # Quản lý chạy toàn bộ hệ thống

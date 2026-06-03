@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: core-backend
+  
+  datasource:
+    # URL kết nối Supabase PostgreSQL sử dụng PgBouncer (Port 6543)
+    # Thay thế [YOUR_PROJECT_REF] và [YOUR_PASSWORD] bằng thông tin thực tế từ Supabase Dashboard
+    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require
+    username: postgres.[YOUR_PROJECT_REF]
+    password: [YOUR_PASSWORD]
+    driver-class-name: org.postgresql.Driver
+    
+    # Cấu hình HikariCP (Connection Pool) chống mất kết nối (Timeout)
+    hikari:
+      pool-name: SupabaseHikariPool
+      minimum-idle: 2
+      maximum-pool-size: 10
+      idle-timeout: 30000       # Đóng connection nếu không dùng sau 30s
+      connection-timeout: 20000 # Chờ 20s để lấy connection, quá hạn sẽ báo lỗi
+      max-lifetime: 1800000     # 30 phút, đảm bảo Supabase không drop connection bất thình lình
+  
+  jpa:
+    hibernate:
+      ddl-auto: update # Tự động tạo bảng dựa trên Entity
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+# Cấu hình log để dễ debug
+logging:
+  level:
+    root: INFO
+    com.edu.chatbot: DEBUG
