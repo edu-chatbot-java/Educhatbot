@@ -75,7 +75,7 @@ project_root/
 │       ├── main.py                  # API gọi Model LLM Fine-tuned (TV5)
 │       └── requirements.txt         
 └── docker-compose.yml               # Quản lý chạy toàn bộ hệ thống
-
+```
 ---
 
 ## 🤖 6. Hướng dẫn Prompt cho Antigravity (Dành cho thành viên team)
