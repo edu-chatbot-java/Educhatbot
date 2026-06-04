@@ -1,0 +1,1202 @@
+[
+  {
+    "category": "Java I/O",
+    "question": "Giao diện DataInput trong Java có vai trò gì và nó xử lý dữ liệu UTF-8 như thế nào?",
+    "context": "Giao diện DataInput được sử dụng để đọc các byte từ luồng nhị phân và xây dựng lại các kiểu dữ liệu dạng nguyên thuỷ trong Java. DataInput cũng cho phép chúng ta chuyển đổi dữ liệu từ định dạng sửa đổi UTF-8 tới dạng sâu chuỗi.",
+    "ground_truth": "Giao diện DataInput được sử dụng để đọc các byte từ luồng nhị phân và xây dựng lại các kiểu dữ liệu dạng nguyên thuỷ trong Java. Nó cho phép chuyển đổi dữ liệu từ định dạng sửa đổi UTF-8 tới dạng sâu chuỗi."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Khi sử dụng các phương thức trong giao diện DataInput, lập trình viên cần lưu ý điều gì về việc xử lý ngoại lệ?",
+    "context": "Giao diện DataInput được định nghĩa là số các phương thức, các phương thức bao gồm việc đọc các kiểu dữ liệu nguyên thuỷ trong java. Bảng 9.3 tóm lượt vài phương thức. Tất cả các phương thức được kính hoạt IOException trong trường hợp lỗi:",
+    "ground_truth": "Tất cả các phương thức trong giao diện DataInput đều kích hoạt (throw) ngoại lệ IOException trong trường hợp xảy ra lỗi."
+  },
+  {
+    "category": "Java Security",
+    "question": "Để một applet có thể nhận được chứng thực từ một Certificate Authority (CA), nó cần phải thực hiện hành động gì?",
+    "context": "Nhận được được chứng thực từ một CA (Certificate Authority), applet phải đệ trình tài liệu chứng thực sự nhận dạng của nó.",
+    "ground_truth": "Applet phải đệ trình tài liệu chứng thực sự nhận dạng của nó cho CA."
+  },
+  {
+    "category": "Java Security",
+    "question": "Vai trò của Keystore trong hệ thống bảo mật Java là gì và nó chứa những thành phần nào?",
+    "context": "Keystore là một cơ sở dữ liệu khoá, chứa các chứng thực số dùng để nhận dạng các giá trị khoá công cộng.",
+    "ground_truth": "Keystore đóng vai trò là một cơ sở dữ liệu khoá, chứa các chứng thực số được sử dụng để nhận dạng các giá trị khoá công cộng."
+  },
+  {
+    "category": "Java Applet Multithreading",
+    "question": "Tại sao trong Java Applet, chúng ta không thể thực hiện trực tiếp việc kế thừa từ lớp Thread để tạo luồng?",
+    "context": "Từ đó, Java không hổ trợ nhiều kế thừa với các lớp, nó không thể thực hiện được trực tiếp lớp con của lớp luồng trong các applet.",
+    "ground_truth": "Vì Java không hỗ trợ đa kế thừa (nhiều kế thừa) với các lớp, nên không thể thực hiện trực tiếp lớp con của lớp luồng trong các applet."
+  },
+  {
+    "category": "Java Applet Multithreading",
+    "question": "Làm thế nào để triển khai đa luồng trong một Applet khi không thể kế thừa trực tiếp từ lớp Thread?",
+    "context": "Tuy nhiên, chúng ta sử dụng một đối tượng của luồng người sử dụng đã định nghĩa, mà các luồng này, lần lượt, dẫn xuất từ lớp luồng. Một luồng đơn giản xuất hiện sẽ được thực thi tại giao diện (Interface) Runnable",
+    "ground_truth": "Chúng ta sử dụng một đối tượng của luồng người sử dụng đã định nghĩa (được dẫn xuất từ lớp luồng) và thực thi luồng đó thông qua giao diện (Interface) Runnable."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Điều gì sẽ xảy ra nếu một ngoại lệ trong Java không được bắt giữ (catch) và tại sao lập trình viên cần sử dụng các từ khóa xử lý ngoại lệ?",
+    "context": "Các ngoại lệ phải được bắt giữ nếu không chương trình sẽ bị ngắt.",
+    "ground_truth": "Nếu ngoại lệ không được bắt giữ, chương trình sẽ bị ngắt. Do đó, lập trình viên cần sử dụng các từ khóa xử lý ngoại lệ để bắt giữ chúng, đảm bảo chương trình không bị dừng đột ngột."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Khối 'finally' trong cấu trúc xử lý ngoại lệ của Java có vai trò gì và khi nào nó được thực thi?",
+    "context": "finally\n{\n// this book is executed, whether or not the exception is throw.\n}",
+    "ground_truth": "Khối 'finally' có vai trò thực thi các đoạn mã cần thiết bất kể ngoại lệ có được ném ra hay không."
+  },
+  {
+    "category": "Java String Manipulation",
+    "question": "Tại sao việc sử dụng lệnh fruit.charAt(length) để lấy ký tự cuối cùng của chuỗi \"banana\" lại dẫn đến lỗi?",
+    "context": "Để tìm chữ cái cuối cùng trong chuỗi, bạn có thể bị xui khiến để thử theo cách làm sau: int length = fruit.length(); char last = fruit.charAt(length); // SAI!! Cách này không có tác dụng. Lý do là không có chữ cái thứ 6 nào trong \"banana\". Vì ta đã bắt đầu đếm từ 0, nên sáu chữ cái trong chuỗi được đếm từ 0 tới 5.",
+    "ground_truth": "Việc này gây lỗi vì chuỗi \"banana\" có 6 ký tự nhưng được đánh chỉ số từ 0 đến 5. Do đó, không tồn tại ký tự ở vị trí thứ 6 (tương ứng với giá trị length), dẫn đến lỗi vượt quá phạm vi chỉ số."
+  },
+  {
+    "category": "Java String Manipulation",
+    "question": "Trong Java, làm thế nào để thực hiện duyệt qua từng ký tự của một chuỗi bằng vòng lặp while?",
+    "context": "Một công việc thường làm với một chuỗi là bắt đầu từ điểm đầu của chuỗi, lần lượt chọn từng kí tự, thực hiện một số thao tác đối với chữ cái đó, và công việc được tiếp diễn cho các chữ cái còn lại đến hết chuỗi. Kiểu xử lý như thế này được gọi là duyệt. Một cách tự nhiên để thực hiện việc duyệt là dùng vòng lặp while: int index = 0; while (index < fruit.length()) { char letter = fruit.charAt(index); System.out.println(letter); index = index + 1; }",
+    "ground_truth": "Để duyệt chuỗi bằng vòng lặp while, ta khởi tạo một biến chỉ số (index) bằng 0, sau đó sử dụng điều kiện lặp là index nhỏ hơn độ dài của chuỗi (fruit.length()). Trong thân vòng lặp, ta truy xuất ký tự bằng phương thức charAt(index) và tăng giá trị index lên 1 sau mỗi lần lặp."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Tại sao lớp ByteArrayOutputStream lại được coi là linh hoạt hơn so với các lớp OutputStream thông thường khi làm việc với mảng byte?",
+    "context": "Lớp ByteArrayOutputStream tạo ra luồng kết suất trên một mảng các byte. Nó cũng cung cấp các khả năng bổ sung để mảng kết suất tăng trưởng nhằm mục đích chừa chổ cho mảng được ghi.",
+    "ground_truth": "Lớp ByteArrayOutputStream linh hoạt hơn vì nó cung cấp khả năng tự động tăng trưởng kích thước mảng để chừa chỗ cho dữ liệu được ghi vào, thay vì bị giới hạn bởi kích thước cố định ban đầu."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Khi sử dụng phương thức close() trong lớp OutputStream, mục đích chính của nó là gì và điều gì sẽ xảy ra nếu có lỗi trong quá trình thực thi?",
+    "context": "close() Phương thức đóng luồng. Nó được dùng để giải phóng mọi tài nguyên kết hợp với luồng. Nó kích hoạt IOException nếu lỗi xảy ra.",
+    "ground_truth": "Mục đích chính của phương thức close() là giải phóng mọi tài nguyên kết hợp với luồng. Nếu có lỗi xảy ra trong quá trình đóng luồng, phương thức sẽ kích hoạt một ngoại lệ IOException."
+  },
+  {
+    "category": "Java Memory Management",
+    "question": "Tại sao Java được coi là có ưu thế hơn C++ trong việc quản lý bộ nhớ thông qua cơ chế Garbage collection?",
+    "context": "Trong ngôn ngữ lập trình hướng đối tượng khác như C++, lập trình viên phải làm cho bộ nhớ trống mà đã không được yêu cầu trong thời gian dài. Tình trạng không hoạt động để bộ nhớ trống có thể là kết quả trong một số vấn đề. Java tự động tiến trình thu dọn rác để cung cấp giải pháp duy nhất cho vấn đề này.",
+    "ground_truth": "Trong C++, lập trình viên phải tự tay giải phóng bộ nhớ không còn sử dụng, điều này dễ dẫn đến các vấn đề phát sinh. Ngược lại, Java cung cấp giải pháp tự động hóa tiến trình thu dọn rác (Garbage collection), giúp loại bỏ các rủi ro liên quan đến việc quản lý bộ nhớ thủ công."
+  },
+  {
+    "category": "Java Memory Management",
+    "question": "Cơ chế Garbage collection trong Java thực hiện nhiệm vụ gì đối với các đối tượng trong bộ nhớ?",
+    "context": "Thu dọn “rác” (Garbage collection) cải tạo hoặc làm trống bộ nhớ đã định vị cho các đối tượng mà các đối tượng này không sử dụng trong thời gian dài.",
+    "ground_truth": "Garbage collection thực hiện việc cải tạo hoặc làm trống bộ nhớ đã được cấp phát cho các đối tượng không còn được sử dụng trong một khoảng thời gian dài."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Trong trường hợp một lớp không được thiết kế cho đa luồng và không thể thêm từ khóa synchronized vào các phương thức, làm thế nào để đảm bảo tính đồng bộ khi truy cập đối tượng của lớp đó?",
+    "context": "Để đồng bộ thâm nhập một đối tượng của lớp này, tất cả chúng gọi các phương thức mà lớp này định nghĩa, được đặt bên trong một khối đồng bộ. Tất cả chúng sử dụng chung một câu lệnh đồng bộ được cho như sau: synchronized(object) { // các câu lệnh đồng bộ }",
+    "ground_truth": "Để đồng bộ hóa, tất cả các lời gọi phương thức của lớp đó phải được đặt bên trong một khối đồng bộ sử dụng chung một câu lệnh synchronized(object), trong đó 'object' là tham chiếu đến đối tượng cần được đồng bộ."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Khối đồng bộ (synchronized block) đảm bảo điều kiện gì đối với việc gọi phương thức của một đối tượng?",
+    "context": "Một khối đồng bộ bảo đảm rằng nó gọi đến một phương thức (mà là thành phần của đối tượng) xuất hiện chỉ sau khi luồng hiện hành đã được tham nhập thành công vào monitor (sự quan sát) của đối tượng.",
+    "ground_truth": "Khối đồng bộ đảm bảo rằng việc gọi đến một phương thức của đối tượng chỉ xảy ra sau khi luồng hiện hành đã tham nhập thành công vào monitor (sự quan sát) của đối tượng đó."
+  },
+  {
+    "category": "Java Programming / Game Implementation",
+    "question": "Khi triển khai trò chơi Life trong GridWorld, phương thức makeLifeWorld cần thực hiện những nhiệm vụ cụ thể nào để thiết lập môi trường?",
+    "context": "Phương thức makeLifeWorld cần phải tạo nên một Grid chứa các Actor cùng một ActorWorld, sau đó kích hoạt makeRocks, đến lượt phương thức này sẽ phải đặt một LifeRock vào mỗi ô trong Grid.",
+    "ground_truth": "Phương thức makeLifeWorld cần tạo ra một Grid chứa các Actor cùng với một ActorWorld, sau đó kích hoạt phương thức makeRocks để đặt các LifeRock vào mỗi ô trong Grid."
+  },
+  {
+    "category": "Algorithm / Game Theory",
+    "question": "Cấu hình r-pentomino có đặc điểm gì nổi bật về quá trình tiến hóa trong trò chơi Life?",
+    "context": "Một trong những điều kiện đầu như vậy là r-pentomino: bắt đầu chỉ với 5 viên đá, cấu hình này chạy suốt 1103 bước thời gian rồi kết thúc ở một cấu hình bền vững với 116 viên đá sống",
+    "ground_truth": "Cấu hình r-pentomino bắt đầu với 5 viên đá, trải qua 1103 bước thời gian và cuối cùng kết thúc ở một cấu hình bền vững bao gồm 116 viên đá sống."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Sự khác biệt về chức năng giữa phương thức getBuffer() và toString() trong lớp StringWriter là gì?",
+    "context": "Lớp này bổ sung hai phương thức có tên là ‘getBuffer( )’ và ‘toString()’ . Phương thức ‘getBuffer( )’ trả về đối tượng StringBuffer tương ứng với vùng đệm xuất, trong khi đó phương thức toString( ) trả về một bảng sao chuỗi của vùng đệm xuất.",
+    "ground_truth": "Phương thức getBuffer() trả về chính đối tượng StringBuffer tương ứng với vùng đệm xuất, trong khi phương thức toString() trả về một bản sao chuỗi (string copy) của vùng đệm xuất đó."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Lớp StringReader có bổ sung thêm phương thức mới nào so với lớp cha Reader của nó không?",
+    "context": "Lớp StringReader trợ giúp luồng nhập ký tự từ một chuỗi. Nó không bổ sung phương thức nào vào lớp Reader.",
+    "ground_truth": "Không, lớp StringReader không bổ sung bất kỳ phương thức nào vào lớp Reader."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Trong đoạn mã chương trình 9.6, mục đích của việc gọi phương thức rf.seek(1) là gì và nó ảnh hưởng thế nào đến các lệnh đọc dữ liệu tiếp theo?",
+    "context": "/ / making use of seek( ) method to move to a specific file location\nrf.seek(l);\nSystem.out.println(rf.readlnt( ));\nSystem.out.println(rf.readChar( ));\nSystem.out.println(rf.readDouble( ));",
+    "ground_truth": "Phương thức rf.seek(1) được sử dụng để di chuyển con trỏ tệp đến vị trí byte thứ 1 trong tệp. Việc này ảnh hưởng đến các lệnh đọc tiếp theo vì nó thay đổi điểm bắt đầu đọc dữ liệu, khiến chương trình đọc các giá trị (int, char, double) từ vị trí byte thứ 1 thay vì bắt đầu từ đầu tệp."
+  },
+  {
+    "category": "Java API",
+    "question": "Gói java.awt.print cung cấp những giao diện nào và giao diện nào trong số đó chịu trách nhiệm định nghĩa phương thức print() để in trên đối tượng Graphics?",
+    "context": "Gói java.awt.print\nĐây là gói mới mà java JDK 1.2 cung cấp. Nó thay thế khả năng in của JDK 1.1. Nó bao\ngồm dãy các giao diện:\n Pageable\n Printable\n PrinterGraphics\nGiao diện ‘Pageable’ định nghĩa các phương thức được sử dụng cho đối tượng mô tả lại các\ntrang sẽ được in. Nó cũng chỉ định số lượng trang sẽ được in cũng như sẽ được in trang\nhiện hành hay một miền trang.\nGiao diện ‘Printable’ chỉ định phương thức print( )được dùng để in một trạng trên một đối\ntượng Graphics.",
+    "ground_truth": "Gói java.awt.print bao gồm ba giao diện là Pageable, Printable và PrinterGraphics. Trong đó, giao diện 'Printable' là giao diện chỉ định phương thức print() được dùng để in một trang trên một đối tượng Graphics."
+  },
+  {
+    "category": "Java Memory Model",
+    "question": "Tại sao biểu đồ trạng thái được coi là một ảnh chụp tại một thời điểm cụ thể trong quá trình thực thi chương trình?",
+    "context": "Khi chương trình chạy, trạng thái của nó thay đổi; bởi vậy bạn nên coi biểu đồ trạng thái như một ảnh chụp tại một thời điểm cụ thể trong quá trình thực thi.",
+    "ground_truth": "Vì trạng thái của chương trình (bao gồm tất cả các biến, giá trị và đối tượng) luôn thay đổi liên tục trong quá trình chạy, nên biểu đồ trạng thái chỉ phản ánh thông tin tại một thời điểm nhất định khi nó được ghi lại."
+  },
+  {
+    "category": "Java Object-Oriented Programming",
+    "question": "Tại sao trong Java, khi muốn truy cập vào một biến thực thể, chúng ta cần phải chỉ định đối tượng cụ thể thông qua kí pháp dấu chấm?",
+    "context": "Những đơn vị thông tin hợp thành đối tượng được gọi là các biến thực thể vì từng đối tượng, vốn là một thực thể cho kiểu của nó, có một bản sao riêng của biến thực thể này. Tương tự như vậy, nếu bạn muốn đọc một giá trị từ biến thực thể, bạn phải chỉ định đối tượng mà bạn cần lấy giá trị từ đó. Ở Java, điều này được thực hiện bằng cách dùng “kí pháp dấu chấm.”",
+    "ground_truth": "Vì mỗi đối tượng là một thực thể riêng biệt và sở hữu một bản sao riêng của biến thực thể đó, nên việc sử dụng kí pháp dấu chấm giúp xác định chính xác đối tượng nào mà ta muốn truy xuất giá trị biến thực thể từ đó."
+  },
+  {
+    "category": "Java Security",
+    "question": "Để một Java applet có thể thực hiện các thao tác như đọc, ghi hoặc xóa file trên hệ thống máy khách, nó cần phải thỏa mãn những điều kiện tiên quyết nào?",
+    "context": "Java 2 có thể thực hiện tất cả các đặc điểm trên, với các applet cung cấp từ một nhà cung cấp applet tin cậy, và được ký danh số (digitally signed).",
+    "ground_truth": "Applet đó phải được cung cấp từ một nhà cung cấp tin cậy và phải được ký danh số (digitally signed)."
+  },
+  {
+    "category": "Cryptography",
+    "question": "Quy trình xác thực chữ ký số diễn ra như thế nào khi so sánh giá trị tóm lược (digest) của đối tượng?",
+    "context": "Kết quả của sự giải mã, giá trị tóm lược được đưa ra. Giá trị tóm lược của đối tượng được tính và so sánh với giá trị tóm lược được giải mã. Nếu giá trị tóm lược (digest) của đối tượng và giá trị tóm lược được mã hoá khớp với nhau, chữ ký được được xác nhận.",
+    "ground_truth": "Giá trị tóm lược của đối tượng được tính toán và so sánh với giá trị tóm lược đã được giải mã từ chữ ký. Nếu hai giá trị này khớp với nhau, chữ ký số sẽ được xác nhận là hợp lệ."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Tại sao việc sử dụng đa luồng trong Java lại giúp tối ưu hóa hiệu suất của chương trình?",
+    "context": "Đa luồng giữ thời gian nhàn rỗi của hệ thống thành nhỏ nhất. Điều này cho phép bạn viết các chương trình có hiệu quả cao với sự tận dụng CPU là tối đa.",
+    "ground_truth": "Đa luồng giúp tối ưu hóa hiệu suất bằng cách giữ thời gian nhàn rỗi của hệ thống ở mức nhỏ nhất, từ đó cho phép tận dụng tối đa khả năng xử lý của CPU."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Điều gì sẽ xảy ra với một chương trình Java nếu luồng chính (main thread) kết thúc việc thực thi?",
+    "context": "Nó là luồng cuối cùng kết thúc việc thực hiện. Trong chốc lát luồng chính ngừng thực thi, chương trình bị chấm dứt.",
+    "ground_truth": "Nếu luồng chính ngừng thực thi, chương trình Java sẽ bị chấm dứt ngay lập tức."
+  },
+  {
+    "category": "Java Programming Fundamentals",
+    "question": "Tại sao các toán tử quan hệ trong Java lại được coi là ngoại lệ so với các toán tử thông thường như cộng (+)?",
+    "context": "Hầu hết các toán tử mà ta đã gặp đều tạo ra kết quả có cùng kiểu với các toán hạng trong đó. Lấy ví dụ, toán tử + nhận hai số int rồi cũng tạo ra một số int, hoặc hai số double rồi tạo thành một double, v.v. Những ngoại lệ mà ta gặp, đó là các toán tử quan hệ, vốn để so sánh các int hoặc float rồi trả lại true hoặc false.",
+    "ground_truth": "Các toán tử quan hệ được coi là ngoại lệ vì thay vì tạo ra kết quả cùng kiểu với toán hạng (như số int hoặc double), chúng trả về giá trị kiểu boolean (true hoặc false) sau khi so sánh các số int hoặc float."
+  },
+  {
+    "category": "Java Programming Fundamentals",
+    "question": "Kiểu dữ liệu boolean trong Java khác biệt như thế nào so với các kiểu dữ liệu như int, double hay String về mặt tập hợp giá trị?",
+    "context": "Đối với các số int, double hay chuỗi String, những tập hợp như vậy đều rất lớn. Song với boolean, tập hợp này chỉ chứa hai giá trị.",
+    "ground_truth": "Khác với các kiểu dữ liệu như int, double hay String vốn có tập hợp các giá trị rất lớn, kiểu boolean trong Java là một tập hợp đặc biệt chỉ chứa đúng hai giá trị là true và false."
+  },
+  {
+    "category": "Java String Comparison",
+    "question": "Khi so sánh hai chuỗi bằng phương thức compareTo, tại sao kết quả trả về lại là một giá trị âm hoặc dương thay vì chỉ là true hoặc false?",
+    "context": "Giá trị trả về từ compareTo lại kì quặc. Đó là khoảng cách giữa hai chữ cái đầu tiên có sự khác biệt ở hai chuỗi. Nếu hai chuỗi bằng nhau thì khoảng cách này bằng 0. Nếu chuỗi thứ nhất (chuỗi mà ta kích hoạt phương thức lên) đứng trước theo thứ tự bảng chữ cái, thì khoảng cách này có giá trị âm. Ngược lại, khoảng cách có giá trị dương.",
+    "ground_truth": "Giá trị trả về từ compareTo đại diện cho khoảng cách giữa hai chữ cái đầu tiên có sự khác biệt ở hai chuỗi. Kết quả âm nghĩa là chuỗi thứ nhất đứng trước chuỗi thứ hai theo thứ tự bảng chữ cái, và kết quả dương nghĩa là chuỗi thứ nhất đứng sau chuỗi thứ hai."
+  },
+  {
+    "category": "Java Programming Best Practices",
+    "question": "Việc sử dụng toán tử == để so sánh các đối tượng String trong Java được đánh giá như thế nào?",
+    "context": "Để trọn vẹn, tôi cũng nói thật rằng việc dùng toán tử == đối với các Strings là hợp lệ nhưng ít khi đúng đắn.",
+    "ground_truth": "Việc sử dụng toán tử == đối với các đối tượng String là hợp lệ về mặt cú pháp nhưng ít khi là cách làm đúng đắn."
+  },
+  {
+    "category": "Java Programming Concepts",
+    "question": "Dựa trên phân loại các phương thức hoạt động trên đối tượng, sự khác biệt cốt lõi giữa 'hàm thuần túy' và 'phương thức sửa đổi' là gì?",
+    "context": "hàm thuần tuý: Nhận các đối tượng làm tham số nhưng không thay đổi chúng. Giá trị trả lại thuộc kiểu nguyên thuỷ hoặc một đối tượng mới tạo ra bên trong phương thức này. phương thức sửa đổi: Nhận đối số là các đối tượng rồi sửa đổi một vài, hoặc tất cả những đối tượng đó. Thường trả lại đối tượng rỗng (void).",
+    "ground_truth": "Hàm thuần túy nhận đối tượng làm tham số nhưng không thay đổi chúng và trả về giá trị kiểu nguyên thủy hoặc đối tượng mới, trong khi phương thức sửa đổi nhận đối tượng làm tham số và trực tiếp thay đổi trạng thái của các đối tượng đó, thường trả về kiểu void."
+  },
+  {
+    "category": "Java Programming Concepts",
+    "question": "Tại sao một 'phương thức điền' lại được coi là một dạng của 'phương thức sửa đổi' trong lập trình hướng đối tượng?",
+    "context": "phương thức điền: Một trong các đối số là đối tượng “trống trơn” sẽ được phương thức điền thông tin vào. Về mặt kĩ thuật, đây cũng chính là một dang phương thức sửa đổi.",
+    "ground_truth": "Phương thức điền được coi là một dạng của phương thức sửa đổi vì nó nhận vào một đối tượng 'trống trơn' và thực hiện việc thay đổi trạng thái của đối tượng đó bằng cách điền thông tin vào bên trong phương thức."
+  },
+  {
+    "category": "Java Programming - Graphics",
+    "question": "Để tạo ra hiệu ứng giao hòa Moiré khi vẽ các đường tròn đồng tâm trong Java, yêu cầu kỹ thuật quan trọng nhất về khoảng cách giữa các đường tròn là gì?",
+    "context": "4. Sửa lại chương trình để các đường tròn đồng tâm được vẽ từ tâm màn hình, như ở hình dưới, bên trái. Khoảng cách giữa các đường tròn cần phải đủ nhỏ để thấy được sự giao hòa Moiré .",
+    "ground_truth": "Khoảng cách giữa các đường tròn cần phải đủ nhỏ để thấy được sự giao hòa Moiré."
+  },
+  {
+    "category": "Java Programming - System I/O",
+    "question": "Khi thực hiện lệnh in một đối tượng trong Java bằng System.out, kết quả hiển thị trên màn hình bao gồm những thành phần thông tin nào?",
+    "context": "Khi Java in ra một đối tượng, nó in ra kiểu của đối tượng này (PrintStream) cùng với gói mà kiểu đó được định nghĩa (java.io), và một số nhận diện duy nhất cho đối tượng này.",
+    "ground_truth": "Kết quả hiển thị bao gồm kiểu của đối tượng, gói (package) mà kiểu đó được định nghĩa và một số nhận diện duy nhất cho đối tượng đó."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Điều gì sẽ xảy ra nếu từ khóa 'synchronized' bị loại bỏ khỏi phương thức 'display()' trong lớp 'Target'?",
+    "context": "Nếu từ khóa synchronized đặt trước bị bỏ quên trong phương thức “display()” của lớp “Target”, tất cả luồng trên có thể cùng lúc gọi cùng phương thức, trên cùng đối tượng. Điều kiện này được biết đến như là “loại điều kiện” (race condition).",
+    "ground_truth": "Nếu từ khóa synchronized bị loại bỏ, tất cả các luồng có thể cùng lúc gọi phương thức trên cùng một đối tượng, dẫn đến tình trạng được gọi là 'race condition' (loại điều kiện)."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Tại sao việc sử dụng phương thức synchronized trong lớp đôi khi không phải là giải pháp tối ưu cho mọi trường hợp?",
+    "context": "Tạo ra các phương thức synchronzed (đồng bộ) trong phạm vi các lớp là một con đường dễ dàng và có hiệu quả của việc thực hiện sự đồng bộ. Tuy nhiên, điều này không làm việc trong tất cả các trường hợp. Hãy xem một trường hợp nơi mà lập trình viên muốn sự đồng bộ được xâm nhập vào các đối tượng của lớp mà không được thiết kế cho thâm nhập đa luồng.",
+    "ground_truth": "Việc sử dụng phương thức synchronized không phải lúc nào cũng hiệu quả, đặc biệt là khi lập trình viên cần thực hiện đồng bộ trên các đối tượng của lớp vốn không được thiết kế sẵn cho việc truy cập đa luồng (không sử dụng các phương thức đồng bộ)."
+  },
+  {
+    "category": "Java Code Analysis",
+    "question": "Dựa vào đoạn mã được cung cấp, phương thức 'banana' thực hiện nhiệm vụ gì và biến 'grape' đóng vai trò như thế nào?",
+    "context": "public static int banana(int[] a) { int grape = 0; int i = 0; while (i < a.length) { grape = grape + a[i]; i++; } return grape; }",
+    "ground_truth": "Phương thức 'banana' thực hiện nhiệm vụ tính tổng các phần tử có trong mảng số nguyên đầu vào. Biến 'grape' đóng vai trò là biến tích lũy (accumulator) để lưu trữ giá trị tổng của các phần tử trong mảng."
+  },
+  {
+    "category": "Java Code Execution",
+    "question": "Kết quả in ra màn hình của chương trình trong Bài tập 8 là bao nhiêu và giải thích ngắn gọn nhiệm vụ của phương thức 'mus'?",
+    "context": "public static int mus(int[] zoo) { int fus = 0; for (int i = 0; i < zoo.length; i++) { fus = fus + zoo[i]; } return fus; } public static void main(String[] args) { int[] bob = make(5); dub(bob); System.out.println(mus(bob)); }",
+    "ground_truth": "Kết quả in ra màn hình là 30. Phương thức 'mus' có nhiệm vụ tính tổng các giá trị của các phần tử trong mảng số nguyên được truyền vào."
+  },
+  {
+    "category": "Java Programming Syntax",
+    "question": "Tại sao việc tuân thủ quy tắc thụt đầu dòng tiêu chuẩn lại quan trọng khi thực hiện xâu chuỗi các điều kiện if-else?",
+    "context": "Một cách làm để dễ đọc hơn là sử dụng quy tắc thụt đầu dòng tiêu chuẩn, như đã trình bày trong các ví dụ trên. nếu bạn giữ cho các câu lệnh và các ngoặc nhọn được thẳng hàng với nhua thì ít có khả năng gây lỗi cú pháp hơn, và nếu có thì cũng dễ tìm thấy hơn.",
+    "ground_truth": "Việc tuân thủ quy tắc thụt đầu dòng giúp mã nguồn dễ đọc hơn, giảm thiểu khả năng gây lỗi cú pháp và giúp việc tìm kiếm lỗi trở nên dễ dàng hơn nếu chúng xảy ra."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Cấu trúc của câu lệnh điều kiện lồng ghép được mô tả như thế nào trong ví dụ về việc kiểm tra giá trị của x?",
+    "context": "Bây giờ thì câu lệnh điều kiện bên ngoài có hai nhánh. Nhánh thứ nhất chỉ chứa một lệnh print, nhánh thứ hai lại chứa một câu lệnh điều kiện khác, mà bản thân nó lại có hai nhánh. Hai nhánh này đều chứa những câu lệnh print đơn giản, mặc dù dĩ nhiên chúng có thể là những câu lệnh điều kiện khác.",
+    "ground_truth": "Câu lệnh điều kiện bên ngoài có hai nhánh: nhánh thứ nhất chứa một lệnh print, nhánh thứ hai chứa một câu lệnh điều kiện khác (với hai nhánh con bên trong chứa các lệnh print đơn giản)."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Trong Java, phương thức Math.random() trả về giá trị trong khoảng nào và tính chất của dãy số được tạo ra là gì?",
+    "context": "Giá trị trả lại là một doublenằm giữa 0.0 và 1.0. Chính xác là, nó lớn hơn hoặc bằng 0.0 và nhỏ hơn 1.0. Mỗi lần kích hoạt random bạn sẽ nhận được con số tiếp theo trong dãy số giả ngẫu nhiên.",
+    "ground_truth": "Phương thức Math.random() trả về một giá trị kiểu double lớn hơn hoặc bằng 0.0 và nhỏ hơn 1.0. Dãy số được tạo ra là dãy số giả ngẫu nhiên, không thực sự ngẫu nhiên hoàn toàn."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Làm thế nào để kiểm tra tính chính xác của một phương thức phát sinh số nguyên ngẫu nhiên trong một khoảng xác định?",
+    "context": "Một cách kiểm tra phương thức vừa viết là phát inh rất nhiều số ngẫu nhiên, lưu trữ chúng vào một mảng, rồi đếm số lần từng giá trị xuất hiện.",
+    "ground_truth": "Bạn có thể kiểm tra bằng cách phát sinh một lượng lớn các số ngẫu nhiên, lưu trữ chúng vào một mảng, sau đó đếm số lần xuất hiện của từng giá trị để xem xác suất xuất hiện của chúng có xấp xỉ nhau hay không."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Trong Java, điều kiện tiên quyết bắt buộc để gọi các phương thức wait() và notify() là gì?",
+    "context": "Các monitor được sử dụng cho các phương thức wait() và notify(). Cả hai phương thức này phải được gọi trong mã đồng bộ.",
+    "ground_truth": "Cả hai phương thức wait() và notify() phải được gọi trong mã đồng bộ (synchronized code)."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Khi một luồng được đánh thức bởi phương thức notify(), nó có được thực thi ngay lập tức không? Giải thích dựa trên văn bản.",
+    "context": "Luồng mà đã được thông báo phải thu trở lại khóa của monitor trước khi nó có thể bắt đầu.",
+    "ground_truth": "Không, luồng đó không được thực thi ngay lập tức. Nó phải thu trở lại khóa (lock) của monitor trước khi có thể bắt đầu thực thi."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Trong Java, phương thức 'ready()' của lớp Reader có ý nghĩa gì và nó trả về kiểu dữ liệu nào?",
+    "context": "Lớp này cũng hỗ trợ phương thức gọi ‘ready()’. Phương thức này trả về giá trị kiểu boolean nếu rõ tác vụ đọc kế tiếp có tiếp tục mà không phong toả hay không.",
+    "ground_truth": "Phương thức 'ready()' trả về giá trị kiểu boolean, cho biết liệu tác vụ đọc kế tiếp có thể tiếp tục mà không bị phong tỏa hay không."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Lớp CharArrayWriter cung cấp những phương thức bổ sung nào so với lớp Writer cơ bản?",
+    "context": "Lớp CharArrayWriter bổ sung các phương thức sau đây vào các phương thức của lớp Writer. reset( ) thiết lập lại vùng đệm size( ) trả về kích cỡ hiện hành của vùng đệm toCharArray( ) Trả về bản sao mảng ký tự của vùng đệm xuất toString( ) Chuyển đổi vùng đệm xuất thành một đối tượng String writeTo( ) Ghi vùng đệm ra một luồng xuất khác.",
+    "ground_truth": "Lớp CharArrayWriter bổ sung các phương thức: reset() (thiết lập lại vùng đệm), size() (trả về kích cỡ hiện hành của vùng đệm), toCharArray() (trả về bản sao mảng ký tự của vùng đệm xuất), toString() (chuyển đổi vùng đệm xuất thành một đối tượng String), và writeTo() (ghi vùng đệm ra một luồng xuất khác)."
+  },
+  {
+    "category": "Computer Science Methodology",
+    "question": "Tại sao công việc của một nhà khoa học máy tính lại được coi là sự kết hợp giữa toán học, kĩ thuật và khoa học tự nhiên?",
+    "context": "Cũng như những nhà toán học, những nhà khoa học máy tính dùng những ngôn ngữ có quy cách để diễn đạt ý tưởng (đặc biệt là tính toán). Giống như những kĩ sư, họ cũng làm công việc thiết kế, gắn kết các thành phần tạo nên một hệ thống và đánh giá những ưu khuyết giữa các phương án khác nhau. Giống như những nhà khoa học, họ khảo sát các động thái của hệ thống phức tạp, đề ra các giả thiết, và kiểm định những tính toán.",
+    "ground_truth": "Vì họ sử dụng ngôn ngữ có quy cách để diễn đạt ý tưởng như nhà toán học, thực hiện thiết kế và đánh giá hệ thống như kĩ sư, đồng thời khảo sát động thái hệ thống, đề ra giả thiết và kiểm định tính toán như những nhà khoa học."
+  },
+  {
+    "category": "Programming Fundamentals",
+    "question": "Việc học lập trình mang lại những giá trị cốt lõi nào cho người học theo quan điểm của tác giả?",
+    "context": "Một mặt, bạn sẽ được học cách lập trình, vốn bản thân nó là một kĩ năng hữu dụng. Mặt khác, bạn sẽ dùng lập trình như một phương tiện để giải quyết vấn đề.",
+    "ground_truth": "Việc học lập trình mang lại hai giá trị cốt lõi: thứ nhất là bản thân lập trình là một kĩ năng hữu dụng, và thứ hai là sử dụng lập trình như một phương tiện để rèn luyện và thực hiện giải quyết vấn đề."
+  },
+  {
+    "category": "Java Technology",
+    "question": "Tại sao việc sử dụng file JAR lại giúp cải thiện hiệu năng tải applet trên trình duyệt?",
+    "context": "Dùng một jar với một applet cải tiện đáng kể khả năng thực hiện của trình duyệt. Vì tấc cả các tất cả các file được biên dịch trong một file đơn, trình duyệt chỉ cần thiết lập kết nối HTTP với web server. Nén file giảm 50% thời gian tải file.",
+    "ground_truth": "Việc sử dụng file JAR cải thiện hiệu năng vì nó gom tất cả các file vào một file đơn, giúp trình duyệt chỉ cần thiết lập một kết nối HTTP duy nhất với web server, đồng thời việc nén file giúp giảm 50% thời gian tải."
+  },
+  {
+    "category": "Java Technology",
+    "question": "Trong công cụ JAR, tùy chọn nào được sử dụng để tạo ra một lưu trữ mới và ý nghĩa của file chứng thực là gì?",
+    "context": "Tuỳ chọn Mô tả c Tạo ra một lưu trữ mới ... Một file chứng thực chứa thông về các file lưu trữ. File này là một tuỳ chọn. Thậm chí file không xác định thì JAR cũng tự động tạo ra.",
+    "ground_truth": "Tùy chọn 'c' được sử dụng để tạo ra một lưu trữ mới. File chứng thực (manifest) chứa thông tin về các file lưu trữ; đây là một file tùy chọn và JAR sẽ tự động tạo ra nó nếu người dùng không xác định."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Điều kiện tiên quyết nào để một chương trình Java thực hiện tiến trình thoát liên quan đến luồng hiểm (daemon thread)?",
+    "context": "Máy ảo Java thực hiện tiến trình thoát, khi và chỉ khi luồng hiểm vẫn còn sống.",
+    "ground_truth": "Máy ảo Java chỉ thực hiện tiến trình thoát khi và chỉ khi luồng hiểm vẫn còn sống."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Đặc điểm về quyền ưu tiên và thời điểm thực thi của luồng dọn rác (garbage collection) trong Java là gì?",
+    "context": "Luồng dọn rác thực thi chỉ khi hệ thồng không có tác vụ nào. Nó là một luồng có quyền ưu tiên thấp.",
+    "ground_truth": "Luồng dọn rác là một luồng có quyền ưu tiên thấp và nó chỉ thực thi khi hệ thống không có tác vụ nào khác."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Làm thế nào để khởi tạo một ActorWorld với một lưới không giới hạn trong GridWorld?",
+    "context": "rld.grid.UnboundedGrid; Bây giờ, hãy thay dòng lệnh tạo nên ActorWorld với dòng lệnh sau: ActorWorld world = new ActorWorld(new UnboundedGrid());",
+    "ground_truth": "Bạn cần sử dụng dòng lệnh: ActorWorld world = new ActorWorld(new UnboundedGrid());"
+  },
+  {
+    "category": "Java Programming",
+    "question": "Trong bài tập GridWorld, làm thế nào để lấy tọa độ cột của một con bọ và cách điều khiển màu sắc dựa trên tọa độ?",
+    "context": "Đối tượng Location mà bạn đã lấy từ getLocation có chứa những phương thức mang tên getRow và getCol vốn trả lại những số nguyên. VÌ vậy bạn có thể lấy tọa độ x của con bọ như sau: int x = bug.getLocation().getCol(); Hãy viết một phương thức có tên makeBugs để nhận vào một ActorWorld và một số nguyên n rồi tạo nên n con bọ có màu sắc tùy thuộc theo tọa độ của chúng. Hãy dùng số thứ tự dòng để điều khiển mức sắc đỏ và thứ tự cột để điều khiển mức sắc lam.",
+    "ground_truth": "Để lấy tọa độ cột, bạn sử dụng phương thức bug.getLocation().getCol(). Để điều khiển màu sắc, bạn dùng số thứ tự dòng (row) để điều khiển mức sắc đỏ và số thứ tự cột (col) để điều khiển mức sắc lam khi tạo đối tượng Color."
+  },
+  {
+    "category": "Java Programming Concepts",
+    "question": "Sự khác biệt cơ bản giữa 'phương thức sửa đổi' (modifier method) và 'phương thức điền' (filler method) trong lập trình Java là gì?",
+    "context": "phương thức sửa đổi: Phương thức làm thay đổi một hay nhiều đối tượng nhận làm tham số, và thường trả lại void. phương thức điền: Kiểu phương thức nhận tham số là một đối tượng “trống không” và điền vào những biến thực thể của nó thay vì việc phát sinh một giá trị trả lại.",
+    "ground_truth": "Phương thức sửa đổi làm thay đổi một hoặc nhiều đối tượng được truyền vào làm tham số và thường trả về kiểu void, trong khi phương thức điền nhận một đối tượng 'trống không' làm tham số và thực hiện việc điền dữ liệu vào các biến thực thể của đối tượng đó thay vì trả về một giá trị."
+  },
+  {
+    "category": "Java Class Implementation",
+    "question": "Dựa trên yêu cầu của Bài tập 1, các thành phần cần thiết để định nghĩa lớp Tile bao gồm những gì?",
+    "context": "1. Hãy viết một định nghĩa lớp có tên Tile để biểu diễn các miếng vuông Scrabble. Các biến thực thể sẽ gồm một kí tự có tên letter và một số nguyên có tên value. 2. Hãy viết một constructor để nhận các tham số letter và value rồi khởi tạo các biến thực thể.",
+    "ground_truth": "Để định nghĩa lớp Tile, cần có các biến thực thể gồm một kí tự tên là 'letter' và một số nguyên tên là 'value', cùng với một constructor nhận hai tham số tương ứng là 'letter' và 'value' để khởi tạo các biến thực thể này."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Khi triển khai phương thức squareRoot theo thuật toán Newton, điều kiện dừng nào được yêu cầu để đảm bảo độ chính xác của giá trị xấp xỉ?",
+    "context": "Phương thức bạn viết cần phải lặp lại đến khi nó đạt được hai giá trị ước tính liên tiếp chỉ sai khác nhau chưa đến 0.0001; nói cách khác, là đến khi giá trị tuyệt đối của xn − xn−1 nhỏ hơn 0.0001. Bạn có thể dùng Math.abs để tính giá trị tuyệt đối này.",
+    "ground_truth": "Phương thức cần lặp lại cho đến khi giá trị tuyệt đối của hiệu giữa hai giá trị ước tính liên tiếp (xn − xn−1) nhỏ hơn 0.0001."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Trong bài tập tính căn bậc hai, giá trị khởi tạo x0 nên được thiết lập như thế nào và công thức lặp để cải thiện phỏng đoán là gì?",
+    "context": "Giả sử bạn có một số, a, và bạn muốn tính căn bậc hai của nó. Một cách làm điều này là khởi đầu bằng một phỏng đoán sơ lược về đáp số, x0, và rồi cải thiện phỏng đoán này theo công thức sau: x =(x + a/x ) / 2 1 0 0 ... Với giá trị ban đầu, bạn nên lấy a/2.",
+    "ground_truth": "Giá trị khởi tạo x0 nên được lấy là a/2, và công thức lặp để cải thiện phỏng đoán là x = (x + a/x) / 2."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Tại sao tác giả lại thêm các phép đổi kiểu dữ liệu (double) vào trong phương thức distance dù chúng không thực sự cần thiết?",
+    "context": "Các phép đổi kiểu dữ liệu ở đây đều không thật sự cần thiết. Tôi chỉ viết vào để tự nhắc rằng các biến thực thể trong một Point đều là các số nguyên.",
+    "ground_truth": "Tác giả thêm các phép đổi kiểu dữ liệu này vào để tự nhắc nhở bản thân rằng các biến thực thể trong một đối tượng Point đều là các số nguyên."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Phương thức findCenter thực hiện nhiệm vụ gì và nó trả về kiểu dữ liệu nào?",
+    "context": "Chẳng hạn, findCenter lấy một Rectangle làm đối số rồi trả lại một Point có chứa toạ độ của tâm Rectangle: public static Point findCenter(Rectangle box) { int x = box.x + box.width/2; int y = box.y + box.height/2; return new Point(x, y); }",
+    "ground_truth": "Phương thức findCenter lấy một đối tượng Rectangle làm đối số để tính toán và trả về một đối tượng Point chứa tọa độ tâm của hình chữ nhật đó."
+  },
+  {
+    "category": "Debugging Methodology",
+    "question": "Kỹ thuật 'vịt cao su' (rubber duck debugging) được thực hiện như thế nào và mục đích chính của nó là gì?",
+    "context": "Hiện tượng này thường gặp đến nỗi người ta gợi ý một kĩ thuật gỡ lỗi có tên “vịt cao su.” Sau đây là cách hoạt động: 1. Mua một con vịt cao su chuẩn. 2. Khi bạn thực sự đã vướng mắc trong lập trình, hãy đặt con vịt cao su trước mặt rồi nói, “Vịt ơi, tao đang vướng mắc đây. Hoàn cảnh là như thế này…” 3. Trình bày vấn đề cho con vịt. 4. Tìm thấy hướng giải quyết. 5. Cám ơn con vịt cao su.",
+    "ground_truth": "Kỹ thuật này bao gồm việc mua một con vịt cao su, đặt nó trước mặt khi gặp lỗi, và trình bày chi tiết vấn đề, hoàn cảnh đang vướng mắc cho con vịt nghe. Mục đích chính là thông qua việc giải thích khúc mắc cho người khác (hoặc vật thay thế), lập trình viên có thể tự tìm thấy hướng giải quyết vấn đề."
+  },
+  {
+    "category": "Post-Debugging Analysis",
+    "question": "Tại sao tác giả khuyên lập trình viên nên dành thời gian suy ngẫm sau khi đã sửa xong một lỗi thay vì chuyển ngay sang lỗi mới?",
+    "context": "Sau khi sửa xong lỗi, bạn đừng chuyển sang lỗi mới. Hãy nghĩ một lát xem vừa rồi là loại lỗi gì, tại sao bạn mắc phải lỗi này, làm thế nào mà lỗi đã lộ diện, và đáng ra bạn có thể tìm lỗi này nhanh hơn bằng cách nào. Lần sau khi bạn thấy điều tương tự, có thể bạn sẽ chóng phá",
+    "ground_truth": "Tác giả khuyên nên suy ngẫm để hiểu rõ bản chất lỗi, nguyên nhân mắc phải, cách lỗi lộ diện và phương pháp tìm lỗi nhanh hơn. Việc này giúp lập trình viên rút kinh nghiệm để có thể nhận diện và xử lý nhanh hơn nếu gặp lại lỗi tương tự trong tương lai."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Phương thức nào trong lớp ByteArrayOutputStream được sử dụng để ghi nội dung vùng đệm ra một luồng xuất khác và đối số của nó là gì?",
+    "context": "writeto() Ghi nội dung của vùng đệm kết xuất ra luồng xuất đã chỉ định. Để thực hiện, nó chấp nhận một đối tượng của lớp OutputStream làm đối số.",
+    "ground_truth": "Phương thức writeto() được sử dụng để ghi nội dung vùng đệm ra luồng xuất đã chỉ định, và nó chấp nhận một đối tượng của lớp OutputStream làm đối số."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Để thực hiện các tác vụ nhập và xuất tập tin trong Java, ngôn ngữ này hỗ trợ những lớp nào?",
+    "context": "Java hỗ trợ các tác vụ nhập và xuất tập tin với sự trợ giúp các lớp sau đây: File, FileDescriptor, FileInputStream, FileOutputStream",
+    "ground_truth": "Java hỗ trợ các tác vụ nhập và xuất tập tin với sự trợ giúp của các lớp: File, FileDescriptor, FileInputStream và FileOutputStream."
+  },
+  {
+    "category": "Java Programming Exercises",
+    "question": "Tại sao các bản ghi trong bài tập lập trình tập tin nên được lưu trữ dưới định dạng .dat?",
+    "context": "Các bản ghi nên được lưu ở dạng tập tin ‘.dat’, vì vậy người dùng truy cập chúng nhanh hơn.",
+    "ground_truth": "Các bản ghi nên được lưu ở dạng tập tin .dat để giúp người dùng truy cập chúng nhanh hơn."
+  },
+  {
+    "category": "Java Security",
+    "question": "Sự khác biệt cơ bản về vị trí thực thi giữa chương trình Java Applet và chương trình CGI là gì?",
+    "context": "Các chương trình này, không giống như chương trình CGI, được chạy trên hệ thống của người dùng, hơn là chạy trên máy chủ Web (Web server).",
+    "ground_truth": "Chương trình Java Applet được chạy trực tiếp trên hệ thống của người dùng, trong khi chương trình CGI được chạy trên máy chủ Web (Web server)."
+  },
+  {
+    "category": "Java Memory Management",
+    "question": "Trong quy trình mô phỏng garbage collection được mô tả, tại sao cần phải đặt các mảng phần tử thành rỗng trước khi gọi phương thức gc() lần thứ hai?",
+    "context": "Để làm các mảng phần tử thích hợp cho garbage collection, chúng ta đặt chúng rỗng. Cuối cùng, chúng ta sử dụng phương thức gc() để viện dẫn garbage collection lần nữa.",
+    "ground_truth": "Việc đặt các mảng phần tử thành rỗng là để giải phóng tham chiếu đến các đối tượng đó, từ đó làm cho chúng trở nên thích hợp (đủ điều kiện) để bộ thu gom rác (garbage collection) có thể thu hồi bộ nhớ."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Theo tài liệu, cơ chế nào được Java cung cấp để giải quyết vấn đề kiểm soát vòng (deadlock) trong kỹ thuật truyền thông giữa các luồng?",
+    "context": "Để tránh kiểm soát vòng, Java bao gồm một thiết kế tốt trong tiến trình kỹ thuật truyền thông sử dụng các phương thức “wait()” (đợi), “notify()” (thông báo) và “notifyAll()” (thông báo hết).",
+    "ground_truth": "Để tránh kiểm soát vòng, Java sử dụng các phương thức wait(), notify() và notifyAll() trong tiến trình kỹ thuật truyền thông giữa các luồng."
+  },
+  {
+    "category": "Lập trình và Thuật toán",
+    "question": "Tại sao việc học thuộc lòng bảng cửu chương không được coi là một thuật toán theo quan điểm của tác giả?",
+    "context": "Trước hết, hãy xét một số thứ không phải là thuật toán. Khi bạn học tính nhân giữa hai số, có lẽ bạn đã ghi nhớ bản cửu chương. Thật ra, bạn đã học thuộc lòng 100 lời giải cụ thể, bởi vậy kiến thức này thực sự không phải là thuật toán.",
+    "ground_truth": "Vì việc học thuộc lòng bảng cửu chương thực chất là ghi nhớ 100 lời giải cụ thể cho từng trường hợp riêng lẻ, thay vì áp dụng một phương pháp tổng quát."
+  },
+  {
+    "category": "Lập trình và Thuật toán",
+    "question": "Đặc điểm cốt lõi nào của thuật toán giúp chúng khác biệt với các phương pháp giải quyết vấn đề thông thường?",
+    "context": "Một trong những đặc điểm của thuật toán là chúng không cần trí thông minh để thực hiện. Chúng chỉ là những cơ chế máy móc trong đó từng bước nối tiếp nhau theo một loạt những nguyên tắc đơn giản.",
+    "ground_truth": "Đặc điểm cốt lõi là thuật toán không cần trí thông minh để thực hiện, chúng hoạt động như những cơ chế máy móc tuân theo một loạt các nguyên tắc đơn giản nối tiếp nhau."
+  },
+  {
+    "category": "Java Object Comparison",
+    "question": "Trong Java, sự khác biệt về mặt kỹ thuật giữa việc sử dụng toán tử == và phương thức sameCard khi so sánh hai đối tượng Card là gì?",
+    "context": "Để xem liệu có phải hai tham chiếu cùng chỉ đến một đối tượng hay không, ta dùng toán tử ==. [...] Để kiểm tra sự tương đồng, người ta thường viết một phương thức có tên gọi kiểu như sameCard. public static boolean sameCard(Card c1, Card c2) { return(c1.suit == c2.suit && c1.rank == c2.rank); }",
+    "ground_truth": "Toán tử == được dùng để kiểm tra xem hai tham chiếu có cùng chỉ đến một đối tượng hay không (giống hệt nhau), trong khi phương thức sameCard được dùng để kiểm tra xem hai đối tượng có dữ liệu bên trong giống nhau hay không (tương đồng nhau)."
+  },
+  {
+    "category": "Java String Comparison",
+    "question": "Tại sao tác giả khuyên không nên sử dụng toán tử == để so sánh các đối tượng String trong Java?",
+    "context": "Ở Mục 8.10, tôi đã nói rằng bạn không nên dùng toán tử == đối với String vì nó sẽ không hoạt động theo ý mình. Thay vì việc so sánh nội dung của các String (so sánh tương đồng), nó lại đi kiểm tra xem hai String này có phải cùng đối tượng (giống hệt) không.",
+    "ground_truth": "Vì toán tử == không so sánh nội dung (tương đồng) của các String mà chỉ kiểm tra xem hai biến String đó có cùng tham chiếu đến một đối tượng (giống hệt) hay không."
+  },
+  {
+    "category": "Java Threading",
+    "question": "Điều gì sẽ xảy ra nếu một luồng vượt quá khoảng thời gian định lượng được cấp trong môi trường Java?",
+    "context": "Sau khoảng thời gian này được vượt qua, luồng không được nhận nhiều thời gian để tiếp tục thực hiện, ngay cả nếu nó không được hoàn thành việc thực hiện của nó. Luồng kế tiếp của luồng có quyền ưu tiên bằng nhau này sẽ lấy khoảng thời gian thay đổi của bộ vi xử lý.",
+    "ground_truth": "Luồng đó sẽ không được nhận thêm thời gian để tiếp tục thực hiện dù chưa hoàn thành công việc, và luồng kế tiếp có cùng quyền ưu tiên sẽ lấy quyền sử dụng bộ vi xử lý."
+  },
+  {
+    "category": "Java Threading",
+    "question": "Tại sao phương thức yield() lại cần thiết trong các hệ thống không chia nhỏ thời gian (non-time-sliced)?",
+    "context": "Phương thức yield() (lợi nhuận) đưa ra các luồng khác một khả năng để thực thi. Phương thức này được thích hợp cho các hệ thống không chia nhỏ thời gian (non-time-sliced), nơi mà các luồng hiện thời hoàn thành việc thực hiện trước khi các luồng có quyền ưu tiên ngang nhau kế tiếp tiếp quản.",
+    "ground_truth": "Trong các hệ thống không chia nhỏ thời gian, các luồng hiện tại thường thực thi cho đến khi hoàn thành công việc. Phương thức yield() được gọi để cho phép các luồng khác có cùng quyền ưu tiên có cơ hội chia sẻ thời gian thực thi CPU."
+  },
+  {
+    "category": "Java Memory Management",
+    "question": "Trong Java, khi nào một đối tượng được coi là thích hợp để garbage collection?",
+    "context": "Tuy nhiên, trong ví dụ cho dưới đây, giả định rằng không có tham chiếu đến “a” tồn tại, đối tượng “a” trở nên thích hợp cho garbage collection.",
+    "ground_truth": "Một đối tượng trở nên thích hợp cho garbage collection khi không còn tham chiếu nào đến nó tồn tại."
+  },
+  {
+    "category": "Java Garbage Collection",
+    "question": "Việc gọi phương thức garbage collection trong Java có đảm bảo rằng quá trình dọn dẹp bộ nhớ sẽ diễn ra ngay lập tức không?",
+    "context": "Bạn có thể chạy phương thức garbage collection, nhưng không có banỏ đảm rằng nó sẽ xảy ra.",
+    "ground_truth": "Không, việc gọi phương thức garbage collection không đảm bảo rằng nó sẽ xảy ra."
+  },
+  {
+    "category": "Java Keytool Security",
+    "question": "Tại sao các 'self-signed certificates' (chứng nhận tự ký danh) do Keytool tạo ra lại không được coi là chứng nhận đáng tin cậy cho định danh?",
+    "context": "Cùng thực thể đã tạo khoá công cộng ký danh chứng nhận này. Đó được gọi là ‘self-signed certificates’ (Chứng nhận tự ký danh). Các chứng nhận này không phải là chứng nhận đáng tin cậy cho định danh.",
+    "ground_truth": "Vì các chứng nhận này được ký danh bởi chính thực thể đã tạo ra khoá công cộng đó, nên chúng không đảm bảo tính xác thực và không phải là chứng nhận đáng tin cậy cho định danh."
+  },
+  {
+    "category": "Java Keytool Operations",
+    "question": "Để tạo một yêu cầu ký danh chứng nhận (certificate-signing request) bằng Keytool, người dùng cần sử dụng câu lệnh nào và các tham số quan trọng bao gồm những gì?",
+    "context": "Câu lệnh sau giúp tạo các chứng nhận trên: keytool –keystore store –alias mykey –certreq –file mykey.txt Cặp khoá được tạo là ‘mykey’. Tuỳ chọn ‘-file’ chỉ tên file, mà yêu cầu ký danh chứng nhận dùng để lưu.",
+    "ground_truth": "Người dùng cần sử dụng câu lệnh 'keytool –keystore store –alias mykey –certreq –file mykey.txt'. Trong đó, tham số '-alias' chỉ định cặp khoá (ví dụ: 'mykey') và tham số '-file' chỉ định tên file dùng để lưu yêu cầu ký danh chứng nhận."
+  },
+  {
+    "category": "Java Object-Oriented Programming",
+    "question": "Tại sao khi làm việc với đối tượng Deck, ta không thể sử dụng cú pháp deck[i] để truy cập vào các lá bài?",
+    "context": "ờ đây deck đã là một đối tượng Deck, chứ không phải một mảng. Nó chứa một mảng, nhưng nó không phải là mảng. Bởi v ậy ta phải viết deck.cards.length để kết xuất được mảng từ đối tượng Deck rồi lấy chiều dài của mảng này. Với lý do tương tự, ta phải dùng deck.cards[i] để truy cập một phần tử của mảng, thay vì chỉ viết deck[i].",
+    "ground_truth": "Vì deck là một đối tượng chứa mảng chứ bản thân nó không phải là một mảng, do đó ta phải truy cập thông qua thuộc tính mảng bên trong đối tượng (deck.cards[i]) thay vì truy cập trực tiếp vào đối tượng như một mảng."
+  },
+  {
+    "category": "Algorithm Design",
+    "question": "Tại sao việc mô phỏng cách con người tráo bài (chia đôi và đan xen) lại không phải là lựa chọn tối ưu cho chương trình máy tính?",
+    "context": "Một khả năng là mô phỏng cách con người tráo bài, thường là chia cỗ bài làm đôi rồi chọn bài đan xen từ từng phần. Bởi người thường không thể tráo chính xác theo cách này được, nên sau chừng 7 lần lặp lại thao tác thì cỗ bài dường như đã hoàn toàn ngẫu nhiên. Song một chương trình máy tính thì lại có đặc điểm luôn trộn bài thật hoàn hảo nên kết quả sẽ không thật ngẫu nhiên. Thực tế là, sau 8 lần trộn, máy sẽ làm cho cỗ bài về nguyên trạng.",
+    "ground_truth": "Vì máy tính thực hiện thao tác trộn bài một cách hoàn hảo, dẫn đến kết quả không ngẫu nhiên thực sự; cụ thể là sau 8 lần trộn theo cách này, cỗ bài sẽ quay trở về trạng thái ban đầu."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Lớp BufferedOutputStream cung cấp những tùy chọn nào liên quan đến việc thiết lập kích thước vùng đệm?",
+    "context": "fferedInputStream. Lớp này cũng định nghĩa hai phương thức thiết lập. nó cho phép chỉ định kích cỡ của vùng đệm xuất trong một phương thức thiết lập cũng như cung cấp một kích cỡ vùng đệm ngầm định.",
+    "ground_truth": "Lớp này cho phép chỉ định kích cỡ của vùng đệm xuất thông qua một phương thức thiết lập hoặc cung cấp một kích cỡ vùng đệm ngầm định."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Trong Chương trình 9.3, luồng nào được sử dụng làm nguồn dữ liệu đầu vào cho BufferedInputStream?",
+    "context": "SequenceInputStream Seq3; FileInputStream Fis 1 ; Fisl = new FileInputStream(\"byteexam.java\"); FileInputStream Fis2; Fis2= new FileInputStream(\"fileioexam.java\"); Seq3 = new SequenceInputStream(Fisl, Fis2); // create buffered input and output streams BufferedInputStream inst; inst .= new BufferedInputStream(Seq3);",
+    "ground_truth": "Luồng được sử dụng làm nguồn dữ liệu đầu vào cho BufferedInputStream là SequenceInputStream (được đặt tên là Seq3), vốn kết hợp dữ liệu từ hai FileInputStream là Fis1 và Fis2."
+  },
+  {
+    "category": "Java Programming Best Practices",
+    "question": "Tại sao việc sử dụng biến length của mảng lại được khuyến khích thay vì sử dụng một giá trị cố định trong vòng lặp?",
+    "context": "Tất cả mảng đều có một biến thực thể tên là length. Chẳng cần nói thì bạn cũng biết, biến này chứa chiều dài của mảng (số phần tử). Nên lấy giá trị này làm giới hạn trên của vòng lặp thay vì một giá trị cố định. Làm như vậy, nếu như kích thước của mảng thay đổi thì bạn sẽ không phải dò lại cả chương trình để thay đổi các vòng lặp; chương trình sẽ chạy được đúng với mọi kích cỡ mảng khác nhau.",
+    "ground_truth": "Việc sử dụng biến length giúp chương trình linh hoạt hơn, vì nếu kích thước mảng thay đổi, lập trình viên không cần phải dò lại toàn bộ chương trình để cập nhật giới hạn vòng lặp, giúp chương trình chạy đúng với mọi kích cỡ mảng khác nhau."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Điều gì sẽ xảy ra nếu vòng lặp for duyệt mảng a với điều kiện i <= a.length thay vì i < a.length?",
+    "context": "Lần cuối cùng mà phần thân của vòng lặp được thực thi, i sẽ là a.length - 1, chỉ số của phần tử cuối. Khi i bằng với a.length, điều kiện sẽ không thỏa mãn và phần thần sẽ không được thực thi. Đây là điều tốt, vì sẽ có biệt lệ được phát ra.",
+    "ground_truth": "Nếu điều kiện là i <= a.length, vòng lặp sẽ cố gắng truy cập vào chỉ số a.length, điều này sẽ gây ra lỗi biệt lệ (exception) vì chỉ số hợp lệ cuối cùng của mảng chỉ là a.length - 1."
+  },
+  {
+    "category": "Java I/O Interfaces",
+    "question": "Mục đích chính của giao diện DataOutput trong Java là gì và nó xử lý các kiểu dữ liệu chuỗi như thế nào?",
+    "context": "Giao diện DataOutput được sử dụng để xây dựng lại các kiểu dữ liệu nguyên thuỷ trong java vào trong dãy các byte. nó ghi các byte này lên trên luồng nhị phân. Giao diện DataOutput cũng cho phép chúng ta chuyển đổi một sâu chuỗi vào trong java được sửa đổi theo định dạng UTF-8 và ghi nó vào luồng.",
+    "ground_truth": "Giao diện DataOutput được sử dụng để xây dựng lại các kiểu dữ liệu nguyên thủy trong Java thành dãy các byte để ghi lên luồng nhị phân. Đối với kiểu chuỗi, nó cho phép chuyển đổi chuỗi sang định dạng UTF-8 sửa đổi trước khi ghi vào luồng."
+  },
+  {
+    "category": "Java I/O Classes",
+    "question": "Lớp RandomAccessFile khác biệt như thế nào so với các luồng I/O thông thường dựa trên mô tả chức năng của nó?",
+    "context": "Lớp RandomAccessFile cung cấp khả năng thực hiện I/O theo một vị trí cụ thể bên trong một tập tin. Trong lớp này, dữ liệu có thể đọc hoặc ghi ở vị trí ngẫu nhiên bên trong một tập tin th",
+    "ground_truth": "Lớp RandomAccessFile khác biệt ở chỗ nó cung cấp khả năng thực hiện các thao tác đọc hoặc ghi dữ liệu tại một vị trí cụ thể hoặc vị trí ngẫu nhiên bên trong một tập tin, thay vì chỉ tuần tự."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Trong đoạn mã được cung cấp, phương thức randomArray thực hiện những nhiệm vụ cụ thể nào và kiểu dữ liệu trả về của nó là gì?",
+    "context": "Phương thức sau nhận một đối số duy nhất là kích thước của mảng. Phương thức có nhiệm vụ huy động một mảng số nguyên mới, điền vào những giá trị ngẫu nhiên, rồi trả lại tham chiếu đến mảng mới điền. public static int[] randomArray(int n) { int[] a = new int[n]; for (int i = 0; i<a.length; i++) { a[i] = randomInt(0, 100); } return a; } Kiểu trả lại là int[], nghĩa là phương thức này trả lại một mảng các số nguyên.",
+    "ground_truth": "Phương thức randomArray nhận vào kích thước mảng, huy động một mảng số nguyên mới, điền vào đó các giá trị ngẫu nhiên và trả lại tham chiếu đến mảng đó. Kiểu dữ liệu trả về của phương thức là int[]."
+  },
+  {
+    "category": "Software Development Methodology",
+    "question": "Theo đoạn văn bản, khái niệm 'phát triển từ dưới lên' (bottom-up) được định nghĩa như thế nào trong bối cảnh giải quyết các bài toán lập trình?",
+    "context": "Một cách tiếp cận hay đến những bài toán như thế này là nghĩ về những phương thức đơn giản, dễ viết, rồi kết hợp chúng lại thành lời giải. Quá trình này được gọi là phát triển từ dưới",
+    "ground_truth": "Phát triển từ dưới lên là quá trình nghĩ về những phương thức đơn giản, dễ viết, sau đó kết hợp chúng lại với nhau để tạo thành lời giải hoàn chỉnh cho bài toán."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Điều gì sẽ xảy ra với phương thức displayResults() nếu một ngoại lệ phát sinh trong quá trình thực thi phương thức doFileProcessing() bên trong khối try?",
+    "context": "Nếu một lỗi xảy ra trong khi thi hành phương thức ‘doFileProcessing()’, lúc đó phương thức ‘displayResults()’ sẽ không bao giờ được gọi. Sự thi hành sẽ tiếp tục thực hiện khối ‘catch’.",
+    "ground_truth": "Nếu một lỗi xảy ra trong khi thi hành phương thức doFileProcessing(), phương thức displayResults() sẽ không bao giờ được gọi và chương trình sẽ chuyển sang thực thi khối catch."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Tại sao chúng ta lại sử dụng lớp 'Exception' trong khối catch và đối tượng 'e' có vai trò gì trong việc xử lý lỗi?",
+    "context": "Khi ngoại lệ bị bắt giữ không biết thuộc kiểu nào, chúng ta có thể sử dụng lớp ‘Exception’ để bắt ngoại lệ đó. Ở đây, ‘e’ là đối tượng của lớp ‘Exception’. Chúng ta có thể sử dụng đối tượng này để in các chi tiết về ngoại lệ. Các phương thức ‘toString’ và ‘printStackTrace’ được sử dụng để mô tả các exception phát sinh ra.",
+    "ground_truth": "Lớp 'Exception' được sử dụng để bắt các ngoại lệ khi không xác định được kiểu ngoại lệ cụ thể. Đối tượng 'e' đại diện cho ngoại lệ đó, cho phép lập trình viên sử dụng các phương thức như toString() và printStackTrace() để in ra chi tiết và mô tả lỗi phát sinh."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Trong Java, vai trò của các lớp 'Filter' trong hệ thống nhập xuất là gì và chúng hoạt động như thế nào trong chuỗi xử lý dữ liệu?",
+    "context": "Một ‘Filter’ là một kiểu luồng sửa đổi cách điều quản một luồng hiện tồn tại. Các lớp, các luồng nhập xuất đã lọc của java sẽ giúp ta lọc I/O theo một số cách. Về cơ bản, các bộ lọc này dùng để thích ứng các luồng theo các nhu cầu của chương trình cụ thể. Bộ lọc nằm giữa một luồng nhập và một luồng xuất. Nó thực hiện xử lý một tiến trình đặc biệt trên các byte được truyền từ đầu vào đến kết xuất. Các bộ lọc có thể phối hợp thực hiện dãy tuần tự các tuỳ chọn lọc ở đó mọi bộ lọc tác động như kết xuất của một bộ lọc khác.",
+    "ground_truth": "Các lớp Filter dùng để sửa đổi cách điều quản một luồng hiện tồn tại nhằm thích ứng với các nhu cầu cụ thể của chương trình. Chúng hoạt động bằng cách nằm giữa luồng nhập và luồng xuất để thực hiện xử lý đặc biệt trên các byte được truyền đi, đồng thời có thể phối hợp theo chuỗi tuần tự nơi kết xuất của bộ lọc này là đầu vào của bộ lọc khác."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Lớp FilterInputStream đóng vai trò gì trong phân cấp lớp của Java và biến 'in' trong lớp này có chức năng gì?",
+    "context": "Lớp FilterInputStream Đây là lớp trừu tượng. Nó là cha của tất cả các lớp luồng nhập đã lọc. Lớp này cung cấp khả năng tạo ra một luồng từ luồng khác. Một luồng có thể được đọc và cung cấp dưới dạng kết xuất cho luồng khác. Biến ‘in’ được sử dụng để làm điều này. Biến này được dùng để duy trì một đối tượng tách biệt của lớp InputStream.",
+    "ground_truth": "FilterInputStream là một lớp trừu tượng và là lớp cha của tất cả các lớp luồng nhập đã lọc. Nó cung cấp khả năng tạo ra một luồng từ một luồng khác, trong đó biến 'in' được sử dụng để duy trì một đối tượng tách biệt của lớp InputStream."
+  },
+  {
+    "category": "Lịch sử và bối cảnh tài liệu",
+    "question": "Tác giả bắt đầu viết cuốn sách này vào thời điểm nào và tại cơ sở giáo dục nào?",
+    "context": "Đây là ấn bản thứ năm của cuốn sách mà tôi đã bắt đầu viết từ năm 1999, khi còn dạy ở trường Colby College.",
+    "ground_truth": "Tác giả bắt đầu viết cuốn sách này vào năm 1999 khi đang giảng dạy tại trường Colby College."
+  },
+  {
+    "category": "Đánh giá nội dung giáo trình",
+    "question": "Tại sao tác giả lại cảm thấy các giáo trình Java hiện có không phù hợp để giảng dạy cho sinh viên?",
+    "context": "Tôi dẫ dạy một lớp học nhập môn khoa học máy tính bằng ngôn ngữ Java, nhưng chưa tìm được một cuốn giáo trình vừa ý. Một trong những lý do là, chúng quá dày! Không có cách nào mà sinh viên có thể đọc hết cuốn sách dày cỡ 800 trang, đầy những kiến thức kĩ thuật, kể cả tôi có yêu cầu họ thực hiện.",
+    "ground_truth": "Tác giả cho rằng các giáo trình hiện có quá dày (khoảng 800 trang) với quá nhiều kiến thức kĩ thuật, khiến sinh viên không thể đọc hết được."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Khi làm việc với InputStream, làm thế nào để xác định xem một luồng có cho phép quay lại vị trí đã đánh dấu trước đó hay không?",
+    "context": "markSupporte() trả về giá trị boolean nêu rõ luồng có hỗ trợ các khả năng mark và reset hay không. Nó trả về đúng nếu luồng hỗ trợ nó bằng không là sai.",
+    "ground_truth": "Bạn có thể sử dụng phương thức markSupporte(), phương thức này sẽ trả về giá trị boolean (đúng nếu luồng hỗ trợ mark và reset, sai nếu không hỗ trợ)."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Sự khác biệt về cơ chế hoạt động giữa phương thức flush() và close() trong lớp OutputStream là gì?",
+    "context": "flush() Phương thức này xả sạch luồng. đệm dữ liệu được ghi ra luồng kết xuất. Nó kích hoạt IOException nếu lỗi xảy ra. close() Phương thức đóng luồng. Nó được dùng để giải phóng mọ",
+    "ground_truth": "Phương thức flush() được dùng để xả sạch luồng và đẩy dữ liệu đệm ra luồng kết xuất, trong khi phương thức close() được dùng để đóng luồng nhằm giải phóng tài nguyên."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Tại sao việc sử dụng câu lệnh return lại hữu ích trong phương thức printLogarithm khi phát hiện điều kiện lỗi?",
+    "context": "Một lí do dùng câu lệnh này là nếu bạn phát hiện ra điều kiện gây lỗi: public static void printLogarithm(double x) { if (x <= 0.0) { System.out.println(\"Yêu cau nhap vao so duong.\"); return; } double result = Math.log(x); System.out.println(\"Gia tri log cua x bang \" + result); } Phương thức này kiểm tra xem liệu x có nhỏ hơn hoặc bằng 0 hay không, và trong trường hợp như vậy thì in ra một thông báo lỗi rồi dùng return để thoát khỏi phương thức. Luồng thực thi sẽ lập tức trở lại chỗ gọi phương thức đó và những dòng còn lại của phương thức sẽ không được thực hiện.",
+    "ground_truth": "Việc sử dụng câu lệnh return giúp thoát khỏi phương thức ngay lập tức khi phát hiện điều kiện lỗi (x <= 0.0), từ đó ngăn chặn việc thực hiện các dòng lệnh còn lại của phương thức và trả luồng thực thi về nơi gọi phương thức đó."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Theo đoạn văn bản, tại sao các lệnh điều kiện lồng ghép thường được khuyến cáo nên tránh sử dụng?",
+    "context": "Tuy cách viết thụt vào trong làm cho cấu trúc rõ ý, nhưng các lệnh điều kiện lồng ghép trở nên rất khó để người đọc nhanh. Ta nên cố gắng tránh dùng chúng.",
+    "ground_truth": "Các lệnh điều kiện lồng ghép nên được tránh vì chúng khiến cấu trúc mã nguồn trở nên rất khó để người đọc có thể nắm bắt hoặc đọc nhanh nội dung."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Khi phương thức x() gọi phương thức y() và y() ném ra một ngoại lệ chưa được xử lý, lập trình viên cần thực hiện hành động gì trong x() để đảm bảo tính an toàn cho chương trình?",
+    "context": "Giả sử rằng phương thức ‘x()’ gọi phương thức ‘y()’. Phương thức ‘y()’ chặn một ngoại lệ không được xử lý. Trong trường hợp này, phương thức gọi ‘x()’ nên khai báo việc chặn cùng một ngoại lệ với phương thức được gọi ‘y()’. Ta nên khai báo khối ‘try catch’ trong phương thức x() để đảm bảo rằng ngoại lệ không được truyền cho các phương thức mà gọi phương thức này.",
+    "ground_truth": "Phương thức x() nên khai báo việc chặn cùng một ngoại lệ với phương thức y() và sử dụng khối 'try catch' để đảm bảo ngoại lệ không bị truyền ngược lên các phương thức gọi x()."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Việc tạo một lớp con kế thừa từ lớp 'Exception' mang lại lợi ích gì trong việc quản lý ngoại lệ do người dùng định nghĩa?",
+    "context": "Ưu điểm của nó là tạo các lớp ngoại lệ được định nghĩa bởi người dùng. Để làm điều này, một lớp con của lớp Exception được tạo ra. Ưu điểm của lớp con là một kiểu ngoại lệ mới có thể bị bắt giữ độc lập từ các loại Throwable khác.",
+    "ground_truth": "Việc tạo lớp con từ lớp 'Exception' cho phép tạo ra các kiểu ngoại lệ mới mà có thể bị bắt giữ (catch) một cách độc lập so với các loại Throwable khác."
+  },
+  {
+    "category": "Java Graphics Programming",
+    "question": "Tại sao lớp MyCanvas lại cần phải mở rộng (extend) lớp Canvas trong ví dụ được cung cấp?",
+    "context": "MyCanvas mở rộng Canvas, nghĩa là một đối tượng MyCanvas là một kiểu Canvas mà cung cấp các phương thức để vẽ những đối tượng đồ họa.",
+    "ground_truth": "Lớp MyCanvas cần mở rộng lớp Canvas vì Canvas cung cấp các phương thức cần thiết để vẽ những đối tượng đồ họa."
+  },
+  {
+    "category": "Java Graphics Programming",
+    "question": "Trong đoạn mã ví dụ, phương thức paint đóng vai trò gì và khi nào nó được thực thi?",
+    "context": "paint là một phương thức đặc biêt được kích hoạt khi MyCanvas cần được vẽ.",
+    "ground_truth": "Phương thức paint là một phương thức đặc biệt được sử dụng để thực hiện các thao tác vẽ (như vẽ hình tròn) và nó được kích hoạt tự động khi đối tượng MyCanvas cần được vẽ trên màn hình."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Tại sao khi thực hiện lệnh fruit.charAt(1) trên chuỗi \"banana\", kết quả in ra lại là 'a' thay vì 'b'?",
+    "context": "Tôi đang truyền đối số 1 vào phương thức này, tức là tôi đang muốn biết chữ cái đầu tiên của chuỗi là gì. Kết quả là một kí tự, và được lưu vào trong một char có tên letter. Khi tôi in ra giá trị của letter, tôi bị bất ngờ: a. a không phải là chữ cái đầu tiên của \"banana\". Trừ khi bạn nghiên cứu khoa học máy tính. Vì những lí do kĩ thuật mà giới khoa học máy tính đều đếm từ số không. Chữ cái thứ 0 của \"banana\" là chữ b. Chữ cái thứ 1 là a và thứ 2 là n.",
+    "ground_truth": "Kết quả là 'a' vì trong khoa học máy tính, các chỉ số (index) được bắt đầu đếm từ số 0. Do đó, chữ cái ở vị trí 0 là 'b', và chữ cái ở vị trí 1 là 'a'."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Sự khác biệt cơ bản về cú pháp và nội dung giữa kiểu dữ liệu String và char trong Java là gì?",
+    "context": "Những giá trị của kí tự đều xuất hiện trong cặp dấu nháy đơn, như ’c’. Khác với giá trị của chuỗi (xuất hiện giữa cặp dấu nháy kép), các giá trị kí tự chỉ có thể chứa một chữ cái hoặc một kí hiệu.",
+    "ground_truth": "Sự khác biệt là giá trị của kiểu char được đặt trong cặp dấu nháy đơn và chỉ chứa một chữ cái hoặc kí hiệu duy nhất, trong khi giá trị của kiểu String được đặt trong cặp dấu nháy kép và đại diện cho một chuỗi các kí tự."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Cơ chế kết xích (chained filters) trong lớp FilterInputStream hoạt động như thế nào để xử lý dữ liệu?",
+    "context": "Lớp FilterInputStream được thiết kế sao cho có thể tạo nhiều bộ lọc kết xích [chained filters]. Để thực hiện điều này chúng ta dùng vài tầng lồng ghép. đến lượt mỗi lớp sẽ truy cập kết xuất của lớp trước đó với sự trợ giúp của biến ‘in’.",
+    "ground_truth": "Cơ chế này hoạt động bằng cách sử dụng vài tầng lồng ghép, trong đó mỗi lớp sẽ truy cập kết xuất của lớp trước đó thông qua biến 'in' để thực hiện các tác vụ lọc nối tiếp nhau."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Tại sao việc sử dụng cơ chế nhập/xuất có lập vùng đệm (buffered I/O) lại giúp cải thiện hiệu năng của chương trình Java?",
+    "context": "Java sử dụng cơ chế nhập/xuất có lập vùng đệm để tạm thời lập cache dữ liệu được đọc hoặc ghi vào/ra một luồng. Nó giúp các chương trình đọc/ghi các lượng dữ liệu nhỏ mà không tác động ngược lên khả năng thực hiện của hệ thống.",
+    "ground_truth": "Cơ chế này giúp chương trình đọc hoặc ghi các lượng dữ liệu nhỏ mà không gây ảnh hưởng tiêu cực đến khả năng thực hiện của hệ thống bằng cách tạm thời lưu trữ (cache) dữ liệu trong vùng đệm thay vì phải truy cập trực tiếp vào nguồn dữ liệu ban đầu mỗi lần thao tác."
+  },
+  {
+    "category": "Java Programming/GridWorld",
+    "question": "Làm thế nào để thay đổi hình ảnh đại diện của Termite trong GridWorld thành một hình ảnh tùy chỉnh?",
+    "context": "Nếu bạn tạo một file tên là LangtonTermite.gif, GridWorld sẽ dùng nó để biểu diễn cho Termite của bạn. Bạn có thể tải về những ảnh côn trùng đẹp từ http://www.cksinfo.com/animals/insects/realisticdrawings/index.html. Để chuyển chúng về dạng GIF, bạn có thể dùng một ứng dụng như ImageMagick.",
+    "ground_truth": "Bạn cần tạo một file ảnh có định dạng .gif và đặt tên file là LangtonTermite.gif, sau đó GridWorld sẽ tự động sử dụng file này để biểu diễn cho đối tượng Termite của bạn."
+  },
+  {
+    "category": "Java Programming/Object-Oriented Design",
+    "question": "Việc định nghĩa một lớp trong Java có ý nghĩa gì đối với kiểu đối tượng theo nội dung chương 11?",
+    "context": "11.1 Lời định nghĩa lớp và các kiểu đối tượng Trở về tận Mục 1.5 khi chúng ta định nghĩa lớp Hello, ta đồng thời tạo nên một kiểu đối tượng có tên Hello.",
+    "ground_truth": "Việc định nghĩa một lớp trong Java đồng thời tạo nên một kiểu đối tượng tương ứng với tên của lớp đó."
+  },
+  {
+    "category": "Java Keytool/Jarsigner",
+    "question": "Trong trường hợp người dùng không chỉ định mật khẩu thông qua tùy chọn '-keypass' khi tạo khóa, hệ thống sẽ xử lý mật khẩu như thế nào?",
+    "context": "Mật khẩu sau cùng phần biệt với mật khẩu keystore. Nó được dùng truy cập khoá riêng của cặp khoá công cộng. Mật khẩu có thể trực tiếp chỉ rõ bằng cách sử dụng tuỳ chọn ‘-keypass’. Nếu mật khẩu không chỉ rõ, mật khẩu keystore được sẽ được dùng.",
+    "ground_truth": "Nếu mật khẩu không được chỉ rõ thông qua tùy chọn '-keypass', hệ thống sẽ tự động sử dụng mật khẩu keystore thay thế."
+  },
+  {
+    "category": "Java Keytool/Jarsigner",
+    "question": "Lệnh nào được sử dụng để xóa một cặp khóa khỏi cơ sở dữ liệu keystore và tham số nào xác định khóa cần xóa?",
+    "context": "Để xoá cặp khoá từ cơ sớ liệu, dùng lệnh sau: keytool –delete –alias aliasName ‘aliasName’ chỉ tên của khoá được xoá.",
+    "ground_truth": "Lệnh được sử dụng là 'keytool –delete –alias aliasName', trong đó tham số 'aliasName' xác định tên của khóa cần xóa."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Tại sao việc sử dụng các phương thức đồng bộ (synchronized methods) lại không được khuyến khích trong các trường hợp mà hiệu năng thực thi là yếu tố giới hạn?",
+    "context": "Các phương thức đồng bộ không thực thi tốt như là các phương thức không đồng bộ. Các phương thức này chậm hơn từ ba đến bốn lần so với các phương thức tương ứng không đồng bộ. Trong trạng thái nơi mà việc thực thi là có giới hạn, các phương thức đồng bộ bị ngăn ngừa.",
+    "ground_truth": "Các phương thức đồng bộ không được khuyến khích vì chúng thực thi kém hiệu quả hơn các phương thức không đồng bộ, cụ thể là chậm hơn từ ba đến bốn lần."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Trong đoạn mã ví dụ Synchblock, từ khóa synchronized được áp dụng ở đâu và nó có ảnh hưởng trực tiếp đến định nghĩa của phương thức display() hay không?",
+    "context": "Ở đây, từ khóa synchronized không hiệu chỉnh phương thức “display()”. Từ khóa này được sử dụng trong phương thức run() của lớp “Target” (mục tiêu).",
+    "ground_truth": "Từ khóa synchronized được sử dụng trong phương thức run() của lớp Target và nó không trực tiếp hiệu chỉnh (định nghĩa) phương thức display()."
+  },
+  {
+    "category": "Software Development Methodology",
+    "question": "Tại sao việc phát triển chương trình theo hướng tăng dần lại giúp lập trình viên tránh được việc viết quá nhiều mã lệnh sai?",
+    "context": "chương trình lại tạo nên kết quả nhìn thấy được, nên bạn liên tục kiểm tra mô hình nhận thức của mình về cách chương trình hoạt động. Nếu mô hình nhận thức bị sai, bạn sẽ đối mặt với mâu thuẫn (và có cơ hội sửa chữa mô hình đó) trước khi viết ra nhiều dòng lệnh sai.",
+    "ground_truth": "Vì chương trình tạo ra kết quả nhìn thấy được giúp lập trình viên liên tục kiểm tra mô hình nhận thức của mình. Nếu mô hình sai, lập trình viên sẽ nhận ra mâu thuẫn và có cơ hội sửa chữa nó trước khi viết ra nhiều dòng lệnh sai."
+  },
+  {
+    "category": "Debugging and Development Techniques",
+    "question": "Trong quá trình phát triển, tại sao phương thức toString lại được coi là một dạng 'dàn giáo' và đặc điểm của nó là gì?",
+    "context": "Trong quá trình phát triển, bạn có thể cần phải dựng “dàn giáo”. Chẳng hạn, mỗi lớp cần phải có một phương thức toString để cho phép bạn in ra trạng thái của một đối tượng dưới dạng người đọc được. Phương thức này rất có ích cho việc gỡ lỗi, song thường không thuộc về chương trình hoàn thiện.",
+    "ground_truth": "Phương thức toString được coi là 'dàn giáo' vì nó cho phép in trạng thái đối tượng dưới dạng người đọc được để hỗ trợ gỡ lỗi, nhưng nó thường không phải là thành phần thuộc về chương trình hoàn thiện."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Tại sao việc không xử lý ngoại lệ đúng cách trong thao tác I/O với tập tin lại gây nguy hiểm cho hệ thống?",
+    "context": "Cho ví dụ, xét thao tác nhập xuất (I/O) trong một tập tin. Nếu việc chuyển đổi kiểu dữ liệu không thực hiện đúng, một ngoại lệ sẽ xảy ra và chương trình bị hủy mà không đóng lại tập tin. Lúc đó tập tin dễ bị hư hại và các nguồn tài nguyên được cấp phát cho tập tin không được thu hồi lại cho hệ thống.",
+    "ground_truth": "Nếu ngoại lệ xảy ra mà không được xử lý, chương trình sẽ bị hủy mà không đóng tập tin, dẫn đến nguy cơ tập tin bị hư hại và các nguồn tài nguyên đã cấp phát không được thu hồi lại cho hệ thống."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Trong hệ thống phân cấp lớp của Java, lớp nào đóng vai trò là lớp cha cao nhất của tất cả các ngoại lệ?",
+    "context": "Lớp ‘throwable’ được Java cung cấp là lớp trên nhất của lớp Exception , lớp này là lớp cha của các ngoại lệ khác nhau.",
+    "ground_truth": "Lớp 'throwable' là lớp trên nhất của lớp Exception và là lớp cha của các ngoại lệ khác nhau trong Java."
+  },
+  {
+    "category": "Java Programming Best Practices",
+    "question": "Tại sao việc sử dụng biến trung gian trong các biểu thức phức tạp lại được khuyến khích trong lập trình Java?",
+    "context": "Dạng mã lệnh chi tiết thì dễ đọc hơn vì tên biến cho ta bản thân đã giúp giải thích rõ thêm, và cũng dễ gỡ lỗi hơn vì bạn có thể kiểm tra kiểu của những biến trung gian cùng việc hiển thị giá trị của chúng.",
+    "ground_truth": "Việc sử dụng biến trung gian giúp mã lệnh dễ đọc hơn nhờ tên biến mang tính giải thích, đồng thời hỗ trợ gỡ lỗi hiệu quả vì lập trình viên có thể kiểm tra kiểu dữ liệu và hiển thị giá trị của các biến đó."
+  },
+  {
+    "category": "Debugging and Logic",
+    "question": "Tại sao biểu thức 'double y = x / 2 * Math.PI;' lại dẫn đến kết quả sai lệch so với mong đợi và cách khắc phục là gì?",
+    "context": "Điều này không đúng vì các phép nhân và chia có cùng thứ tự ưu tiên và được lượng giá từ trái sang phải. Vì vậy biểu thức này sẽ tính xπ / 2. Một cách hay để gỡ lỗi biểu thức là thêm vào những cặp ngoặc đơn để giúp cho thứ tự lượng giá được rõ ràng: double y = x / (2 * Math.PI);",
+    "ground_truth": "Biểu thức sai vì các phép nhân và chia có cùng thứ tự ưu tiên và được thực hiện từ trái sang phải, dẫn đến việc tính toán xπ / 2 thay vì x / (2π). Cách khắc phục là sử dụng cặp ngoặc đơn để xác định rõ thứ tự thực hiện phép tính."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Trong bối cảnh lập trình đa luồng Java, điều kiện nào dẫn đến hiện tượng 'bế tắt' (deadlock) giữa các luồng?",
+    "context": "Một “bế tắt” xảy ra khi hai luồng có mọt phụ thuộc xoay vòng trên một phần của các đối tượng đồng bộ",
+    "ground_truth": "Bế tắt xảy ra khi hai luồng có một sự phụ thuộc xoay vòng trên một phần của các đối tượng đồng bộ."
+  },
+  {
+    "category": "Java Memory Management",
+    "question": "Mục đích chính của tiến trình Garbage collection trong Java là gì?",
+    "context": "Garbage collection là một tiến trình nhờ đó bộ nhớ được định vị để các đối tượng mà không sử dụng trong thời gian dài, có thể cải tạo hoặc làm rãnh bộ nhớ.",
+    "ground_truth": "Garbage collection là tiến trình giúp cải tạo hoặc làm rãnh bộ nhớ bằng cách giải phóng các đối tượng không còn được sử dụng trong thời gian dài."
+  },
+  {
+    "category": "Algorithm",
+    "question": "Dựa trên thuật toán Euclid được mô tả, làm thế nào để xác định điểm dừng của quá trình tính ước số chung lớn nhất (GCD) và giá trị trả về tại thời điểm đó là gì?",
+    "context": "Có thể thấy rằng với bất kì hai số ban đầu nào, cách liên tiếp rút gọn này cuối cùng sẽ cho ta một cặp số mà số thứ hai bằng 0. Khi đó GCD sẽ bằng số còn lại trong cặp.",
+    "ground_truth": "Quá trình tính GCD dừng lại khi số thứ hai trong cặp bằng 0, và giá trị GCD lúc đó chính là số còn lại trong cặp."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Tại sao tác giả lại cảnh báo người lập trình cần phân biệt rõ giữa câu lệnh gán và đẳng thức trong Java khi sử dụng dấu '='?",
+    "context": "Khi có nhiều phép gán đối với cùng một biến, thì rất chú trọng việc phân biệt giữa câu lệnh gán và đẳng thức. Vì Java dùng dấu = cho lệnh gán nên ta bị lôi cuốn vào việc diễn giải một câu lệnh như a = b là câu lệnh đẳng thức. Thật ra không phải vậy!",
+    "ground_truth": "Vì Java sử dụng dấu '=' cho lệnh gán, điều này dễ gây nhầm lẫn cho người lập trình khi diễn giải câu lệnh gán (như a = b) thành một đẳng thức toán học, trong khi thực tế chúng có bản chất khác nhau."
+  },
+  {
+    "category": "Java Printing API",
+    "question": "Trong gói java.awt.print, lớp nào chịu trách nhiệm quản lý các trang in và thực thi giao diện Pageable?",
+    "context": "Lớp ‘Book’ là một lớp con của đối tượng duy trì một danh sách các trang in. Lớp này cũng cung cấp các phương thức để bổ sung và quản lý các trang cũng như thực thi giao diện Pageable.",
+    "ground_truth": "Lớp 'Book' là lớp chịu trách nhiệm duy trì danh sách các trang in và thực thi giao diện Pageable."
+  },
+  {
+    "category": "Java Printing API",
+    "question": "Sự khác biệt về ý nghĩa giữa PrinterIOException và PrinterAbortException trong gói java.awt.print là gì?",
+    "context": "‘PrinterIOException’ mở rộng lớp ‘PrinterException’ nêu rõ một lỗi trong I/O. ‘PrinterAbortException’ là lớp con của lớp PrinterException nêu rõ khối in đã được bỏ ngang.",
+    "ground_truth": "PrinterIOException được sử dụng để thông báo về một lỗi xảy ra trong quá trình I/O, trong khi PrinterAbortException được sử dụng để thông báo rằng khối in đã bị bỏ ngang."
+  },
+  {
+    "category": "Java Programming Fundamentals",
+    "question": "Tại sao việc đọc mã nguồn ngôn ngữ lập trình lại khác biệt so với đọc văn bản ngôn ngữ tự nhiên và người học cần áp dụng phương pháp nào?",
+    "context": "n ngôn ngữ tự nhiên, nên phải mất nhiều thời gian để đọc hơn. Mặt khác, cấu trúc cũng rất quan trọng, do đó không nên chỉ đọc qua một lượt từ trên xuống dưới. Thay vì vậy, bạn nên học cách phân tách ngôn ngữ trong trí óc, nhận diện các nguyên tố và diễn giải cấu trúc.",
+    "ground_truth": "Mã nguồn không nên chỉ đọc qua một lượt từ trên xuống dưới vì cấu trúc rất quan trọng. Người học cần học cách phân tách ngôn ngữ trong trí óc, nhận diện các nguyên tố và diễn giải cấu trúc thay vì đọc như ngôn ngữ tự nhiên."
+  },
+  {
+    "category": "Java Programming Fundamentals",
+    "question": "Trong cấu trúc của một chương trình Java, phương thức 'main' đóng vai trò gì và nó được định nghĩa như thế nào trong một lớp?",
+    "context": "main là một phương thức, tức là một tập hợp được đặt tên, bao gồm các câu lệnh. Tên gọi main này rất đặc biệt; nó đánh dấu điểm khởi đầu của chương trình. Khi chạy chương trình, câu lệnh đầu tiên trong main sẽ là điểm bắt đầu và kết thúc ở câu lệnh cuối c",
+    "ground_truth": "Phương thức 'main' là một tập hợp các câu lệnh được đặt tên, đóng vai trò là điểm khởi đầu của chương trình Java. Khi chương trình chạy, nó sẽ bắt đầu thực thi từ câu lệnh đầu tiên bên trong phương thức này."
+  },
+  {
+    "category": "Java Debugging",
+    "question": "Khi một hàm đệ quy trong Java không đạt được trường hợp cơ sở, phương pháp nào giúp lập trình viên xác định nguyên nhân khiến tham số không thay đổi đúng hướng?",
+    "context": "Nếu có một trường hợp cơ sở nhưng chương trình dường như không đạt đến đó, thì hãy thêm câu lệnh print vào điểm đầu của hàm hoặc phương thức để in ra các tham biến. Bây giờ khi chạy chương trình, bạn sẽ thấy một ít dòng kết quả mỗi lần hàm hoặc phương thức được gọi đến, và sẽ thấy giá trị các tham số. Nếu tham số không thay đổi với xu hướng về trường hợp cơ sở, bạn sẽ thấy được tại sao.",
+    "ground_truth": "Lập trình viên nên thêm câu lệnh print vào điểm đầu của hàm hoặc phương thức để in ra các tham biến. Bằng cách theo dõi giá trị các tham số qua mỗi lần gọi, lập trình viên có thể quan sát xem tham số có đang thay đổi theo xu hướng tiến về trường hợp cơ sở hay không."
+  },
+  {
+    "category": "Java Debugging",
+    "question": "Làm thế nào để kiểm tra lỗi cung cấp sai thứ tự các đối số khi thực hiện debug luồng thực thi của chương trình Java?",
+    "context": "Nếu bạn không chắc chắn về luồng thực hiện trong chương trình, hãy thêm các câu lệnh print vào điểm đầu của mỗi hàm với thông báo kiểu như “bắt đầu phương thức foo”, trong đó foo là tên phương thức. Bây giờ khi chạy chương trình, nó sẽ in ra một dấu vết của mỗi phương thức khi được kích hoạt đến. Bạn cũng có thể in ra những đối số mà từng phương thức nhận được. Khi chạy chương trình, hãy kiểm tra xem các giá trị này hợp lý không, và kiểm tra một trong những lỗi thường mắc phải nhất—cung cấp các đối số sai thứ tự.",
+    "ground_truth": "Bạn cần thêm các câu lệnh print vào điểm đầu của mỗi hàm để in ra dấu vết phương thức và các đối số mà phương thức đó nhận được. Sau đó, khi chạy chương trình, hãy kiểm tra các giá trị đối số được in ra để xem chúng có hợp lý hay không, từ đó phát hiện lỗi cung cấp sai thứ tự các đối số."
+  },
+  {
+    "category": "Java Programming Fundamentals",
+    "question": "Tại sao việc thêm hoặc thay đổi câu lệnh in lại được coi là một phương pháp hữu ích khi làm việc với môi trường lập trình?",
+    "context": "Trong một số môi trường, rất dễ bị mất dấu chương trình đang chạy, và bạn có thể rơi vào trường hợp đi gỡ lỗi một chương trình trong khi vô ý chạy chương trình khác. Việc thêm vào (và thay đổi) câu lệnh in là một cách đơn giản để đảm bảo chắc chương trình đang làm việc là chương trình mà bạn chạy.",
+    "ground_truth": "Việc thêm hoặc thay đổi câu lệnh in giúp lập trình viên đảm bảo chắc chắn rằng chương trình đang thực thi chính là chương trình mà họ đang làm việc và gỡ lỗi, tránh trường hợp vô ý chạy nhầm một chương trình khác trong môi trường lập trình."
+  },
+  {
+    "category": "Java Programming Fundamentals",
+    "question": "Mục đích của việc cố tình phạm lỗi trong quá trình lập trình theo gợi ý ở Bài tập 3 là gì?",
+    "context": "Một ý tưởng hay là hãy phạm càng nhiều lỗi trong lập trình mà bạn có thể hình dung được, để thấy những thông báo lỗi nào mà trình biên dịch đưa ra.",
+    "ground_truth": "Mục đích là để người học có thể quan sát và làm quen với các thông báo lỗi khác nhau mà trình biên dịch đưa ra, từ đó hiểu rõ hơn về cách trình biên dịch phản hồi với các lỗi lập trình."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Tại sao phương thức findBisect ban đầu lại gặp lỗi đệ quy vô hạn và cách khắc phục được tác giả đề xuất là gì?",
+    "context": "Mã lệnh này có chứa phần cốt lõi của phép tìm kiếm chia đôi, song vẫn thiếu một phần trong trọng, đó là lý do mà tôi đã ghi chú “CẦN LÀM”. Như đã viết, phương thức này sẽ lặp đệ quy mãi mãi nếu như lá bài không có trong cỗ. Ta cần một trường hợp cơ bản để xử lý tình huống này. Nếu high nhỏ hơn low, thì không có lá bài nào giữa chúng, bởi vậy ta sẽ kết luận rằng lá bài cần tìm không có trong cỗ.",
+    "ground_truth": "Phương thức gặp lỗi đệ quy vô hạn vì thiếu trường hợp cơ bản để xử lý khi lá bài không tồn tại trong cỗ. Cách khắc phục là thêm điều kiện kiểm tra nếu high nhỏ hơn low, thì trả về -1 để kết luận lá bài không có trong cỗ."
+  },
+  {
+    "category": "Software Testing",
+    "question": "Dựa trên quan điểm của tác giả, việc thực hiện các phép thử với các trường hợp cụ thể có đủ để khẳng định tính đúng đắn của chương trình không?",
+    "context": "Những phép thử này không chứng minh được rằng chương trình đúng đắn. Thực tế là bao nhiêu kiểm thử cũng không thể chứng minh được tính đúng đắn nói trên. Song qua việc xem xét một vài trường hợp và kiểm t",
+    "ground_truth": "Không, theo tác giả, việc thực hiện các phép thử không thể chứng minh được tính đúng đắn của chương trình, dù có thực hiện bao nhiêu kiểm thử đi chăng nữa."
+  },
+  {
+    "category": "Java Threading",
+    "question": "Tại sao các phương thức Thread.suspend(), Thread.resume() và Thread.stop() lại không được hỗ trợ trong các phiên bản Java mới nhất?",
+    "context": "Phiên bản mới nhất của Java không hổ trợ các phương thức Thread.suspend() (trì hoãn), Thread.resume() (phục hồi) và Thread.stop() (dừng), như là các phương thức resume() (phục hồi) và suspend() (trì hoãn) được thiên về sự đình trệ (deadlock), trong khi phương thức stop() không an toàn.",
+    "ground_truth": "Các phương thức suspend() và resume() không được hỗ trợ vì chúng dễ dẫn đến tình trạng đình trệ (deadlock), còn phương thức stop() không được hỗ trợ vì nó không an toàn."
+  },
+  {
+    "category": "Java Threading",
+    "question": "Cơ chế chia nhỏ thời gian (time-slicing) trong lập lịch luồng của Java hoạt động như thế nào?",
+    "context": "Một số nền Java hổ trợ việc chia nhỏ thời gian. Ở đây, mỗi luồng nhận một phần nhỏ của thời gian bộ vi xử lý, được gọi là định lượng. Luồng có thể thực thi tác vụ của chính nó trong suốt khoảng thời gian định lượng đấy.",
+    "ground_truth": "Trong cơ chế chia nhỏ thời gian, mỗi luồng sẽ được cấp một phần thời gian bộ vi xử lý nhất định gọi là định lượng (quantum), trong đó luồng có thể thực thi các tác vụ của mình trước khi hết thời gian được cấp."
+  },
+  {
+    "category": "Java Security",
+    "question": "Làm thế nào để chỉ định một vị trí lưu trữ keystore tùy chỉnh thay vì sử dụng vị trí mặc định khi thực hiện lệnh keytool?",
+    "context": "Tuỳ chọn keystore cũng có thể được sử dụng trong lệnh keytool, như sau: keytool –list keystore c:\\java\\try Câu lệnh này chỉ cho JDK tìm keystore trong file được gọi là ‘try’ trong thư mục ‘C:\\java\\try’.",
+    "ground_truth": "Bạn có thể sử dụng tuỳ chọn keystore trong lệnh keytool để chỉ định đường dẫn cụ thể, ví dụ: 'keytool –list keystore c:\\java\\try', điều này sẽ buộc JDK tìm kiếm keystore tại file và thư mục đã chỉ định thay vì vị trí mặc định."
+  },
+  {
+    "category": "Java Security",
+    "question": "Trong công cụ keytool, bí danh (alias) đóng vai trò gì và nó có phân biệt chữ hoa chữ thường không?",
+    "context": "Bí danh (alias) có thể được dùng lưu trữ, thay thế hoặc xoá cặp khoá. Các bí danh keytool không phân biệt chữ hoa.",
+    "ground_truth": "Bí danh (alias) được dùng để lưu trữ, thay thế hoặc xoá cặp khoá, và các bí danh này không phân biệt chữ hoa."
+  },
+  {
+    "category": "Java Logic Analysis",
+    "question": "Dựa vào đoạn mã nguồn của phương thức isAfter, kết quả trả về sẽ là gì khi hai đối tượng Time có giá trị bằng nhau và tại sao kết quả đó có thể gây tranh cãi?",
+    "context": "public static boolean isAfter(Time time1, Time time2) { if (time1.hour > time2.hour) return true; if (time1.hour < time2.hour) return false; if (time1.minute > time2.minute) return true; if (time1.minute < time2.minute) return false; if (time1.second > time2.second) return true; return false; }",
+    "ground_truth": "Kết quả trả về sẽ là false. Điều này có thể gây tranh cãi vì phương thức được đặt tên là isAfter (kiểm tra xem thời gian thứ nhất có sau thời gian thứ hai không), nhưng khi hai thời gian bằng nhau thì kết quả lại là false, do đó cần phải cân nhắc việc đề cập rõ ràng trường hợp này trong tài liệu hướng dẫn của phương thức."
+  },
+  {
+    "category": "Java Programming Concepts",
+    "question": "Tại sao phương thức addTime trong đoạn văn bản được cảnh báo là dễ gây nhầm lẫn với constructor và cần phải xem xét lại?",
+    "context": "Mặc dù phương thức này trả lại một đối tượng Time, song nó không phải là constructor. Bạn cần xem lại và so sánh cú pháp của một phương thức dạng này với cú pháp của một constructor, vì chúng dễ gây nhầm lẫn.",
+    "ground_truth": "Phương thức addTime trả lại một đối tượng Time nhưng không phải là constructor, và do sự tương đồng về cấu trúc trả về đối tượng, người lập trình dễ nhầm lẫn giữa cú pháp của một phương thức thông thường với cú pháp của một constructor."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Trong phương thức đệ quy tính giai thừa, đâu là điều kiện cơ sở (base case) và tại sao nó lại quan trọng?",
+    "context": "Nếu đối số bằng 0, chúng ta chỉ cần trả lại giá trị 1: public static int factorial(int n) { if (n == 0) { return 1; } } Đó là trường hợp cơ sở.",
+    "ground_truth": "Điều kiện cơ sở là khi đối số n bằng 0, phương thức sẽ trả về giá trị 1. Nó quan trọng vì đây là điểm dừng của quá trình đệ quy, giúp ngăn chặn việc gọi đệ quy vô hạn."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Khi thực hiện lời gọi hàm factorial(3), quá trình tính toán kết quả cuối cùng diễn ra như thế nào sau khi đạt đến điều kiện cơ sở?",
+    "context": "Giá trị được trả về, 1, được nhân với n, vốn bằng 1, và kết quả được trả lại. Giá trị được trả về (1) được nhân với n, vốn bằng 2, và kết quả được trả lại. Giá trị được trả về (2) được nhân với n, vốn bằng 3, và kết quả, 6 trở thành giá trị trả về của hàm ứng với lúc bắt đầu gọi đệ quy.",
+    "ground_truth": "Sau khi đạt đến điều kiện cơ sở (trả về 1), giá trị đó được nhân ngược lại với các giá trị n tương ứng trong ngăn xếp đệ quy: 1 nhân với 1 (kết quả 1), sau đó 1 nhân với 2 (kết quả 2), và cuối cùng 2 nhân với 3 để thu được kết quả cuối cùng là 6."
+  },
+  {
+    "category": "Java Static Context",
+    "question": "Tại sao việc sử dụng từ khóa 'this' trong phương thức main lại gây ra lỗi biên dịch?",
+    "context": "của từ khóa static, có lẽ bạn đã hình dung ra được rằng main là một phương thức lớp, nghĩa là không có một “đối tượng hiện thời” nơi nó được kích hoạt. Vì không có đối tượng hiện thời trong một phương thức lớp, nên sẽ có lỗi khi dùng từ khóa this. Nếu bạn thử thì sẽ nhận được một thông báo lỗi kiểu như “Undefined variable: this.”",
+    "ground_truth": "Vì main là một phương thức lớp (static), nên không tồn tại một “đối tượng hiện thời” nào để từ khóa 'this' có thể tham chiếu đến, dẫn đến lỗi biên dịch."
+  },
+  {
+    "category": "Java Inheritance",
+    "question": "Lợi ích cốt lõi của tính thừa kế trong Java đối với các lớp có sẵn là gì?",
+    "context": "Ưu điểm cơ bản của đặc điểm này là bạn có thể bổ sung được những phương thức và biến thực thể mà không cần sửa đổi lớp cha mẹ. Điều này đặc biệt hữu ích đối với các lớp Java, vì bạn có muốn cũng chẳng thể sửa đổi được chúng.",
+    "ground_truth": "Lợi ích cốt lõi là khả năng bổ sung các phương thức và biến thực thể mới mà không cần sửa đổi lớp cha mẹ, điều này đặc biệt quan trọng khi làm việc với các lớp Java mà người lập trình không thể can thiệp chỉnh sửa trực tiếp."
+  },
+  {
+    "category": "Java Threading",
+    "question": "Khi một luồng mới được tạo ra trong Java, quyền ưu tiên (priority) của nó được xác định như thế nào nếu không được thiết lập thủ công?",
+    "context": "Mỗi luồng được nhận một hằng số ưu tiên của phương thức Thread.PRIORITY là 5. Mỗi luồng mới thừa kế quyền ưu tiên của luồng mà tạo ra nó.",
+    "ground_truth": "Nếu không được thiết lập thủ công, một luồng mới sẽ thừa kế quyền ưu tiên từ luồng đã tạo ra nó. Nếu luồng đó không có thiết lập đặc biệt, nó sẽ nhận giá trị mặc định là hằng số Thread.PRIORITY là 5."
+  },
+  {
+    "category": "Java Threading",
+    "question": "Sự khác biệt về tên gọi giữa hai phương thức khởi dựng Thread(String threadname) và Thread() là gì?",
+    "context": "public Thread(String threadname) Cấu trúc một luồng với tên là “threadname” public Thread() Cấu trúc một luồng với tên “Thread, được ràng buộc với một số; lấy ví dụ, Thread-1, Thread-2, v.v…",
+    "ground_truth": "Phương thức Thread(String threadname) cho phép người lập trình chỉ định tên cụ thể cho luồng, trong khi phương thức Thread() sẽ tự động đặt tên luồng theo định dạng 'Thread-' kèm theo một số thứ tự (ví dụ: Thread-1, Thread-2)."
+  },
+  {
+    "category": "Software Development Strategy",
+    "question": "Tại sao việc viết nhiều dòng lệnh cùng lúc mà không biên dịch hay chạy thử lại được coi là một chiến lược phát triển không hiệu quả?",
+    "context": "Nếu như bạn đang viết nhiều dòng lệnh cùng lúc mà không biên dịch và chạy thử, thì bạn đang tự chuốc lấy phiền phức.",
+    "ground_truth": "Vì việc viết nhiều dòng lệnh cùng lúc mà không biên dịch và chạy thử sẽ khiến lập trình viên tự chuốc lấy phiền phức và gặp khó khăn trong việc gỡ lỗi."
+  },
+  {
+    "category": "Debugging and Problem Solving",
+    "question": "Khi rơi vào tình trạng 'bám chặt lấy mã lệnh sai', lập trình viên nên làm gì để thoát khỏi bẫy này?",
+    "context": "Đôi khi chiến thuật duy nhất là (than ôi!) xoá đi mã lệnh sai rồi làm lại từ đầu (bằng chiến thuật tăng dần). Nhưng người mới lập trình thường có tình cảm gắn bó với mã lệnh họ viết ra, dù cho mã lệnh này không hoạt động được. Cách duy nhất để thoát khỏi cái bẫy này là phải tàn nhẫn.",
+    "ground_truth": "Lập trình viên cần phải tàn nhẫn, chấp nhận xóa đi mã lệnh sai và làm lại từ đầu bằng chiến thuật tăng dần thay vì giữ tình cảm gắn bó với những đoạn mã không hoạt động."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Tại sao việc sử dụng kỹ thuật 'polling' trong lập trình đa luồng lại được coi là không hiệu quả và Java đã cung cấp giải pháp nào để thay thế?",
+    "context": "Một vòng lặp mà lặp lại việc một số điều kiện thường thực thi “polling” (kiểm soát vòng). Khi điều kiện nhận giá trị là True (đúng), các câu lệnh phúc đáp được thực hiện. Đây là tiến trình thường bỏ phí thời gian của CPU. Để tránh trường hợp kiểm soát vòng, Java bao gồm một thiết kế tốt trong tiến trình kỹ thuật truyền thông sử dụng các phương thức “wait()” (đợi), “notify()” (thông báo) và “notifyAll()” (thông báo hết).",
+    "ground_truth": "Polling gây lãng phí thời gian của CPU vì nó liên tục kiểm tra điều kiện trong vòng lặp. Java thay thế kỹ thuật này bằng các phương thức wait(), notify() và notifyAll() để quản lý giao tiếp giữa các luồng một cách hiệu quả hơn."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Các phương thức wait(), notify() và notifyAll() có những ràng buộc kỹ thuật nào khi được gọi trong Java?",
+    "context": "Các phương thức này được thực hiện như là các các phương thức cuối cùng trong lớp đối tượng (Object), để mà tất cả các lớp có thể thâm nhập chúng. Tất cả 3 phương thức này có thể được gọi chỉ từ trong phạm vi một phương thức đồng bộ (synchronized).",
+    "ground_truth": "Các phương thức này được định nghĩa trong lớp Object để mọi lớp đều có thể truy cập, và chúng chỉ có thể được gọi từ bên trong phạm vi của một phương thức đồng bộ (synchronized)."
+  },
+  {
+    "category": "Lập trình Java",
+    "question": "Tại sao việc sử dụng biến địa phương lại giúp ích cho kỹ thuật bao bọc trong lập trình?",
+    "context": "bao bọc: Việc phân chia một chương trình lớn, phức tạp thành nhiều thành phần (như phương thức) rồi cô lập riêng các thành phần (chẳng hạn, bằng cách dùng các biến địa phương). biến địa phương: Một biến được khai báo bên trong một phương thức; biến này chỉ tồn tại trong phương thức đó. Những biến địa phương đều không truy cập được từ ngoài phương thức của nó, và không can thiệp tới bất kì phương thức nào khác.",
+    "ground_truth": "Việc sử dụng biến địa phương giúp ích cho kỹ thuật bao bọc vì chúng chỉ tồn tại trong phạm vi phương thức, không thể bị truy cập từ bên ngoài và không can thiệp tới các phương thức khác, từ đó giúp cô lập các thành phần của chương trình một cách hiệu quả."
+  },
+  {
+    "category": "Lập trình Java",
+    "question": "Việc áp dụng kỹ thuật khái quát hóa mang lại những lợi ích cụ thể nào cho mã lệnh?",
+    "context": "khái quát hóa: Việc thay thế những thứ cụ thể một cách không cần thiết (như một giá trị không đổi) bằng những thứ có tính khái quát thích hợp (nhưng một biến hoặc một tham số). Việc khái quát hóa khiến cho mã lệnh linh hoạt hơn, dễ sử dụng lại hơn, và đôi khi dễ viết hơn.",
+    "ground_truth": "Việc áp dụng kỹ thuật khái quát hóa giúp mã lệnh trở nên linh hoạt hơn, dễ dàng tái sử dụng hơn và trong một số trường hợp còn giúp mã lệnh dễ viết hơn bằng cách thay thế các giá trị cụ thể bằng các biến hoặc tham số."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Tại sao phương thức tính lũy thừa số nguyên được cung cấp trong đoạn văn bản lại bị hạn chế và cần phải thay đổi kiểu dữ liệu trả về?",
+    "context": "Vấn đề với phương thức này là ở chỗ nó chỉ hoạt động được nếu kết quả nhỏ hơn 2 tỷ. Hãy viết lại phương thức để kết quả là một BigInteger.",
+    "ground_truth": "Phương thức này bị hạn chế vì nó chỉ hoạt động chính xác khi kết quả của phép tính lũy thừa nhỏ hơn 2 tỷ (giới hạn của kiểu int), do đó cần thay đổi kiểu dữ liệu trả về thành BigInteger để xử lý các kết quả lớn hơn."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Khi cài đặt GridWorld, người dùng cần thực hiện những thao tác gì với các tệp tin trong thư mục projects/boxBug?",
+    "context": "Khi cài đặt GridWorld, bạn sẽ có một thư mục mang tên projects/boxBug, trong đó chứa BoxBug.java, BoxBugRunner.java và BoxBug.gif. Hãy sao chép những file này vào thư mục hiện thời của bạn rồi nhập chúng vào môi trường phát triển.",
+    "ground_truth": "Người dùng cần sao chép các tệp tin BoxBug.java, BoxBugRunner.java và BoxBug.gif từ thư mục projects/boxBug vào thư mục hiện thời, sau đó nhập chúng vào môi trường phát triển."
+  },
+  {
+    "category": "Java Programming Concepts",
+    "question": "Tại sao trong ví dụ về đệ quy, các biến địa phương 'recurse' và 'result' lại không tồn tại ở khung cuối cùng của biểu đồ ngăn xếp?",
+    "context": "Lưu ý rằng ở khung cuối cùng, các biến địa phương recurse và result đều không tồn tại, vì khi n=0, nhánh tạo ra chúng không được thực hiện.",
+    "ground_truth": "Các biến này không tồn tại vì khi n=0, nhánh mã lệnh tạo ra chúng không được thực thi."
+  },
+  {
+    "category": "Programming Methodology",
+    "question": "Phương pháp 'niềm tin' trong việc đọc mã lệnh là gì và tại sao nó lại hữu ích khi làm việc với các phương thức đệ quy?",
+    "context": "Khi bạn dò đến chỗ kích hoạt phương thức, thay vì việc đi theo luồng thực hiện, hãy coi như là phương thức đó hoạt động tốt và trả lại kết quả đúng. Cũng với lý lẽ tương tự khi bạn kích hoạt các phương thức do mình viết nên. ... Điều tương tự cũng đúng với các chương trình đệ quy. Khi bạn đến điểm kích hoạt đệ quy, thay vì đi theo luồng thực hiện, bạn cần coi rằng lời",
+    "ground_truth": "Phương pháp 'niềm tin' là việc giả định rằng một phương thức sẽ hoạt động tốt và trả về kết quả đúng thay vì phải dò theo luồng thực hiện chi tiết bên trong nó. Điều này giúp lập trình viên tránh bị lạc trong mê cung mã lệnh khi xử lý các phương thức phức tạp hoặc đệ quy."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Tại sao trong mảng 'ranks' lại xuất hiện phần tử 'narf' ở vị trí chỉ số 0?",
+    "context": "Lý do có mặt \"narf\" là để đứng vào chỗ phần tử thứ không của mảng, vốn chẳng bao giờ được dùng đến (hay lẽ ra không có). Các bậc hợp lý chỉ có từ 1–13. Để tránh phần tử thường này, ta đã có thể bắt đầu từ 0, nhưng việc ánh xạ sẽ tự nhiên hơn nếu ta mã hóa 2 là 2, và 3 là 3, v.v.",
+    "ground_truth": "Phần tử 'narf' được thêm vào để chiếm vị trí chỉ số 0 nhằm mục đích ánh xạ các bậc lá bài từ 1-13 một cách tự nhiên, giúp giá trị 2 tương ứng với chỉ số 2, giá trị 3 tương ứng với chỉ số 3, thay vì phải lệch chỉ số."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Cú pháp khởi tạo mảng đặc biệt trong Java giúp rút gọn những thao tác nào so với cách khai báo thông thường?",
+    "context": "Việc tạo ra một mảng và khởi tạo các phần tử trong nó là một thao tác thường gặp đến nỗi Java cung cấp luôn một cú pháp đặc biệt cho nó: String[] suits = { \"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\" }; Câu lệnh này tương đương với các lệnh khai báo, huy động và gán.",
+    "ground_truth": "Cú pháp đặc biệt này giúp gộp ba thao tác riêng biệt bao gồm khai báo mảng, huy động (cấp phát bộ nhớ) và gán giá trị cho các phần tử vào trong một câu lệnh duy nhất."
+  },
+  {
+    "category": "Java Keytool Command Usage",
+    "question": "Khi thực hiện lệnh nhập chứng nhận vào keystore bằng keytool, hệ thống sẽ hiển thị những thông tin gì sau khi quá trình nhập hoàn tất?",
+    "context": "Kết quả xuất ra hiển thị hai tuỳ chọn –Owner và Issuer. Nó hiển thị tên công ty, nghề nghiệp, tổ chức, địa điểm, bang và tiền tệ. Nó cũng hiển thị số serial và thời gian có giá trị. Cuối cùng, nó hỏi có là chứng nhận uỷ thác không.",
+    "ground_truth": "Kết quả hiển thị hai tuỳ chọn Owner và Issuer, bao gồm tên công ty, nghề nghiệp, tổ chức, địa điểm, bang, tiền tệ, số serial, thời gian có giá trị và câu hỏi xác nhận chứng nhận có được uỷ thác hay không."
+  },
+  {
+    "category": "Java Security Packages",
+    "question": "Gói java.security trong Java đóng vai trò gì và nó hỗ trợ những tính năng bảo mật nào?",
+    "context": "java.security\nĐây là gói API nhân bảo mật (the core security API package). Chứa các lớp và giao diện (interface) hỗ trợ mã hoá (encryption), tính bảng tóm lược tài liệu và chữ ký điện tử.",
+    "ground_truth": "Gói java.security là gói API nhân bảo mật (core security API package), chứa các lớp và giao diện hỗ trợ mã hoá (encryption), tính bảng tóm lược tài liệu và chữ ký điện tử."
+  },
+  {
+    "category": "Software Design Methodology",
+    "question": "Phương pháp phát triển từ dưới lên (bottom-up design) được định nghĩa như thế nào trong ngữ cảnh lập trình?",
+    "context": "ài toán như thế này là nghĩ về những phương thức đơn giản, dễ viết, rồi kết hợp chúng lại thành lời giải. Quá trình này được gọi là phát triển từ dưới lên.",
+    "ground_truth": "Phát triển từ dưới lên là quá trình suy nghĩ về những phương thức đơn giản, dễ viết, sau đó kết hợp chúng lại với nhau để tạo thành lời giải hoàn chỉnh cho bài toán."
+  },
+  {
+    "category": "Algorithm Pattern",
+    "question": "Dựa trên mã nguồn phương thức inRange, giá trị 'low' được xử lý như thế nào trong điều kiện kiểm tra khoảng?",
+    "context": "public static int inRange(int[] a, int low, int high) { int count = 0; for (int i = 0; i < a.length; i++) { if (a[i] >= low && a[i] < high) count++; } return count; }",
+    "ground_truth": "Trong phương thức inRange, giá trị 'low' được coi là bao gồm trong khoảng (inclusive) vì điều kiện kiểm tra là a[i] >= low."
+  },
+  {
+    "category": "Java Archive (JAR) Operations",
+    "question": "Làm thế nào để tích hợp một file lưu trữ JAR vào một applet trong trang HTML và mục đích của việc này là gì?",
+    "context": "Để gộp file lưu trữ ‘pack.jar vào trong một applet, mở trang HTML, và thêm thuộc tính ARCHIVE=’pack.jar’ vào thẻ applet, như sau: <applet code=”exr7.class” ARRCHIVE=”pack.jar” height=125 width=350></applet> Thuộc tính sẽ chỉ cho trình duyệt nạp lưu trữ ‘pack.jar’ để tìm file ‘exr7.class’",
+    "ground_truth": "Để tích hợp, bạn cần thêm thuộc tính ARCHIVE='pack.jar' vào thẻ <applet> trong trang HTML. Mục đích của việc này là chỉ dẫn cho trình duyệt nạp file lưu trữ pack.jar để tìm kiếm file class cần thiết (ví dụ: exr7.class) bên trong đó."
+  },
+  {
+    "category": "Java Applet Security",
+    "question": "Tại sao các applet trong Java lại bị hạn chế quyền truy cập vào hệ thống file của máy tính người dùng?",
+    "context": "Trong java, bảo mật applet trên web là phần rất quan trọng. Hacker có thể viết các applet nguy hiểm xuyên thủng hàng rào bảo mật. Vì thế, applet hạn chế sự can thiệt của các ngôn ngữ. Applet không hỗ trợ một số nét đặt trưng sau: Đọc và ghi file từ hệ thống nơi applet đang chạy. Lấy thông tin về một file từ hệ thống Xoá một file từ hệ thống.",
+    "ground_truth": "Các applet bị hạn chế quyền truy cập vì bảo mật là phần rất quan trọng trong Java; việc hạn chế này nhằm ngăn chặn các applet nguy hiểm do hacker viết ra có thể xuyên thủng hàng rào bảo mật để thực hiện các hành vi như đọc, ghi, lấy thông tin hoặc xóa file từ hệ thống nơi applet đang chạy."
+  },
+  {
+    "category": "Lập trình Java",
+    "question": "Tại sao trình biên dịch Java lại được coi là khắt khe hơn so với ngôn ngữ tự nhiên như tiếng Anh khi xử lý các lỗi cú pháp?",
+    "context": "Tệ hơn nữa là trong Java có nhiều quy tắc cú pháp hơn là trong tiếng Anh, và thường thì những thông báo lỗi mà bạn nhận được từ trình biên dịch đều không giúp ích gì nhiều.",
+    "ground_truth": "Trình biên dịch Java khắt khe hơn vì nó có nhiều quy tắc cú pháp hơn so với tiếng Anh, và khi phát hiện lỗi, nó sẽ hiển thị thông báo lỗi rồi kết thúc chương trình, khiến người lập trình không thể chạy được chương trình đó."
+  },
+  {
+    "category": "Lập trình Java",
+    "question": "Điều gì sẽ xảy ra với quá trình thực thi chương trình nếu trình biên dịch phát hiện ra lỗi cú pháp?",
+    "context": "Chỉ cần trong chương trình có lỗi cú pháp ở bất cứ đâu, trình biên dịch sẽ hiển thị thông báo lỗi và kết thúc, và bạn sẽ không thể chạy chương trình.",
+    "ground_truth": "Nếu có lỗi cú pháp, trình biên dịch sẽ hiển thị thông báo lỗi và kết thúc quá trình biên dịch, dẫn đến việc chương trình không thể chạy được."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Tại sao việc sử dụng phương thức notify() trong Java lại được coi là không chính xác trong một số trường hợp và giải pháp thay thế được khuyến nghị là gì?",
+    "context": "Phương thức notify() là không chính xác, như là nó không thể chỉ ra được luồng mà phải được thông báo. Trong một trạng thái đã trộn lẫn, luồng có thể thay đổi trạng thái của monitor trong một con đường mà không mang lại kết quả tốt cho luồng đã được đưa thông báo. Trong một số trường hợp này, các phương thức của monitor đưa ra 2 sự đề phòng: o Trạng thái của monitor sẽ được kiểm tra trong một vòng lặp “while” tốt hơn là câu lệnh if o Sau khi thay đổi trạng thái của monitor, phương thức notifyAll() sẽ được sử dụng, tốt hơn phương thức notify().",
+    "ground_truth": "Phương thức notify() không chính xác vì nó không thể chỉ định cụ thể luồng nào cần được thông báo, dẫn đến nguy cơ luồng khác thay đổi trạng thái monitor gây ảnh hưởng tiêu cực. Giải pháp thay thế là sử dụng vòng lặp 'while' để kiểm tra trạng thái monitor thay vì câu lệnh 'if', và sử dụng phương thức notifyAll() thay vì notify()."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Dựa trên các nguyên tắc lập trình đa luồng được nêu, tại sao việc kiểm tra trạng thái monitor trong vòng lặp 'while' lại được ưu tiên hơn so với câu lệnh 'if'?",
+    "context": "Trong một trạng thái đã trộn lẫn, luồng có thể thay đổi trạng thái của monitor trong một con đường mà không mang lại kết quả tốt cho luồng đã được đưa thông báo. Trong một số trường hợp này, các phương thức của monitor đưa ra 2 sự đề phòng: o Trạng thái của monitor sẽ được kiểm tra trong một vòng lặp “while” tốt hơn là câu lệnh if",
+    "ground_truth": "Việc sử dụng vòng lặp 'while' được ưu tiên vì trong trạng thái đã trộn lẫn, trạng thái của monitor có thể bị thay đổi bởi một luồng khác ngay sau khi luồng hiện tại được thông báo nhưng trước khi nó kịp thực thi, khiến điều kiện kiểm tra ban đầu không còn đúng."
+  },
+  {
+    "category": "Java Programming Best Practices",
+    "question": "Tại sao việc sử dụng các phương thức sửa đổi (modifier methods) và phương thức điền (fill methods) có thể gây rủi ro trong các dự án phần mềm lớn?",
+    "context": "Các phương thức sửa đổi và phương thức điền đều hiệu quả vì chúng không phải tạo nên đối tượng mới. Nhưng chúng lại gây khó khăn trong việc cô lập các phần khác nhau của chương trình; trong những dự án lớn chúng có thể gây nên lỗi rất khó tìm ra.",
+    "ground_truth": "Mặc dù chúng hiệu quả vì không cần tạo đối tượng mới, nhưng chúng gây khó khăn trong việc cô lập các phần khác nhau của chương trình, dẫn đến việc tạo ra các lỗi rất khó tìm ra trong những dự án lớn."
+  },
+  {
+    "category": "Functional Programming Benefits",
+    "question": "Những ưu điểm chính của hàm thuần túy (pure functions) là gì và tại sao chúng lại có lợi cho việc tối ưu hóa hiệu năng?",
+    "context": "Các hàm thuần túy giúp ta quản lý tính chất phức tạp của những dự án lớn, phần là nhờ ngăn không cho những loại lỗi nhất định không thể xảy ra. Hơn nữa, hàm thuần túy còn thích hợp với những kiểu lập trình ghép và lồng. Và vì kết quả của hàm thuần túy chỉ phụ thuộc vào tham số, ta có thể tăng tốc cho nó bằng cách lưu giữ những giá trị đã tính toán từ trước.",
+    "ground_truth": "Hàm thuần túy giúp quản lý độ phức tạp, ngăn ngừa một số loại lỗi, hỗ trợ lập trình ghép và lồng. Về hiệu năng, vì kết quả chỉ phụ thuộc vào tham số, ta có thể tăng tốc bằng cách lưu giữ (cache) các giá trị đã tính toán từ trước."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Làm thế nào để xác định chế độ truy cập khi khởi tạo một đối tượng RandomAccessFile và các tham số nào được sử dụng?",
+    "context": "Lớp này cũng hỗ trợ cho phép đọc hoặc ghi tập tin cơ bản, điều này cho phép đọc tập tin theo chế độ chỉ đọc hoặc đọc-ghi. tham số ‘r’ hoặc ‘rw’ được gán cho lớp RandomAccessFile chỉ định truy cập ‘chỉ đọc’ và ‘đọc-ghi’.",
+    "ground_truth": "Bạn có thể xác định chế độ truy cập bằng cách gán tham số 'r' cho chế độ 'chỉ đọc' hoặc 'rw' cho chế độ 'đọc-ghi' khi khởi tạo đối tượng RandomAccessFile."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Phương thức nào trong lớp RandomAccessFile cho phép thay đổi vị trí con trỏ tập tin và phương thức nào dùng để kiểm tra vị trí hiện tại của con trỏ đó?",
+    "context": "Các phương thức bao gồm: seek( ) Thiết lập con trỏ tập tin tới vị trí cụ thể bên trong tập tin. getFilePointer( ) Trả về vị trí hiện hành của con trỏ tập tin.",
+    "ground_truth": "Phương thức 'seek()' được sử dụng để thiết lập con trỏ tập tin tới một vị trí cụ thể, trong khi phương thức 'getFilePointer()' được sử dụng để trả về vị trí hiện hành của con trỏ tập tin đó."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Trong Java, khối 'finally' có đặc điểm gì về cơ chế thực thi khi một ngoại lệ như ArithmeticException xảy ra hoặc không xảy ra?",
+    "context": "thi hành bất chấp ‘ArithmeticException’ có xảy ra hay không. Khối này khai báo các hoạt động thu dọn. ... Trong ví dụ này, các câu lệnh trong khối ‘Finally’ luôn luôn thi hành, bất chấp ngoại lệ có xảy ra hay không.",
+    "ground_truth": "Khối 'finally' luôn luôn thi hành bất chấp ngoại lệ có xảy ra hay không, nó được sử dụng để khai báo các hoạt động thu dọn."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Lệnh 'throw' trong Java có vai trò gì và toán tử của nó phải tuân thủ điều kiện gì về lớp đối tượng?",
+    "context": "Các ngoại lệ bị chặn với sự trợ giúp của từ khoá ‘throw’. Từ khóa ‘throw’ chỉ ra một ngoại lệ vừa xảy ra. Toán tử của throw là một đối tượng của lớp, lớp này được dẫn xuất từ ‘Throwable’.",
+    "ground_truth": "Lệnh 'throw' dùng để chỉ ra một ngoại lệ vừa xảy ra, và toán tử của nó phải là một đối tượng của lớp được dẫn xuất từ 'Throwable'."
+  },
+  {
+    "category": "Java Security - JAR Signing",
+    "question": "Khi thực hiện lệnh jarsigner để xác minh file JAR, điều gì sẽ xảy ra nếu chữ ký không hợp lệ?",
+    "context": "Để chỉ rõ chữ ký của file JAR được định danh, dùng tuỳ chọn ‘-verify’. jarsigner –verify pack.jar ‘pack.jar’ chỉ tên file JAR. Nếu chữ ký không hợp lệ, thì ngoại lệ sau được ném ra (thrown). Jarsigner:java.util.zip.ZipException:invalid entry size (expected 900 but got 876 bytes)",
+    "ground_truth": "Nếu chữ ký không hợp lệ, một ngoại lệ (exception) sẽ được ném ra, cụ thể là Jarsigner:java.util.zip.ZipException:invalid entry size (expected 900 but got 876 bytes)."
+  },
+  {
+    "category": "Java Security - Digital Certificates",
+    "question": "Quyền chứng thực (Certificate Authority - CA) đóng vai trò gì trong việc quản lý chữ ký điện tử?",
+    "context": "Chữ ký điện tử là một file, một đối tượng, hoặc một thông báo được ký danh bởi quyền chứng thực (certificate authority). The CA (Certificate authority) cấp chứng nhận giá trị các khoá công cộng.",
+    "ground_truth": "Quyền chứng thực (CA) đóng vai trò ký danh vào file, đối tượng hoặc thông báo, đồng thời cấp chứng nhận giá trị cho các khoá công cộng."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Tại sao lớp PrintWriter được coi là một sự thay thế cải tiến hơn so với lớp PrintStream trong Java?",
+    "context": "Lớp PrinterWriter’ là một thay thể của lớp PrinterStream. Nó thực tế cải thiện lớp PrinterStream bằng cách dùng dấu tách dòng phụ thuộc nền tảng để in các dòng thay vì ký tự ‘\n’. Lớp này cũng cấp hỗ trợ các ký tự Unicode so với PrinterStream.",
+    "ground_truth": "Lớp PrintWriter cải thiện PrintStream bằng cách sử dụng dấu tách dòng phụ thuộc vào nền tảng thay vì ký tự '\n' và cung cấp khả năng hỗ trợ các ký tự Unicode tốt hơn."
+  },
+  {
+    "category": "Java I/O",
+    "question": "Trong lớp PrintWriter, hai phương thức checkError() và setError() có chức năng cụ thể là gì?",
+    "context": "Phương thức ‘checkError( )’ được sử dụng kiểm tra kết xuất được xả sạch và và được kiểm ra các lỗi. Phương thức setError( ) được sử dụng để thiết lập lỗi điều kiện.",
+    "ground_truth": "Phương thức checkError() được dùng để kiểm tra xem kết xuất đã được xả sạch (flush) hay chưa và kiểm tra các lỗi xảy ra, trong khi phương thức setError() được dùng để thiết lập lỗi điều kiện."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Trong chương trình 7.3, tại sao phương thức checkSize() cần phải khai báo 'throws ArraySizeException'?",
+    "context": "void checkSize() throws ArraySizeException { if (size < 0) throw new ArraySizeException(); else System.out.println(“The array size is ok.”); array = new int[3]; for (int i=0; i<3; i++) array[i] = i+1; }",
+    "ground_truth": "Phương thức checkSize() cần khai báo 'throws ArraySizeException' vì nó có khả năng ném ra ngoại lệ ArraySizeException (thông qua lệnh throw) nếu kích thước mảng nhỏ hơn 0, do đó cần thông báo cho các phương thức gọi nó biết về sự tồn tại của ngoại lệ này."
+  },
+  {
+    "category": "Java Exception Handling",
+    "question": "Lớp ArraySizeException được định nghĩa như thế nào và nó có mối quan hệ kế thừa ra sao?",
+    "context": "class ArraySizeException extends NegativeArraySizeException { ArraySizeException() // constructor { super(“You have passed an illegal array size”); } } Lớp được định nghĩa bởi người dùng ‘ArraySizeException’ là lớp con của lớp ‘NegativeArraySizeException’.",
+    "ground_truth": "Lớp ArraySizeException là một lớp do người dùng tự định nghĩa, kế thừa trực tiếp từ lớp NegativeArraySizeException. Trong constructor của nó, nó gọi super() để truyền thông báo lỗi 'You have passed an illegal array size' cho lớp cha."
+  },
+  {
+    "category": "Java Synchronization",
+    "question": "Điều gì xảy ra với các luồng khác khi một luồng đang thực thi bên trong một phương thức được đánh dấu là synchronized?",
+    "context": "Khi một luồng đang được thực thi trong phạm vi một phương thức đồng bộ (synchronized), bất kỳ luồng khác hoặc phương thức đồng bộ khác mà cố gắng gọi nó trong cùng thể nghiệm sẽ phải đợi.",
+    "ground_truth": "Các luồng khác hoặc các phương thức đồng bộ khác cố gắng gọi phương thức đó trong cùng thể nghiệm sẽ phải đợi cho đến khi luồng đầu tiên thoát khỏi monitor."
+  },
+  {
+    "category": "Java Synchronization",
+    "question": "Khái niệm 'monitor' trong Java đóng vai trò như thế nào đối với việc quản lý tài nguyên giữa các luồng?",
+    "context": "Một “monitor” là một đối tượng mà được sử dụng như là một khóa qua lại duy nhất, hoặc “mutex”. Chỉ một luồng có thể có riêng nó một sự quan sát (monitor) tại mỗi thời điểm được đưa ra. Tất cả các luồng khác cố gắng thâm nhập vào monitor bị khóa sẽ bị trì hoãn, cho đến khi luồng đầu tiên thoát khỏi monitor.",
+    "ground_truth": "Monitor đóng vai trò như một khóa qua lại duy nhất (mutex). Tại mỗi thời điểm, chỉ một luồng duy nhất có thể sở hữu monitor, trong khi các luồng khác cố gắng thâm nhập sẽ bị trì hoãn cho đến khi luồng sở hữu thoát khỏi monitor."
+  },
+  {
+    "category": "Java Programming Concepts",
+    "question": "Tại sao khi gọi phương thức 'pow' từ lớp 'Math' lại có cú pháp khác biệt so với việc gọi phương thức 'newLine' trong ví dụ lớp 'NewLine'?",
+    "context": "Khi kích hoạt một phương thức toán học, ta phải nêu tên của lớp (Math) và tên của phương thức. Đó là lý do mà về cú pháp, có điểm khác biệt nhỏ giữa các phương thức Java và các phương thức mà ta viết: Math.pow(2.0, 10.0); newLine(); Câu lệnh thứ nhất kích hoạt phương thức pow trong lớp Math (để đưa đối số thứ nhất lên lũy thừa cấp của đối số thứ hai). Câu lệnh tiếp theo kích hoạt phương thức newLine, mà Java giả sử rằng nó có ở trong lớp mà ta đang (tức là lớp NewLine).",
+    "ground_truth": "Vì phương thức 'pow' thuộc lớp 'Math' nên cần chỉ định tên lớp khi gọi, trong khi phương thức 'newLine' được Java giả định nằm trong lớp hiện tại (lớp NewLine) nên không cần chỉ định tên lớp."
+  },
+  {
+    "category": "Java Programming Concepts",
+    "question": "Lớp (class) trong Java được định nghĩa như thế nào trong đoạn văn bản trên?",
+    "context": "Dòng thứ nhất cho biết rằng đó là lời định nghĩa một lớp mới có tên NewLine. Lớp là tập hợp các phương thức có liên quan đến nhau. Trong trường hợp này, lớp với tên gọi NewLine có chứa 3 phương thức tên là newLine, threeLine, và main.",
+    "ground_truth": "Lớp là tập hợp các phương thức có liên quan đến nhau."
+  },
+  {
+    "category": "Java Programming Fundamentals",
+    "question": "Tại sao biểu thức 'double y = 1 / 3;' lại dẫn đến kết quả y bằng 0.0 thay vì 0.333333?",
+    "context": "Lý do là biểu thức vế phải là tỉ số giữa hai số nguyên, vì vậy Java thực hiện phép chia nguyên, và cho giá trị số nguyên bằng 0. Chuyển thành dạng số phẩy động, kết quả là 0.0.",
+    "ground_truth": "Vì biểu thức vế phải là tỉ số giữa hai số nguyên, Java thực hiện phép chia nguyên (integer division) thay vì chia số thực, dẫn đến kết quả là 0, sau đó mới chuyển đổi sang kiểu double thành 0.0."
+  },
+  {
+    "category": "Java Type Conversion",
+    "question": "Tại sao Java không tự động chuyển đổi từ kiểu double sang int mà yêu cầu lập trình viên phải thực hiện định kiểu (typecast)?",
+    "context": "Ngược lại, chuyển từ double sang int lại cần phải làm tròn số. Java không tự động làm việc này, để đảm bảo rằng bạn, người lập trình, cũng biết được rằng phần thập phân của số sẽ bị mất đi.",
+    "ground_truth": "Java không tự động chuyển đổi từ double sang int để đảm bảo lập trình viên nhận thức được rằng quá trình này sẽ làm mất đi phần thập phân của số."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Tại sao chương trình trong đoạn văn bản lại dẫn đến tình trạng bế tắc (deadlock) giữa hai luồng t1 và t2?",
+    "context": "Từ đó luồng “t2” một mình giám sát cho “dlk2”, luồng “t1” bắt đầu đợi monitor. Khi luồng “t2” đánh thức, nó cố gắng gọi phương thức “synchIt()” của đối tượng Deadlock “dlk2”. Bây giờ, “t2” cũng phải đợi, bởi vì đây là trường hợp tương tự với luồng “t1”. Từ đó, cả hai luồng đang đợi lẫn nhau, cả hai sẽ đánh thức. Đây là điều kiện bế tắt.",
+    "ground_truth": "Tình trạng bế tắc xảy ra vì cả hai luồng t1 và t2 đều rơi vào trạng thái chờ đợi lẫn nhau để giành quyền truy cập vào monitor của các đối tượng dlk1 và dlk2, khiến cho không luồng nào có thể tiếp tục thực thi."
+  },
+  {
+    "category": "Java Concurrency",
+    "question": "Trong đoạn mã Chương trình 8.7, các đối tượng Deadlock dlk1 và dlk2 được khởi tạo và cấu hình như thế nào trước khi các luồng bắt đầu?",
+    "context": "Deadlock dlk1= new Deadlock(); Deadlock dlk2 = new Deadlock(); Thread t1 = new Thread(dlk1); Thread t2 = new Thread(dlk2); dlk1.grabIt = dlk1; dlk2.grabIt = dlk2; t1.start(); t2.start();",
+    "ground_truth": "Hai đối tượng Deadlock dlk1 và dlk2 được khởi tạo, sau đó được gán làm tham số Runnable cho hai luồng t1 và t2 tương ứng. Cuối cùng, thuộc tính grabIt của mỗi đối tượng được gán chính bằng đối tượng đó trước khi gọi phương thức start() để bắt đầu các luồng."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Tại sao việc sử dụng alias (đặt bí danh) cho các đối tượng trong cỗ bài lại được coi là lựa chọn hợp lý đối với lớp Card?",
+    "context": "Song nếu các lá bài là đối tượng không thay đổi được, thì việc đặt bí danh ít nguy hiểm hơn. Trong trường hợp này, có lẽ chẳng có lý do nào để thay đổi bậc hay chất của lá bài. Thay vì vậy, ta có thể mỗi lúc lại tạo ra một lá bài rồi coi nó như một đối tượng không thay đổi được. Bởi vậy, đối với Card, việc đặt bí danh là lựa chọn hợp lý.",
+    "ground_truth": "Việc đặt bí danh là lựa chọn hợp lý đối với lớp Card vì các lá bài được coi là đối tượng không thay đổi được (immutable), do đó không có lý do để thay đổi bậc hay chất của chúng, giúp giảm thiểu rủi ro khi các thay đổi ở một cỗ bài con ảnh hưởng đến các cỗ bài khác."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Dựa trên đoạn mã được cung cấp, làm thế nào để chia một cỗ bài đã được tráo thành các phần bài cụ thể?",
+    "context": "Deck deck = new Deck(); shuffleDeck(deck); Deck hand1 = subdeck(deck, 0, 4); Deck hand2 = subdeck(deck, 5, 9); Deck pack = subdeck(deck, 10, 51); Mã lệnh này đặt 5 lá bài đầu tiên vào phần thứ nhất, 5 lá bài kế tiếp vào phần thứ hai, và phần còn lại giữ ở cỗ.",
+    "ground_truth": "Để chia bài, ta sử dụng phương thức subdeck với các tham số chỉ định chỉ số bắt đầu và kết thúc. Cụ thể, hand1 lấy từ 0 đến 4, hand2 lấy từ 5 đến 9, và phần còn lại (pack) lấy từ 10 đến 51."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Tại sao việc truy cập trực tiếp vào biến thực thể của một đối tượng Card trong mảng mới khởi tạo lại dẫn đến lỗi NullPointerException?",
+    "context": "Mảng hiện tại có chứa các tham chiếu đến đối tượng; nó không chứa bản thân các đối tượng Card. Những phần tử này đều được khởi tạo vềnull. Bạn có thể truy cập từng phần tử trong mảng theo cách thông thường: if (cards[0] == null) { System.out.println(\"Chưa có quân bài nào!\"); } Nhưng nếu bạn cố thử truy cấp các biến thực thể của những Card chưa tồn tại, bạn sẽ nhận được biệt lệ NullPointerException.",
+    "ground_truth": "Vì mảng mới chỉ chứa các tham chiếu đến đối tượng và tất cả các phần tử đều được khởi tạo là null, nên khi cố gắng truy cập biến thực thể của một phần tử chưa được gán đối tượng Card thực sự, chương trình sẽ gây ra lỗi NullPointerException."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Làm thế nào để khởi tạo đầy đủ một mảng gồm 52 đối tượng Card bằng cách sử dụng cấu trúc vòng lặp?",
+    "context": "Cách dễ nhất để điền những đối tượng Card đầy vào cỗ bài là viết những vòng lặp for lồng ghép (nghĩa là vòng lặp này đặt trong vòng lặp khác): int index = 0; for (int suit = 0; suit <= 3; suit++) { for (int rank = 1; rank <= 13; rank++) { cards[index] = new Card(suit, rank); index++; } }",
+    "ground_truth": "Sử dụng hai vòng lặp for lồng nhau: vòng lặp ngoài chạy từ 0 đến 3 để đại diện cho các chất, vòng lặp trong chạy từ 1 đến 13 để đại diện cho các bậc, sau đó khởi tạo đối tượng Card mới cho từng vị trí trong mảng dựa trên biến index tăng dần."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Trong GridWorld, làm thế nào để kiểm tra một đối tượng trong danh sách lân cận có phải là tảng đá (Rock) hay không và thực hiện thay đổi màu sắc của nó?",
+    "context": "gì: từng lân cận có thể là Bug, Rock, v.v. Để tìm tảng đá (Rock), ta sử dụng toán tử instanceof, vốn để kiểm tra xem liệu một đối tượng có là thực thể của một lớp hay không. for (Actor actor : neighbors) { if (actor instanceof Rock) { actor.setColor(Color.blue); } }",
+    "ground_truth": "Ta sử dụng toán tử instanceof để kiểm tra xem đối tượng có phải là thực thể của lớp Rock hay không, sau đó gọi phương thức actor.setColor(Color.blue) để thay đổi màu sắc của nó."
+  },
+  {
+    "category": "Java Programming",
+    "question": "Theo tài liệu, sự khác biệt cơ bản về cấu trúc giữa một lớp thông thường và một giao diện (interface) trong Java là gì?",
+    "context": "Trong lời định nghĩa lớp thông thường, mỗi phương thức có một nguyên mẫu và một phần thân (xem Mục 8.5). Nguyễn mẫu còn được gọi làphần quy định bởi nó quy định tên, các thông số, và kiểu trả lại của phương thức đó. Phần thân được gọi là phần thực hiện bởi nó thực hiện phần quy định trên. Trong một giao diện Java, các phương thức không có phần thân, bởi vậy giao diện chỉ quy định các phương thức mà không thực hiện chúng.",
+    "ground_truth": "Lớp thông thường bao gồm cả nguyên mẫu (phần quy định) và phần thân (phần thực hiện) của phương thức, trong khi giao diện (interface) chỉ chứa các nguyên mẫu phương thức mà không có phần thân, tức là chỉ quy định các phương thức mà không thực hiện chúng."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Trong đoạn mã trên, phương thức nào được sử dụng để thay đổi tên của luồng hiện tại và luồng đó được đặt tên là gì?",
+    "context": "Thread t = Thread.currentThread(); System.out.println(\"The current Thread is :\" + t); t.setName(\"MyJavaThread\");",
+    "ground_truth": "Phương thức được sử dụng là setName() và luồng được đặt tên là \"MyJavaThread\"."
+  },
+  {
+    "category": "Java Multithreading",
+    "question": "Đoạn mã trên sử dụng cơ chế nào để tạm dừng thực thi của luồng trong vòng lặp và khoảng thời gian tạm dừng là bao nhiêu?",
+    "context": "for(int i = 0; i <3;i++){ System.out.println(i); Thread.sleep(1500); }",
+    "ground_truth": "Đoạn mã sử dụng phương thức Thread.sleep(1500) để tạm dừng thực thi của luồng trong khoảng thời gian là 1500 mili giây."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Tại sao việc khai báo kiểu dữ liệu của đối số khi gọi phương thức printParity(int number) lại bị coi là sai trong Java?",
+    "context": "Hãy luôn nhớ rằng khi bạn kích hoạt một phương thức, thì không nhất thiết phải khai báo các kiểu của đối số được cung cấp. Java có thể hình dung ra kiểu dữ liệu là gì. Bạn phải kiềm chế để tránh viết những lệnh kiểu như: int number = 17; printParity(int number); // SAI!!!",
+    "ground_truth": "Vì khi kích hoạt (gọi) một phương thức, Java không yêu cầu khai báo kiểu của đối số được cung cấp do trình biên dịch có thể tự xác định kiểu dữ liệu của đối số đó."
+  },
+  {
+    "category": "Java Programming Logic",
+    "question": "Cấu trúc if-else trong đoạn mã được cung cấp đảm bảo điều gì về số lượng phương án thực hiện?",
+    "context": "Nếu điều kiện không được thoả mã thì lệnh thứ hai sẽ được thực hiện. Vì điều kiện hoặc là được thoả mãn, hoặc không; nên luôn chỉ có một trong hai phương án được thực hiện.",
+    "ground_truth": "Cấu trúc này đảm bảo rằng luôn chỉ có một trong hai phương án được thực hiện, vì điều kiện chỉ có thể hoặc được thỏa mãn hoặc không."
+  },
+  {
+    "category": "Java Threading",
+    "question": "Sự khác biệt giữa hai constructor của lớp ThreadGroup trong Java là gì?",
+    "context": "Hai kiểu nhóm luồng thiết lập (khởi dựng) là:\n\npublic ThreadGroup(String str)\n  Ở đây, “str” là tên của nhóm luồng mới nhất được tạo ra.\n public ThreadGroup(ThreadGroup tgroup, String str)\nỞ đây, “tgroup” chỉ ra luồng đang chạy hiện thời như là luồng cha, “str” là tên của\nnhóm luồng đang được tạo ra.",
+    "ground_truth": "Constructor thứ nhất (ThreadGroup(String str)) chỉ định tên cho nhóm luồng mới, trong khi constructor thứ hai (ThreadGroup(ThreadGroup tgroup, String str)) cho phép chỉ định một nhóm luồng cha cụ thể (tgroup) cùng với tên của nhóm luồng mới được tạo."
+  },
+  {
+    "category": "Java Synchronization",
+    "question": "Tại sao cần phải sử dụng cơ chế đồng bộ (synchronization) khi làm việc với nhiều luồng?",
+    "context": "Trong khi đang làm việc với nhiều luồng, nhiều hơn một luồng có thể muốn thâm\nnhập cùng biến tại cùng thời điểm. Lấy ví dụ, một luồng có thể cố gắng đọc dữ liệu,\ntrong khi luồng khác cố gắng thay đổi dữ liệu. Trong trường hợp này, dữ liệu có thể bị\nsai lạc.\nTrong những trường hợp này, bạn cần cho phép một luồng hoàn thành trọn vẹn tác\nvụ của nó (thay đổi giá trị), và rồi thì cho phép các luồng kế tiếp thực thi.",
+    "ground_truth": "Cần sử dụng đồng bộ để ngăn chặn tình trạng dữ liệu bị sai lạc khi nhiều luồng cùng truy cập vào một tài nguyên chia sẻ tại cùng một thời điểm, đảm bảo rằng một luồng hoàn thành trọn vẹn tác vụ của nó trước khi cho phép các luồng khác thực thi."
+  }
+]
