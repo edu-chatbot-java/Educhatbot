@@ -53,8 +53,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         Double ragAvgLatency = evalRepo.getAverageLatencyByApproach("RAG");
         Double finetuneAvgLatency = evalRepo.getAverageLatencyByApproach("FINETUNE");
         Double avgFaithfulness = evalRepo.getAverageFaithfulnessByApproach("RAG"); 
-        Double avgRelevancy = evalRepo.getAverageFaithfulnessByApproach("FINETUNE"); // Dùng tạm hàm cũ để tránh lỗi, cần bổ sung hàm getAverageRelevancyByApproach sau.
-
+        Double avgRelevancy = evalRepo.getAverageRelevancyByApproach("FINETUNE");
         // 3. Tính toán tỷ lệ thắng (Win Rate) cho bài Test Mù (Blind Test)
         long totalBlindTests = (ragWins != null ? ragWins : 0) + (finetuneWins != null ? finetuneWins : 0);
         double ragWinRate = 0.0;
