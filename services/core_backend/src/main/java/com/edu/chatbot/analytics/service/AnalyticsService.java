@@ -13,5 +13,7 @@ public interface AnalyticsService {
     
     // Xuất dữ liệu chat 5 sao ra file JSONL
     byte[] exportTrainingDataToJsonl();
-    
+
+    // Khai báo hàm chạy đánh giá tự động
+    void runAutoEvaluation(String approach, int sampleSize);
 }
