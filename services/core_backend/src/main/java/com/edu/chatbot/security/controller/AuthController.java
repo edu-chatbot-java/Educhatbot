@@ -4,6 +4,7 @@ import com.edu.chatbot.security.auth.AuthService;
 import com.edu.chatbot.security.dto.AuthResponse;
 import com.edu.chatbot.security.dto.LoginRequest;
 import com.edu.chatbot.security.dto.RegisterRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class AuthController {
 
     // 1. Cánh cửa cho Đăng ký (Đường dẫn gọi từ Postman: POST /api/auth/register)
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         // Nhờ AuthService xử lý và hứng mã Token trả về
         AuthResponse response = authService.register(request);
         return ResponseEntity.ok(response);
@@ -26,7 +27,7 @@ public class AuthController {
 
     // 2. Cánh cửa cho Đăng nhập (Đường dẫn gọi từ Postman: POST /api/auth/login)
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         // Nhờ AuthService xử lý và hứng mã Token trả về
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
