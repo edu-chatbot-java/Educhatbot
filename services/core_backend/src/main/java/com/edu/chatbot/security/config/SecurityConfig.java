@@ -12,8 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -34,6 +37,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Chế độ không lưu trạng thái
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Cánh cửa /api/auth mở tự do cho mọi người đăng ký, đăng nhập
+                .requestMatchers("/api/admin/**").hasRole("ADMIN") // Thêm dòng này: Chỉ ADMIN mới được vào các link bắt đầu bằng /api/admin
                 .anyRequest().authenticated() // BẤT CỨ cánh cửa nào khác đều phải trình thẻ Token
             )
             // Nhét "Ông bảo vệ" JwtFilter đứng ở trước cửa kiểm tra của Spring
