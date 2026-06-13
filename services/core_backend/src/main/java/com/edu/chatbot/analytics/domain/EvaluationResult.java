@@ -1,6 +1,6 @@
 package com.edu.chatbot.analytics.domain;
 
-import com.edu.chatbot.common.domain.BaseEntity;
+import com.edu.chatbot.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
