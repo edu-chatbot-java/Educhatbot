@@ -8,6 +8,7 @@ import com.edu.chatbot.security.entity.User;
 import com.edu.chatbot.security.enums.Role;
 import com.edu.chatbot.security.jwt.JwtTokenProvider;
 import com.edu.chatbot.security.repository.UserRepository;
+import com.edu.chatbot.security.service.AuditLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; 
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuditLogService auditLogService;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -49,6 +51,10 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String token = jwtTokenProvider.generateToken(user.getEmail());
+        
+        // Ghi lại lịch sử đăng nhập vào sổ Audit Log
+        auditLogService.logAction("ĐĂNG NHẬP", user.getEmail(), "Đăng nhập thành công vào hệ thống");
+        
         return new AuthResponse(token);
     }
 }
