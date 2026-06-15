@@ -36,3 +36,28 @@ logging:
   level:
     root: INFO
     com.edu.chatbot: DEBUG
+
+# ==========================================
+# Cấu hình RAG & AI (Phân hệ 4)
+# ==========================================
+qdrant:
+  host: localhost
+  port: 6334
+  api-key: ${QDRANT_API_KEY:}
+  collection-name: edu_chatbot_chunks
+
+groq:
+  api-key: ${GROQ_API_KEY:}
+  base-url: https://api.groq.com/openai/v1
+  rewriting-model: llama-3.1-8b-instant
+
+llm:
+  api-key: ${GROQ_API_KEY:}
+  base-url: https://api.groq.com/openai/v1
+  chat-model: llama3-8b-8192
+  max-tokens: 2048
+
+rag:
+  top-k: 5
+  blind-test-probability: 0.2
+  chat-memory-size: 5
