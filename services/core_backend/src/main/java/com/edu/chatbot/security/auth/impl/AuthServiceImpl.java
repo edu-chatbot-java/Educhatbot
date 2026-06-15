@@ -4,11 +4,15 @@ import com.edu.chatbot.security.auth.AuthService;
 import com.edu.chatbot.security.dto.AuthResponse;
 import com.edu.chatbot.security.dto.LoginRequest;
 import com.edu.chatbot.security.dto.RegisterRequest;
+import com.edu.chatbot.security.dto.TokenRefreshRequest;
+import com.edu.chatbot.security.dto.TokenRefreshResponse;
+import com.edu.chatbot.security.entity.RefreshToken;
 import com.edu.chatbot.security.entity.User;
 import com.edu.chatbot.security.enums.Role;
 import com.edu.chatbot.security.jwt.JwtTokenProvider;
 import com.edu.chatbot.security.repository.UserRepository;
 import com.edu.chatbot.security.service.AuditLogService;
+import com.edu.chatbot.security.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder; 
     private final JwtTokenProvider jwtTokenProvider;
     private final AuditLogService auditLogService;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -38,7 +43,9 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         String token = jwtTokenProvider.generateToken(user.getEmail());
-        return new AuthResponse(token);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+        
+        return new AuthResponse(token, refreshToken.getToken());
     }
 
     @Override
@@ -51,10 +58,29 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String token = jwtTokenProvider.generateToken(user.getEmail());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
         
         // Ghi lại lịch sử đăng nhập vào sổ Audit Log
         auditLogService.logAction("ĐĂNG NHẬP", user.getEmail(), "Đăng nhập thành công vào hệ thống");
         
-        return new AuthResponse(token);
+        return new AuthResponse(token, refreshToken.getToken());
+    }
+
+    @Override
+    public TokenRefreshResponse refreshToken(TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+
+        RefreshToken refreshToken = refreshTokenService.findByToken(requestRefreshToken);
+        refreshToken = refreshTokenService.verifyExpiration(refreshToken);
+        
+        User user = refreshToken.getUser();
+        String newAccessToken = jwtTokenProvider.generateToken(user.getEmail());
+        
+        return new TokenRefreshResponse(newAccessToken, requestRefreshToken);
+    }
+
+    @Override
+    public void logout(Long userId) {
+        refreshTokenService.deleteByUserId(userId);
     }
 }
