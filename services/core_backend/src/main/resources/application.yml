@@ -36,3 +36,14 @@ logging:
   level:
     root: INFO
     com.edu.chatbot: DEBUG
+
+# ─── Hugging Face Inference API (TV5 - Fine-tuning) ───────────────────────────
+huggingface:
+  api:
+    # HF API Token — lấy tại https://huggingface.co/settings/tokens
+    # Giá trị thực tế đặt trong biến môi trường HF_API_TOKEN (xem .env.example)
+    token: ${HF_API_TOKEN}
+  model:
+    # ID model đã fine-tune trên HF Hub — TV5 điền sau khi push model lên
+    # Ví dụ: your-username/llama3.1-8b-java-chatbot-lora
+    id: ${HF_MODEL_ID:meta-llama/Llama-3.1-8B-Instruct}
