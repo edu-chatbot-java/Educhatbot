@@ -9,9 +9,8 @@ import java.util.List;
 @Repository
 public interface ChatSessionRepository extends JpaRepository<ChatSession, Long> {
     
-    // TODO: Tạm thời comment User do TV2 chưa code xong entity
-    // List<ChatSession> findByUserIdOrderByCreatedAtDesc(Long userId);
-    // Optional<ChatSession> findByIdAndUserId(Long id, Long userId);
+    List<ChatSession> findByUserIdOrderByCreatedAtDesc(Long userId);
+    Optional<ChatSession> findByIdAndUserId(Long id, Long userId);
 
     // Dùng tạm khi chưa có User:
     List<ChatSession> findAllByOrderByCreatedAtDesc();
