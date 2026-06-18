@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: core-backend
-  
+
   datasource:
     # URL kết nối Supabase PostgreSQL sử dụng PgBouncer (Port 6543)
     # Thay thế [YOUR_PROJECT_REF] và [YOUR_PASSWORD] bằng thông tin thực tế từ Supabase Dashboard
@@ -12,16 +12,16 @@ spring:
     username: postgres.[YOUR_PROJECT_REF]
     password: [YOUR_PASSWORD]
     driver-class-name: org.postgresql.Driver
-    
+
     # Cấu hình HikariCP (Connection Pool) chống mất kết nối (Timeout)
     hikari:
       pool-name: SupabaseHikariPool
       minimum-idle: 2
       maximum-pool-size: 10
-      idle-timeout: 30000       # Đóng connection nếu không dùng sau 30s
+      idle-timeout: 30000 # Đóng connection nếu không dùng sau 30s
       connection-timeout: 20000 # Chờ 20s để lấy connection, quá hạn sẽ báo lỗi
-      max-lifetime: 1800000     # 30 phút, đảm bảo Supabase không drop connection bất thình lình
-  
+      max-lifetime: 1800000 # 30 phút, đảm bảo Supabase không drop connection bất thình lình
+
   jpa:
     hibernate:
       ddl-auto: update # Tự động tạo bảng dựa trên Entity
@@ -54,7 +54,7 @@ groq:
 llm:
   api-key: ${GROQ_API_KEY:}
   base-url: https://api.groq.com/openai/v1
-  chat-model: llama3-8b-8192
+  chat-model: llama-3.1-8b-instant
   max-tokens: 2048
 
 rag:
