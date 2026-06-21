@@ -40,5 +40,9 @@ public class FineTuneRequest {
         /** Top-p nucleus sampling */
         @JsonProperty("top_p")
         private Float topP;
+
+        /** Tham số chống lặp từ (ví dụ 1.1 đến 1.2) */
+        @JsonProperty("repetition_penalty")
+        private Float repetitionPenalty;
     }
 }
