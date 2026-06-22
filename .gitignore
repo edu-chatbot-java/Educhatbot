@@ -55,3 +55,4 @@ onnx_model/
 # Logs
 *.log
 logs/
+implementation_plan.md
