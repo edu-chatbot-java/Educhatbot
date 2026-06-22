@@ -2,9 +2,7 @@ package com.edu.chatbot.document.entity;
 
 import com.edu.chatbot.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "document_chunks",
@@ -12,6 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DocumentChunk extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 # Environment Variables (Secrets)
 .env
 *.env
+application-local.yml
 
 # IDEs
 .idea/
