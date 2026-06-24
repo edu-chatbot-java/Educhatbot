@@ -18,4 +18,7 @@ public class RegisterRequest {
     
     @NotBlank(message = "Họ và tên không được để trống")
     private String fullName;
+
+    @NotBlank(message = "Tên đăng nhập không được để trống")
+    private String username;
 }
