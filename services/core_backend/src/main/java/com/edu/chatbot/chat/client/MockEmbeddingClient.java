@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Service
+@Service("chatMockEmbeddingClient")
 @ConditionalOnProperty(name = "embedding.mock", havingValue = "true", matchIfMissing = true)
 public class MockEmbeddingClient implements EmbeddingClient {
 

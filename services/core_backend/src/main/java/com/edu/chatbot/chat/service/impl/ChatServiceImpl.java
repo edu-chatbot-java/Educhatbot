@@ -65,9 +65,16 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public SessionDTO createSession(Long subjectId, Long userId) {
-        // ... (User logic should be provided by security context. Mocked here.)
+        com.edu.chatbot.security.entity.User user = new com.edu.chatbot.security.entity.User();
+        user.setId(userId);
+        
+        com.edu.chatbot.common.entity.Subject subject = new com.edu.chatbot.common.entity.Subject();
+        subject.setId(subjectId);
+
         ChatSession session = ChatSession.builder()
                 .title("New Chat")
+                .user(user)
+                .subject(subject)
                 .build();
         session = sessionRepository.save(session);
         return SessionDTO.builder()

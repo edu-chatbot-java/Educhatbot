@@ -20,7 +20,8 @@ public class QdrantConfig {
 
     @Bean
     public QdrantClient qdrantClient() {
-        QdrantGrpcClient.Builder grpcClientBuilder = QdrantGrpcClient.newBuilder(host, port, false);
+        boolean useTls = host.contains("cloud.qdrant.io");
+        QdrantGrpcClient.Builder grpcClientBuilder = QdrantGrpcClient.newBuilder(host, port, useTls);
         if (apiKey != null && !apiKey.isEmpty()) {
             grpcClientBuilder.withApiKey(apiKey);
         }
