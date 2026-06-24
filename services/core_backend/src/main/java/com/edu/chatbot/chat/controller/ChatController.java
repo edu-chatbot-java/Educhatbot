@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,26 +23,21 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    // Helper method to extract user ID from UserDetails
-    private Long extractUserId(UserDetails userDetails) {
-        // Fallback or mock implementation until TV2 finishes JWT
-        if (userDetails == null || userDetails.getUsername() == null) {
-            return 1L; // Mock user ID
+    // Helper method to extract user ID from User entity
+    private Long extractUserId(com.edu.chatbot.security.entity.User user) {
+        if (user == null || user.getId() == null) {
+            return 1L; // Fallback
         }
-        try {
-            return Long.parseLong(userDetails.getUsername());
-        } catch (NumberFormatException e) {
-            return 1L; // Default fallback
-        }
+        return user.getId();
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     public ResponseEntity<ApiResponse<SessionDTO>> createSession(
             @RequestBody @Valid CreateSessionRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal com.edu.chatbot.security.entity.User user) {
         
-        Long userId = extractUserId(userDetails);
+        Long userId = extractUserId(user);
         SessionDTO sessionDTO = chatService.createSession(request.getSubjectId(), userId);
         return ResponseEntity.ok(ApiResponse.success(sessionDTO));
     }
@@ -51,9 +45,9 @@ public class ChatController {
     @GetMapping
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     public ResponseEntity<ApiResponse<List<SessionDTO>>> getUserSessions(
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal com.edu.chatbot.security.entity.User user) {
         
-        Long userId = extractUserId(userDetails);
+        Long userId = extractUserId(user);
         List<SessionDTO> sessions = chatService.getUserSessions(userId);
         return ResponseEntity.ok(ApiResponse.success(sessions));
     }
@@ -62,9 +56,9 @@ public class ChatController {
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     public ResponseEntity<ApiResponse<List<MessageDTO>>> getSessionHistory(
             @PathVariable Long id,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal com.edu.chatbot.security.entity.User user) {
         
-        Long userId = extractUserId(userDetails);
+        Long userId = extractUserId(user);
         List<MessageDTO> messages = chatService.getSessionHistory(id, userId);
         return ResponseEntity.ok(ApiResponse.success(messages));
     }
@@ -74,9 +68,9 @@ public class ChatController {
     public ResponseEntity<ApiResponse<ChatResponseDTO>> sendMessage(
             @PathVariable Long id,
             @RequestBody @Valid ChatRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal com.edu.chatbot.security.entity.User user) {
         
-        Long userId = extractUserId(userDetails);
+        Long userId = extractUserId(user);
         // Đảm bảo sessionId trong payload khớp với URL
         request.setSessionId(id);
         

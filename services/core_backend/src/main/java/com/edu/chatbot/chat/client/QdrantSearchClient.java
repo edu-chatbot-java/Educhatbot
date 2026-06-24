@@ -36,7 +36,7 @@ public class QdrantSearchClient {
             Filter filter = Filter.newBuilder()
                     .addMust(Condition.newBuilder()
                             .setField(FieldCondition.newBuilder()
-                                    .setKey("subjectId")
+                                    .setKey("subject_id")
                                     .setMatch(Match.newBuilder().setInteger(subjectId).build())
                                     .build())
                             .build())
@@ -64,8 +64,8 @@ public class QdrantSearchClient {
     private QdrantPayloadDTO parsePayload(ScoredPoint point) {
         Map<String, io.qdrant.client.grpc.JsonWithInt.Value> payload = point.getPayloadMap();
         
-        Long chunkId = payload.containsKey("chunkId") ? payload.get("chunkId").getIntegerValue() : null;
-        Long subId = payload.containsKey("subjectId") ? payload.get("subjectId").getIntegerValue() : null;
+        Long chunkId = payload.containsKey("chunk_id") ? payload.get("chunk_id").getIntegerValue() : null;
+        Long subId = payload.containsKey("subject_id") ? payload.get("subject_id").getIntegerValue() : null;
         String content = payload.containsKey("content") ? payload.get("content").getStringValue() : "";
         
         return QdrantPayloadDTO.builder()

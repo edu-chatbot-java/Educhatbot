@@ -56,3 +56,12 @@ onnx_model/
 *.log
 logs/
 implementation_plan.md
+
+
+# Misc
+hf_cache/
+issues/
+logs/
+*.log
+issue_*.md
+issue_final_*

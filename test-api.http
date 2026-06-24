@@ -1,0 +1,74 @@
+### =================================================================
+### 1. TEST PYTHON EMBEDDING SERVICE (Cổng 8001)
+### =================================================================
+
+### Kiểm tra sức khoẻ (Health Check) của Embedding Service
+GET http://localhost:8001/health
+Accept: application/json
+
+###
+
+### Sinh vector cho một câu văn bản
+POST http://localhost:8001/api/embed
+Content-Type: application/json
+
+{
+  "texts": ["Làm thế nào để khởi tạo một ArrayList trong Java?"],
+  "prefix": "query: "
+}
+
+### =================================================================
+### 2. TEST JAVA SPRING BOOT SERVICE (Cổng 8080)
+### =================================================================
+
+### Đăng ký tài khoản (Tạo user để test)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "password123",
+  "fullName": "Người Dùng Test"
+}
+
+###
+
+### Đăng nhập để lấy Token
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### Gán token vào biến môi trường của file HTTP (Yêu cầu Extension REST Client)
+@authToken = {{login.response.body.token}}
+
+###
+
+### Tạo một Session Chat mới (Cần Token)
+# @name createSession
+POST http://localhost:8080/api/chat/sessions
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "subjectId": 1,
+  "title": "Chat về Lập trình Java"
+}
+
+###
+
+@sessionId = {{createSession.response.body.id}}
+
+### Gửi tin nhắn và nhận phản hồi RAG (Có thể sẽ gọi ngầm sang Python Embedding)
+POST http://localhost:8080/api/chat/sessions/{{sessionId}}/messages
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "content": "Phân biệt sự khác nhau giữa ArrayList và LinkedList trong Java?"
+}

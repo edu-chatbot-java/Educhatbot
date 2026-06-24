@@ -28,12 +28,7 @@ public class AnalyticsController {
     public ApiResponse<DashboardResponse> getDashboard() {
         DashboardResponse stats = analyticsService.getDashboardStats();
         
-        return ApiResponse.<DashboardResponse>builder()
-                .status("success")
-                .code(200)
-                .message("Trích xuất số liệu Dashboard thành công")
-                .data(stats)
-                .build();
+        return ApiResponse.success(stats, "Trích xuất số liệu Dashboard thành công");
     }
 
     /**
@@ -63,12 +58,7 @@ public class AnalyticsController {
         // Gọi hàm xử lý chạy đánh giá
         analyticsService.runAutoEvaluation(request.getApproach(), request.getSampleSize());
         
-        return ApiResponse.<String>builder()
-                .status("success")
-                .code(200)
-                .message(String.format("Đã kích hoạt đánh giá thành công cho %s với %d mẫu. Vui lòng check Dashboard.", 
-                        request.getApproach(), request.getSampleSize()))
-                .data(null)
-                .build();
+        return ApiResponse.success(null, String.format("Đã kích hoạt đánh giá thành công cho %s với %d mẫu. Vui lòng check Dashboard.", 
+                        request.getApproach(), request.getSampleSize()));
     }
 }

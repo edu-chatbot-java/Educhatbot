@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/finetune/test")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class FineTuningTestController {
 
     private final FineTuningService fineTuningService;

@@ -26,11 +26,6 @@ public class FeedbackController {
         
         analyticsService.submitFeedback(request, currentUserId);
         
-        return ApiResponse.<String>builder()
-                .status("success")
-                .code(200)
-                .message("Hệ thống đã ghi nhận đánh giá của bạn!")
-                .data(null)
-                .build();
+        return ApiResponse.success(null, "Hệ thống đã ghi nhận đánh giá của bạn!");
     }
 }

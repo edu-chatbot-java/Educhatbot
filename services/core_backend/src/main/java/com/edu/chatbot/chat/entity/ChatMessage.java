@@ -37,11 +37,9 @@ public class ChatMessage extends BaseEntity {
     @Column(name = "latency_ms")
     private Long latencyMs;
 
-    // TODO: TV6 sẽ thiết kế chức năng Rating. Hiện tại để nullable = true.
     @Column(name = "user_rating")
     private Integer userRating;
 
-    // TODO: TV6 sẽ thiết kế chức năng Feedback. Hiện tại để nullable = true.
     @Column(name = "feedback_type", length = 20)
     private String feedbackType;
 }

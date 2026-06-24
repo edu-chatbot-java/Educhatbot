@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/documents")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class DocumentController {
 
     private final DocumentService documentService;

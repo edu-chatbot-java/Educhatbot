@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("documentMockEmbeddingClient")
 @Profile("mock")
 public class MockEmbeddingClient implements EmbeddingClient {
     
@@ -18,14 +18,14 @@ public class MockEmbeddingClient implements EmbeddingClient {
         
         for (int i = 0; i < chunks.size(); i++) {
             List<Float> vector = new ArrayList<>();
-            for (int j = 0; j < 768; j++) {
+            for (int j = 0; j < 384; j++) {
                 vector.add((float) Math.random());
             }
             embeddings.add(vector);
         }
         
         response.setEmbeddings(embeddings);
-        response.setDimension(768);
+        response.setDimension(384);
         response.setModel("mock-model");
         return response;
     }

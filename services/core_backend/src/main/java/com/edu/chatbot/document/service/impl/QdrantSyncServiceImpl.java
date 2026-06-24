@@ -58,6 +58,7 @@ public class QdrantSyncServiceImpl implements QdrantSyncService {
                     .setVectors(Vectors.newBuilder().setVector(vector).build())
                     .putPayload("document_id", value(document.getId()))
                     .putPayload("subject_id", value(document.getSubjectId()))
+                    .putPayload("chunk_id", value(chunk.getId()))
                     .putPayload("chunk_index", value(chunk.getChunkIndex()))
                     .putPayload("content", value(chunk.getContent()))
                     .build();
