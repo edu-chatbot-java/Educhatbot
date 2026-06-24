@@ -55,3 +55,6 @@ onnx_model/
 # Logs
 *.log
 logs/
+
+.agents/
+.prompt/
