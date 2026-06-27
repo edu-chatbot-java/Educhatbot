@@ -30,7 +30,7 @@ app = modal.App("finetune-api", image=image)
 
 # 4. Định nghĩa Class Model để chạy inference trên GPU
 @app.cls(
-    gpu="A10G",
+    gpu="T4",
     volumes={"/model": volume},
     timeout=600
 )
