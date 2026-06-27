@@ -32,7 +32,8 @@ app = modal.App("finetune-api", image=image)
 @app.cls(
     gpu="T4",
     volumes={"/model": volume},
-    timeout=600
+    timeout=600,
+    scaledown_window=20,  # Tắt container sau 20 giây idle (mặc định 300s) → tiết kiệm ~93% chi phí idle
 )
 class Model:
     @modal.enter()
