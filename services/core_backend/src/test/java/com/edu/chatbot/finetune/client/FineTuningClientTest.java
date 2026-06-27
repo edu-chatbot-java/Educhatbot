@@ -53,7 +53,7 @@ public class FineTuningClientTest {
         assertEquals("Đây là câu trả lời được sinh ra từ Modal", answer);
 
         RecordedRequest recordedRequest = mockWebServer.takeRequest();
-        assertEquals("/generate", recordedRequest.getPath());
+        assertEquals("/", recordedRequest.getPath());
         assertEquals("POST", recordedRequest.getMethod());
     }
 
