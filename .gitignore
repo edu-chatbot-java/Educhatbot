@@ -65,3 +65,6 @@ logs/
 *.log
 issue_*.md
 issue_final_*
+
+#Docs
+docs/
