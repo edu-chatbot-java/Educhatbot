@@ -67,7 +67,7 @@ public class FineTuningClient {
                                 .build();
 
                 FineTuneResponse response = webClient.post()
-                                .uri("/generate")
+                                .uri("/")
                                 .bodyValue(request)
                                 .retrieve()
                                 // Chuyển HTTP error sang exception để retryWhen xử lý
