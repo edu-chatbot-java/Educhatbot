@@ -72,3 +72,23 @@ Content-Type: application/json
 {
   "content": "Phân biệt sự khác nhau giữa ArrayList và LinkedList trong Java?"
 }
+
+### =================================================================
+### 3. TEST MODAL FINE-TUNING INFERENCE (Cloud Serverless GPU)
+### =================================================================
+
+### Kiểm tra sức khoẻ (Health Check) của Modal Service
+GET https://gthinh29--finetune-api-model-health.modal.run
+Accept: application/json
+
+###
+
+### Gửi prompt trực tiếp lên Modal để sinh kết quả (Test GPU T4)
+POST https://gthinh29--finetune-api-model-generate.modal.run
+Content-Type: application/json
+
+{
+  "prompt": "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nBạn là trợ lý học thuật chuyên về lập trình Java. Hãy trả lời câu hỏi bằng tiếng Việt.<|eot_id|>\n<|start_header_id|>user<|end_header_id|>\n\nMục tiêu chính của cuốn sách Think Java là gì?<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n\n",
+  "max_new_tokens": 128,
+  "temperature": 0.7
+}
