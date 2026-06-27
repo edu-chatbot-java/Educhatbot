@@ -1,6 +1,7 @@
 # Environment Variables (Secrets)
 .env
 *.env
+.env.http.local
 application-local.yml
 
 # IDEs
