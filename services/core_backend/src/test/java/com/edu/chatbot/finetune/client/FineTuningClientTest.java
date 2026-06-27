@@ -65,4 +65,21 @@ public class FineTuningClientTest {
             fineTuningClient.generate("Test prompt");
         });
     }
+
+    @Test
+    void generate_503Retry_Success() throws Exception {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(503));
+        
+        FineTuneResponse mockResponse = new FineTuneResponse();
+        mockResponse.setAnswer("Thành công sau khi retry");
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .setHeader("Content-Type", "application/json")
+                .setBody(objectMapper.writeValueAsString(mockResponse)));
+
+        String answer = fineTuningClient.generate("Test prompt");
+        assertEquals("Thành công sau khi retry", answer);
+        
+        assertEquals(2, mockWebServer.getRequestCount());
+    }
 }
