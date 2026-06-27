@@ -70,7 +70,7 @@ class Model:
             
         logger.info("Model loaded successfully!")
 
-    @modal.web_endpoint(method="POST")
+    @modal.fastapi_endpoint(method="POST")
     def generate(self, request: dict):
         """
         Endpoint POST /generate nhận payload:
@@ -128,7 +128,7 @@ class Model:
             logger.error(f"Error during generation: {str(e)}", exc_info=True)
             return {"error": f"Internal server error: {str(e)}"}, 500
 
-    @modal.web_endpoint(method="GET")
+    @modal.fastapi_endpoint(method="GET")
     def health(self):
         """
         Endpoint GET /health để kiểm tra trạng thái hoạt động của mô hình
