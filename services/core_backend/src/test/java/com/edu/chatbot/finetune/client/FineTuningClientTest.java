@@ -56,4 +56,13 @@ public class FineTuningClientTest {
         assertEquals("/generate", recordedRequest.getPath());
         assertEquals("POST", recordedRequest.getMethod());
     }
+
+    @Test
+    void generate_500Error_ThrowsException() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+
+        assertThrows(FineTuneServiceException.class, () -> {
+            fineTuningClient.generate("Test prompt");
+        });
+    }
 }
