@@ -16,6 +16,9 @@ def upload_model_to_volume():
     from huggingface_hub import snapshot_download
     
     # Lấy model_id từ env hoặc mặc định
+    # Volume mount được ánh xạ tại '/model' trong container.
+    # Thư mục đích trong volume '/model/llama3.1-8b-java-chatbot-lora'
+    # sẽ tương ứng với đường dẫn mà load_model() trong app.py đọc LoRA weights.
     model_id = os.environ.get("HF_MODEL_ID", "thinhpg1420/llama3.1-8b-java-chatbot-lora")
     target_dir = f"/model/llama3.1-8b-java-chatbot-lora"
     
