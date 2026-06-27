@@ -38,7 +38,9 @@ class Model:
     @modal.enter()
     def load_model(self):
         import torch
+        # pyrefly: ignore [missing-import]
         from transformers import AutoModelForCausalLM, AutoTokenizer
+        # pyrefly: ignore [missing-import]
         from peft import PeftModel
 
         self.model_dir = "/model/llama3.1-8b-java-chatbot"
