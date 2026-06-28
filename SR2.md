@@ -7,7 +7,7 @@ Tài liệu này (SR2) được sinh ra để hỗ trợ nhóm phát triển Fro
 ## 1. Thông Tin Môi Trường (Production)
 Frontend không gọi vào `localhost` nữa. Các bạn phải đổi biến môi trường `BASE_URL` trong Frontend thành đường link sau:
 
-- **Base URL Backend (Chính thức):** `https://backend-35971955178.asia-northeast3.run.app`
+- **Base URL Backend (Chính thức):** `https://edu-backend-35971955178.asia-northeast3.run.app`
 
 > ⚠️ **LƯU Ý CỰC KỲ QUAN TRỌNG:** Tất cả các API (ngoại trừ Đăng ký/Đăng nhập) đều yêu cầu đính kèm JWT Token vào Header của mọi request:
 > `Authorization: Bearer <CHUỖI_TOKEN>`
@@ -64,7 +64,7 @@ const sendChatMessage = async (sessionId, question) => {
   setBotTyping(true);
 
   try {
-    const response = await fetch(`https://backend-35971955178.asia-northeast3.run.app/api/chat/sessions/${sessionId}/messages`, {
+    const response = await fetch(`https://edu-backend-35971955178.asia-northeast3.run.app/api/chat/sessions/${sessionId}/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

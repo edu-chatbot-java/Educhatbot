@@ -3,7 +3,7 @@
 ### Yêu cầu: Sử dụng Extension "REST Client" trong VSCode hoặc IntelliJ
 ### =================================================================
 
-@baseUrl = https://backend-35971955178.asia-northeast3.run.app
+@baseUrl = https://edu-backend-35971955178.asia-northeast3.run.app
 @pythonUrl = https://embedding-35971955178.asia-northeast3.run.app
 
 ### -----------------------------------------------------------------
