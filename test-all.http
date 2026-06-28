@@ -3,8 +3,8 @@
 ### Yêu cầu: Sử dụng Extension "REST Client" trong VSCode hoặc IntelliJ
 ### =================================================================
 
-@baseUrl = http://localhost:8080
-@pythonUrl = http://localhost:8001
+@baseUrl = https://educhatbot-35971955178.europe-west1.run.app
+@pythonUrl = https://embedding-35971955178.asia-northeast3.run.app
 
 ### -----------------------------------------------------------------
 ### 0. EMBEDDING SERVICE (PYTHON)
