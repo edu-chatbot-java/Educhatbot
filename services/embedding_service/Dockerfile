@@ -14,5 +14,5 @@ COPY . .
 ENV PORT=8001
 EXPOSE ${PORT}
 
-# Chạy FastAPI bằng Uvicorn và lắng nghe ở cổng do PORT quy định
-CMD uvicorn main:app --host 0.0.0.0 --port ${PORT}
+# Chạy bằng file main.py để bắt chuẩn PORT của Cloud Run
+CMD ["python", "main.py"]
