@@ -1,6 +1,8 @@
+modal
 fastapi
 uvicorn
 pydantic
+torch
 transformers
 peft
-torch
+accelerate

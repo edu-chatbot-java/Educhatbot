@@ -72,3 +72,33 @@ Content-Type: application/json
 {
   "content": "Phân biệt sự khác nhau giữa ArrayList và LinkedList trong Java?"
 }
+
+### =================================================================
+### 3. TEST MODAL FINE-TUNING INFERENCE (Cloud Serverless GPU)
+### =================================================================
+# Điền URL endpoint của bạn vào file .env.http.local (KHÔNG commit file này):
+# MODAL_GENERATE_URL = https://<your-workspace>--finetune-api-model-generate.modal.run
+# MODAL_HEALTH_URL   = https://<your-workspace>--finetune-api-model-health.modal.run
+# MODAL_TOKEN        = <your-modal-token-id>:<your-modal-token-secret>
+
+@MODAL_HEALTH_URL = {{$dotenv MODAL_HEALTH_URL}}
+@MODAL_GENERATE_URL = {{$dotenv MODAL_GENERATE_URL}}
+@MODAL_TOKEN = {{$dotenv MODAL_TOKEN}}
+
+### Kiểm tra sức khoẻ (Health Check) của Modal Service
+GET {{MODAL_HEALTH_URL}}
+Accept: application/json
+Authorization: Bearer {{MODAL_TOKEN}}
+
+###
+
+### Gửi prompt trực tiếp lên Modal để sinh kết quả (Test GPU T4)
+POST {{MODAL_GENERATE_URL}}
+Content-Type: application/json
+Authorization: Bearer {{MODAL_TOKEN}}
+
+{
+  "prompt": "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nBạn là trợ lý học thuật chuyên về lập trình Java. Hãy trả lời câu hỏi bằng tiếng Việt.<|eot_id|>\n<|start_header_id|>user<|end_header_id|>\n\nMục tiêu chính của cuốn sách Think Java là gì?<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n\n",
+  "max_new_tokens": 128,
+  "temperature": 0.7
+}
