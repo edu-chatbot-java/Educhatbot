@@ -41,7 +41,8 @@ Frontend không gọi vào `localhost` nữa. Các bạn phải đổi biến m�
     "approach": "RAG" // Hoặc "FINETUNE"
   }
   ```
-  - **Lưu ý về UI/UX:** Backend trả về file JSON nguyên khối (độ trễ khoảng 2.6s - 4.5s). Frontend cần làm hiệu ứng hiển thị icon *"BOT đang gõ chữ..."* trong thời gian chờ API trả về kết quả.
+  - **Lưu ý CỰC KỲ QUAN TRỌNG về UI/UX (Fake Typewriter):** Backend hiện đang dùng cơ chế Block (Đồng bộ), tức là nó sẽ đợi AI sinh xong toàn bộ chữ (mất khoảng 2s - 4s) rồi mới gói thành 1 cục JSON ném về Frontend một lần duy nhất. **KHÔNG CÓ STREAMING TỪNG TOKEN**.
+  - **Cách xử lý của Frontend:** Để tạo cảm giác AI đang nhả từng chữ giống ChatGPT, Frontend hãy dùng thủ thuật "Fake Typewriter": Nhận nguyên cục Text từ JSON, cắt thành mảng các từ (words), rồi dùng `setInterval` cứ mỗi 20ms nhả 1 từ ra màn hình. Lừa tình cực mạnh nhưng cực kỳ hiệu quả mà Backend không phải gánh luồng Streaming phức tạp!
 - **Bước 3: Lấy lại Lịch sử Chat cũ:**
   `GET /api/chat/sessions/{sessionId}/messages` (Tải lại lịch sử tin nhắn khi F5 trang).
 
