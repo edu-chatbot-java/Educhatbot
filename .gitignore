@@ -74,3 +74,7 @@ setup_gcp_vm.md
 SSH-VMmodel.md
 test_hf_api.py
 fake_jira_scrum.csv
+
+#frontend demo
+frontend-demo
+*/node_modules/

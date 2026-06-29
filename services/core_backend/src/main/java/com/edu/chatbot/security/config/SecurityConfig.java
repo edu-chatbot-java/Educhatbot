@@ -37,7 +37,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Chế độ không lưu trạng thái
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Cánh cửa /api/auth mở tự do cho mọi người đăng ký, đăng nhập
-                .requestMatchers("/api/admin/**").hasRole("ADMIN") // Thêm dòng này: Chỉ ADMIN mới được vào các link bắt đầu bằng /api/admin
+                .requestMatchers("/api/admin/**").hasRole("ADMIN") // Chỉ ADMIN mới được vào các link bắt đầu bằng /api/admin
+                .requestMatchers("/api/teacher/**").hasAnyRole("TEACHER", "ADMIN") // TEACHER hoặc ADMIN được vào
                 .anyRequest().authenticated() // BẤT CỨ cánh cửa nào khác đều phải trình thẻ Token
             )
             // Nhét "Ông bảo vệ" JwtFilter đứng ở trước cửa kiểm tra của Spring
