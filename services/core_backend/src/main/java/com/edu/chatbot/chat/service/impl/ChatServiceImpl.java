@@ -204,7 +204,7 @@ public class ChatServiceImpl implements ChatService {
                         .codeSnippet(botMsg.getCodeSnippet())
                         .approach(Approach.RAG)
                         .latencyMs(latencyMs)
-                        .sources(qdrantResults.stream().map(r -> "Document ID: " + r.getDocumentId() + " (Chunk: " + r.getChunkId() + ")").collect(Collectors.toList()))
+                        .sources(qdrantResults.stream().map(r -> "Subject ID: " + r.getSubjectId() + " (Chunk: " + r.getChunkId() + ")").collect(Collectors.toList()))
                         .build())
                 .sources(sources)
                 .build();
