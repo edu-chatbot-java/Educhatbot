@@ -17,7 +17,6 @@ public class AnalyticsController {
 
     private final AnalyticsService analyticsService;
 
-    // Viết Constructor bằng tay thay vì dùng Lombok
     public AnalyticsController(AnalyticsService analyticsService) {
         this.analyticsService = analyticsService;
     }
