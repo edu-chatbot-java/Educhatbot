@@ -98,3 +98,77 @@ const sendChatMessage = async (sessionId, question) => {
 ## 4. Luồng Chạy Backend (Frontend cần hiểu qua để xử lý UX)
 - **Cách RAG hoạt động:** Khi người dùng gửi 1 câu hỏi lên, Backend không nhả câu trả lời ngay. Nó sẽ biến câu hỏi thành Vector -> Tìm trong Database Vector lấy 5 đoạn văn bản từ PDF khớp nhất -> Ném cả câu hỏi + văn bản đó sang Mỹ (Groq Llama 3.1) -> Groq đọc hiểu và nhả câu trả lời về cho Java -> Java nhả về cho Frontend.
 - Tốc độ cực nhanh (trung bình 2-3s) nhờ kiến trúc Batching. Do đó Frontend chỉ cần gọi API duy nhất 1 lần, mọi kỹ thuật phức tạp ở giữa Java đã lo hết.
+
+---
+
+## 5. Phân Công Nhiệm Vụ Độc Lập Trên Frontend (Chống Merge Conflict)
+
+Dựa theo bản Đặc tả Hệ thống (SRS), để đảm bảo các thành viên có thể code song song trên cùng 1 repo mà **không bao giờ bị lỗi Merge Conflict**, mỗi người sẽ được "khoanh vùng" sở hữu các file riêng biệt tương ứng với Module của mình.
+
+### 5.1. TV2 - Nhóm Quản trị & Xác thực (Security & Identity)
+- **Khu vực được phép sửa:**
+  - File giao diện: `src/pages/AuthPage.jsx`, `src/App.jsx`, `src/index.css`, `tailwind.config.js`
+- **Nhiệm vụ Frontend:**
+  - Hoàn thiện và trang trí (Polish) giao diện Đăng nhập/Đăng ký cho đẹp mắt, hiện đại.
+  - Quản lý State chung của ứng dụng (Dark/Light mode).
+  - Có thể hỗ trợ các thành viên khác làm đẹp Component nhưng phải thông qua Pull Request.
+
+### 5.2. TV3 - Nhóm Xử lý Tài liệu (Data Ingestion)
+- **Khu vực được phép sửa:**
+  - File giao diện: `src/pages/TeacherDashboard.jsx`
+  - File gọi API: `src/services/document.service.js`
+- **Nhiệm vụ Frontend:**
+  - Thiết kế UI để Giảng viên quản lý môn học và tải lên file PDF/TXT.
+  - Gọi API `POST /api/documents/upload`.
+  - Hiển thị thanh Loading chờ Backend xử lý (Apache Tika, Chunking, Nhúng Vector).
+
+### 5.3. TV4 - Nhóm Điều phối RAG (RAG Orchestrator)
+- **Khu vực được phép sửa:**
+  - File giao diện: `src/pages/StudentDashboard.jsx`
+  - File CSS: Cập nhật component của mình nếu cần.
+- **Nhiệm vụ Frontend:**
+  - Bộ khung Chat cơ bản đã hoàn thành. TV4 chịu trách nhiệm làm bóng (Polish) UX/UI.
+  - Cài đặt hiệu ứng "Fake Typewriter" (nhả từng chữ) cho tin nhắn của AI.
+  - Tối ưu hiển thị Markdown và Code Snippet (phát hiện và highlight cú pháp lập trình).
+  - Tinh chỉnh giao diện đánh giá A/B Testing trực quan hơn.
+
+### 5.4. TV6 - Nhóm Thống kê & Đánh giá (Analytics)
+- **Khu vực được phép sửa:**
+  - File giao diện: `src/pages/AdminDashboard.jsx`
+  - File gọi API: `src/services/admin.service.js` (Tự tạo mới file này)
+- **Nhiệm vụ Frontend:**
+  - Cài đặt thư viện vẽ biểu đồ (như Recharts hoặc Chart.js).
+  - Thiết kế Dashboard vẽ biểu đồ so sánh Latency (RAG vs Fine-tuning) và Tỉ lệ thắng từ Blind Test.
+  - Quản lý danh sách User và xem Audit Logs.
+
+### 5.5. TV5 & Leader - Nhóm Mô hình AI (Fine-tuning & Đánh giá)
+- **Khu vực làm việc:** Không yêu cầu viết code Web Frontend.
+- **Nhiệm vụ tập trung:**
+  - **TV5:** Chịu trách nhiệm hoàn toàn code Python (FastAPI). Huấn luyện (Fine-tune) mô hình, triển khai API cho Java gọi sang.
+  - **Leader:** Chạy kịch bản Benchmark, thu thập kết quả vào Database. Dùng công cụ (như Postman hoặc `test-all.http`) để bắn hàng ngàn request đánh giá Faithfulness, Answer Relevancy, Recall/Precision.
+  - **Cả hai:** Phối hợp phân tích dữ liệu, viết báo cáo so sánh kết luận cuối cùng giữa RAG và Finetune.
+
+> 💡 **Quy tắc Vàng cho Team:** Luồng Routing và Đăng nhập (`App.jsx`, `AuthPage.jsx`) do TV2 phụ trách đã hoàn thiện. Các thành viên khác KHÔNG CẦN và KHÔNG ĐƯỢC đụng vào các file cấu hình gốc này để tránh phá vỡ luồng chung. Ai làm trang nào thì tạo Pull Request chỉ chứa file của trang đó!
+
+---
+
+## 6. Hướng Dẫn Bắt Đầu Dành Cho Team Frontend (Getting Started)
+
+Đây là các bước cơ bản để các bạn (TV3, TV4, TV6) bắt đầu nhảy vào code phần việc của mình:
+
+### 6.1. Khởi chạy dự án
+1. Mở Terminal (Command Prompt / VS Code Terminal).
+2. Di chuyển vào đúng thư mục frontend chính: `cd frontend` *(Lưu ý: Không dùng thư mục `frontend-demo` nữa).*
+3. Cài đặt các gói thư viện (chỉ làm lần đầu): `npm install`
+4. Khởi chạy server phát triển: `npm run dev`
+5. Mở trình duyệt ở địa chỉ `http://localhost:5173`.
+
+### 6.2. Hiểu luồng chạy (Cực kỳ quan trọng)
+- **Đã dẹp bỏ lỗi CORS & Token:** Các bạn **KHÔNG CẦN** quan tâm đến việc đính kèm JWT Token hay lo lỗi CORS. File `src/services/api.js` đã tự động bắt và đính kèm Token vào Header cho mọi Request. Bạn chỉ việc gọi: `await api.get('/path')` hoặc `await api.post('/path', data)`.
+- **Luồng Đăng nhập Mới:** TV2 đã thiết kế trang `AuthPage.jsx` có 2 tab rõ ràng "👨‍🎓 Sinh viên" và "👨‍🏫 Giảng viên". Nếu một tài khoản là Admin đăng nhập, nó sẽ tự đá vào `/admin`. Nếu không, nó sẽ ưu tiên đi theo Tab mà người dùng đang chọn. Điều này giúp các bạn dễ dàng test các màn hình Teacher/Student mà không sợ bị chặn.
+
+### 6.3. Nguyên tắc khi Code Giao diện (UI/UX)
+- Dự án sử dụng **Tailwind CSS**. Hạn chế viết CSS thuần (trừ khi bất khả kháng).
+- Các icon trên giao diện được lấy từ thư viện **`lucide-react`** (Ví dụ: `<UploadCloud size={18} />`).
+- Nếu muốn thêm màn hình loading, dùng các class có sẵn của Tailwind như `animate-pulse` hoặc `animate-spin`.
+- **Luôn bọc Code trong Try/Catch:** Khi gọi API Backend, luôn dùng khối `try { ... } catch (error) { ... }` để hiển thị `alert()` thông báo lỗi, tránh tình trạng ứng dụng bị chết cứng (Crash) nếu mạng lag hoặc Backend lỗi.
