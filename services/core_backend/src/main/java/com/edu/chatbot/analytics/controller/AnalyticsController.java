@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/analytics")
-@RequiredArgsConstructor
 public class AnalyticsController {
 
     private final AnalyticsService analyticsService;
 
+    public AnalyticsController(AnalyticsService analyticsService) {
+        this.analyticsService = analyticsService;
+    }
     /**
      * API 1: Cung cấp toàn bộ số liệu thống kê để vẽ biểu đồ trên Dashboard.
      * Quyền: Chỉ Admin
