@@ -204,9 +204,20 @@ public class ChatServiceImpl implements ChatService {
                         .codeSnippet(botMsg.getCodeSnippet())
                         .approach(Approach.RAG)
                         .latencyMs(latencyMs)
+                        .sources(qdrantResults.stream().map(r -> "Document ID: " + r.getDocumentId() + " (Chunk: " + r.getChunkId() + ")").collect(Collectors.toList()))
                         .build())
                 .sources(sources)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void rateMessage(Long messageId, Integer rating, String feedbackType) {
+        ChatMessage message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Message not found"));
+        message.setUserRating(rating);
+        message.setFeedbackType(feedbackType);
+        messageRepository.save(message);
     }
 
     @Override

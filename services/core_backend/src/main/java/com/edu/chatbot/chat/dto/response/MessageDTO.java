@@ -17,4 +17,5 @@ public class MessageDTO {
     private Approach approach;
     private Long latencyMs;
     private LocalDateTime createdAt;
+    private java.util.List<String> sources;
 }
