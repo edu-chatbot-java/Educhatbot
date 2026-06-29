@@ -1,122 +1,124 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { LogOut, Moon, Sun } from 'lucide-react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import AuthPage from './pages/AuthPage';
+import StudentDashboard from './pages/StudentDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import EmbeddingPage from './pages/EmbeddingPage';
+import TeacherDashboard from './pages/TeacherDashboard';
+import { authService } from './services/auth.service';
 
+function Layout({ children, theme, toggleTheme, onLogout, userRole }) {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className={`h-screen flex flex-col bg-background text-foreground transition-colors duration-300 font-sans overflow-hidden`}>
+      <header className="h-16 flex items-center justify-between px-6 border-b border-border bg-card">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold">E</div>
+          <span className="text-xl font-bold tracking-tight">EduBot AI</span>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+        <div className="flex items-center gap-4">
+          {onLogout && userRole === 'ADMIN' && (
+            <div className="flex gap-4 mr-4 text-sm font-medium">
+              <a href="/admin" className="hover:text-primary transition-colors">Admin Dashboard</a>
+              <a href="/embedding" className="hover:text-primary transition-colors">Embedding Center</a>
+            </div>
+          )}
+          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-muted transition-colors">
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          {onLogout && (
+            <button onClick={onLogout} className="p-2 rounded-full hover:bg-muted transition-colors text-destructive">
+              <LogOut size={20} />
+            </button>
+          )}
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </header>
+      <main className="flex-1 flex overflow-hidden">
+        {children}
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  const [theme, setTheme] = useState('dark');
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
+
+  useEffect(() => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+
+  const handleLogin = (role) => {
+    setIsAuthenticated(true);
+    setUserRole(role);
+    localStorage.setItem('userRole', role);
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    setUserRole(null);
+    localStorage.removeItem('userRole');
+  };
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <Layout theme={theme} toggleTheme={toggleTheme}>
+              <AuthPage onLogin={handleLogin} />
+            </Layout>
+          } 
+        />
+        <Route 
+          path="/student" 
+          element={
+            isAuthenticated && userRole === 'STUDENT' ? (
+              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout}>
+                <StudentDashboard />
+              </Layout>
+            ) : <Navigate to="/" />
+          } 
+        />
+        <Route 
+          path="/admin" 
+          element={
+            isAuthenticated && userRole === 'ADMIN' ? (
+              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout}>
+                <AdminDashboard />
+              </Layout>
+            ) : <Navigate to="/" />
+          } 
+        />
+        <Route 
+          path="/embedding" 
+          element={
+            isAuthenticated && userRole === 'ADMIN' ? (
+              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} userRole={userRole}>
+                <EmbeddingPage />
+              </Layout>
+            ) : <Navigate to="/" />
+          } 
+        />
+        <Route 
+          path="/teacher" 
+          element={
+            isAuthenticated && userRole === 'TEACHER' ? (
+              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} userRole={userRole}>
+                <TeacherDashboard />
+              </Layout>
+            ) : <Navigate to="/" />
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
