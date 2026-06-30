@@ -26,4 +26,20 @@ export const adminService = {
   testFineTuneChat: (payload) => {
     return api.post('/api/finetune/test/chat', payload);
   },
+
+  /**
+   * Lấy danh sách Người dùng
+   * API: GET /api/admin/users
+   */
+  getUsers: () => {
+    return api.get('/api/admin/users');
+  },
+
+  /**
+   * Kích hoạt tự động chấm điểm (đánh giá AI)
+   * API: POST /api/analytics/evaluate
+   */
+  evaluate: () => {
+    return api.post('/api/analytics/evaluate');
+  }
 };
