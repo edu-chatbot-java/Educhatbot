@@ -15,4 +15,5 @@ public interface ChatService {
     ChatResponseDTO processRAGMessage(ChatRequest request, Long userId);
     ChatResponseDTO processFineTuneMessage(ChatRequest request, Long userId);
     ChatResponseDTO dispatch(ChatRequest request, Long userId);
+    void rateMessage(Long messageId, Integer rating, String feedbackType);
 }

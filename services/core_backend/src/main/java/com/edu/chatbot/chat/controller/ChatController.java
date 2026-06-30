@@ -77,4 +77,14 @@ public class ChatController {
         ChatResponseDTO response = chatService.dispatch(request, userId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @PutMapping("/messages/{messageId}/rating")
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
+    public ResponseEntity<ApiResponse<String>> rateMessage(
+            @PathVariable Long messageId,
+            @RequestBody @Valid com.edu.chatbot.chat.dto.request.RatingRequest request) {
+        
+        chatService.rateMessage(messageId, request.getRating(), request.getFeedbackType());
+        return ResponseEntity.ok(ApiResponse.success("Message rated successfully."));
+    }
 }

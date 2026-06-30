@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtTokenProvider.generateToken(user.getEmail());
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
         
-        return new AuthResponse(token, refreshToken.getToken());
+        return new AuthResponse(token, refreshToken.getToken(), user.getRole().name());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
         // Ghi lại lịch sử đăng nhập vào sổ Audit Log
         auditLogService.logAction("ĐĂNG NHẬP", user.getEmail(), "Đăng nhập thành công vào hệ thống");
         
-        return new AuthResponse(token, refreshToken.getToken());
+        return new AuthResponse(token, refreshToken.getToken(), user.getRole().name());
     }
 
     @Override
