@@ -1,6 +1,7 @@
 package com.edu.chatbot.security.controller;
 
 import com.edu.chatbot.common.dto.ApiResponse;
+import com.edu.chatbot.security.dto.UserDTO;
 import com.edu.chatbot.security.entity.User;
 import com.edu.chatbot.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin/users")
@@ -24,11 +26,13 @@ public class AdminController {
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<List<User>> getAllUsers() {
+    public ApiResponse<List<UserDTO>> getAllUsers() {
         List<User> users = userRepository.findAll();
         
-        // Cẩn thận: Trong thực tế nên dùng UserDTO để ẩn Password, 
-        // nhưng ở đây trả về User cho nhanh gọn demo
-        return ApiResponse.success(users, "Lấy danh sách người dùng thành công");
+        List<UserDTO> userDTOs = users.stream()
+                .map(UserDTO::fromEntity)
+                .collect(Collectors.toList());
+                
+        return ApiResponse.success(userDTOs, "Lấy danh sách người dùng thành công");
     }
 }
