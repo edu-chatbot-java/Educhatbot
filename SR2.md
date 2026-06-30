@@ -14,26 +14,24 @@ Frontend không gọi vào `localhost` nữa. Các bạn phải đổi biến m�
 
 ---
 
-## 2. Danh Sách Các API Cốt Lõi Frontend Cần Tích Hợp
-*(Chi tiết các trường request/response các bạn Frontend có thể xem trong file `test-all.http` ở thư mục gốc)*
+## 2. Danh Sách Đầy Đủ Các API Backend (API Reference)
+*(Các tham số Request/Response chi tiết được mô tả trong file `test-all.http`)*
 
-### 2.1. Phân hệ Xác Thực (Authentication)
-*Nhiệm vụ Frontend: Làm màn hình Login/Register, lưu chuỗi JWT Token vào `LocalStorage` hoặc `SessionStorage` để xài cho các màn hình khác.*
+### 2.1. Phân hệ Xác Thực (Authentication) - TV2
 - **Đăng ký (Sinh viên):** `POST /api/auth/register`
-- **Đăng nhập:** `POST /api/auth/login` (Sẽ trả về chuỗi token).
+- **Đăng nhập:** `POST /api/auth/login` *(Trả về chuỗi Token và Role)*
+- **Refresh Token:** `POST /api/auth/refresh`
+- **Đăng xuất:** `POST /api/auth/logout`
 
-### 2.2. Phân hệ Quản Lý Tài Liệu PDF (Dành riêng cho Màn hình Giảng viên/Admin)
-*Nhiệm vụ Frontend: Làm màn hình Upload File PDF/Docx cho Giảng viên.*
+### 2.2. Phân hệ Quản Lý Tài Liệu (Dành cho Giảng viên) - TV3
 - **Tải file lên hệ thống:** `POST /api/documents/upload`
-  - **Body dạng `multipart/form-data`**: chứa `file` (File nhị phân) và `subjectId` (ID môn học).
-  - **Lưu ý về UX (Trải nghiệm người dùng):** Vì quá trình nhai file PDF và băm vector trên Server diễn ra khá tốn thời gian (tùy dung lượng file), Frontend BẮT BUỘC phải làm màn hình Loading (vòng xoay hoặc thanh Progress) chờ khoảng 5-15 giây để báo cho Giảng viên không được tắt trình duyệt.
+  - **Body dạng `multipart/form-data`**: chứa `file` (PDF/TXT) và `subjectId` (Mã môn học).
+  - *Lưu ý: BẮT BUỘC phải hiển thị thanh Loading chờ 5-15 giây do Backend xử lý nhúng Vector.*
+- **Lấy danh sách Môn học (Nếu có):** `GET /api/subjects`
 
-### 2.3. Phân hệ Chatbot AI (Giao diện chính của Sinh Viên)
-*Nhiệm vụ Frontend: Làm giao diện khung chat giống giao diện của ChatGPT.*
-- **Bước 1: Tạo phiên Chat mới:**
-  `POST /api/chat/sessions` (Truyền `subjectId` môn học và `title`). Sẽ nhận về `sessionId`.
-- **Bước 2: Gửi tin nhắn Chat & Nhận câu trả lời của AI:**
-  `POST /api/chat/sessions/{sessionId}/messages`
+### 2.3. Phân hệ Chatbot AI (Sinh Viên) - TV4
+- **Tạo phiên Chat mới:** `POST /api/chat/sessions` *(Truyền `subjectId` môn học)*
+- **Gửi tin nhắn Chat:** `POST /api/chat/sessions/{sessionId}/messages`
   ```json
   {
     "sessionId": 1,
@@ -41,14 +39,17 @@ Frontend không gọi vào `localhost` nữa. Các bạn phải đổi biến m�
     "approach": "RAG" // Hoặc "FINETUNE"
   }
   ```
-  - **Lưu ý CỰC KỲ QUAN TRỌNG về UI/UX (Fake Typewriter):** Backend hiện đang dùng cơ chế Block (Đồng bộ), tức là nó sẽ đợi AI sinh xong toàn bộ chữ (mất khoảng 2s - 4s) rồi mới gói thành 1 cục JSON ném về Frontend một lần duy nhất. **KHÔNG CÓ STREAMING TỪNG TOKEN**.
-  - **Cách xử lý của Frontend:** Để tạo cảm giác AI đang nhả từng chữ giống ChatGPT, Frontend hãy dùng thủ thuật "Fake Typewriter": Nhận nguyên cục Text từ JSON, cắt thành mảng các từ (words), rồi dùng `setInterval` cứ mỗi 20ms nhả 1 từ ra màn hình. Lừa tình cực mạnh nhưng cực kỳ hiệu quả mà Backend không phải gánh luồng Streaming phức tạp!
-- **Bước 3: Lấy lại Lịch sử Chat cũ:**
-  `GET /api/chat/sessions/{sessionId}/messages` (Tải lại lịch sử tin nhắn khi F5 trang).
+  - *Lưu ý (Fake Typewriter): Backend KHÔNG HỖ TRỢ STREAMING. Frontend sẽ nhận nguyên chuỗi Text, sau đó tự băm nhỏ (split) ra và dùng `setInterval` nhả từng chữ lên màn hình để tạo cảm giác giống ChatGPT.*
+- **Lấy lại Lịch sử Chat cũ:** `GET /api/chat/sessions/{sessionId}/messages`
 
-### 2.4. Phân hệ Đánh giá (Feedback)
-*Nhiệm vụ Frontend: Thêm 2 nút Thích (👍) / Không thích (👎) dính sát dưới mỗi bóng bóng chat trả lời của BOT.*
-- **Gửi Feedback:** `POST /api/feedback/submit`
+### 2.4. Phân hệ Đánh giá (Feedback) - TV4
+- **Sinh viên Vote Thích/Không thích:** `POST /api/feedback/submit`
+
+### 2.5. Phân hệ Thống kê & Quản trị (Admin Dashboard) - TV6
+- **Lấy danh sách Người dùng:** `GET /api/admin/users` *(Trả về List UserDTO)*
+- **Lấy số liệu vẽ biểu đồ:** `GET /api/analytics/dashboard`
+- **Admin xuất dữ liệu huấn luyện:** `GET /api/analytics/export/jsonl`
+- **Kích hoạt tự động chấm điểm:** `POST /api/analytics/evaluate`
 
 ---
 
