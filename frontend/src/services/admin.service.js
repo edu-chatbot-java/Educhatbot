@@ -28,11 +28,11 @@ export const adminService = {
   },
 
   /**
-   * Lấy danh sách Người dùng
+   * Lấy danh sách Người dùng (có phân trang)
    * API: GET /api/admin/users
    */
-  getUsers: () => {
-    return api.get('/api/admin/users');
+  getUsers: (page = 0, size = 10) => {
+    return api.get(`/api/admin/users?page=${page}&size=${size}`);
   },
 
   /**

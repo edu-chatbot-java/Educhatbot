@@ -13,11 +13,15 @@ export default function AdminDashboard() {
   const [winRateData, setWinRateData] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // --- PAGINATION STATE ---
+  const [currentPage, setCurrentPage] = useState(0); 
+  const [totalPages, setTotalPages] = useState(1);
 
   // --- FETCH DATA ---
   useEffect(() => {
     loadDashboardData();
-  }, []);
+  }, [currentPage]); // Load lại dữ liệu mỗi khi currentPage thay đổi
 
   const loadDashboardData = async () => {
     try {
@@ -35,11 +39,13 @@ export default function AdminDashboard() {
         setWinRateData(statsRes.data.winRateHistory || []);
       }
 
-      // 2. Gọi API danh sách người dùng (API mới bổ sung trong SR2)
-      const usersRes = await adminService.getUsers();
-      // Xử lý an toàn: Backend Spring Boot thường bọc mảng trong data.content (phân trang) hoặc trả thẳng mảng
+      // 2. Gọi API danh sách người dùng có phân trang
+      const usersRes = await adminService.getUsers(currentPage, 10);
+      
+      // Xử lý an toàn: lấy mảng dữ liệu và tổng số trang
       const usersList = usersRes.data?.content || usersRes.data || [];
       setUsers(usersList);
+      setTotalPages(usersRes.data?.totalPages || 1);
 
     } catch (err) {
       console.error("Lỗi khi tải dữ liệu Dashboard:", err);
@@ -217,6 +223,27 @@ export default function AdminDashboard() {
                 )}
               </tbody>
             </table>
+          </div>
+          
+          {/* Pagination Controls */}
+          <div className="p-3 border-t border-border flex justify-between items-center bg-muted/10 text-xs text-muted-foreground">
+            <span>Trang {currentPage + 1} / {totalPages}</span>
+            <div className="flex gap-1">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                disabled={currentPage === 0}
+                className="px-2 py-1 border border-border rounded hover:bg-muted disabled:opacity-50 transition-colors"
+              >
+                Trước
+              </button>
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
+                disabled={currentPage >= totalPages - 1 || totalPages === 0}
+                className="px-2 py-1 border border-border rounded hover:bg-muted disabled:opacity-50 transition-colors"
+              >
+                Sau
+              </button>
+            </div>
           </div>
         </div>
       </div>
