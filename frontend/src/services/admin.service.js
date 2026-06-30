@@ -1,4 +1,4 @@
-import api from './api'; // Đảm bảo import file api.js đã cấu hình axios interceptor
+import api from './api';
 
 export const adminService = {
   /**
