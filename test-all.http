@@ -205,6 +205,6 @@ Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
-  "question": "Tính đa hình là gì?",
+  "question": "java là gì?",
   "codeSnippet": "public class Animal { public void speak() {} }"
 }

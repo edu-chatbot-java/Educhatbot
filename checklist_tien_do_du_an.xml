@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProjectProgress>
+    <Member>
+        <Id>TV1</Id>
+        <Role>Leader - Core Infrastructure &amp; Benchmark Dataset</Role>
+        <Description>Thiết kế Hệ thống &amp; Tài liệu hóa (SRS, Architecture, UML). Xây dựng Nền tảng Core Backend (ApiResponse, Exceptions, BaseEntity). Thiết lập DevOps (Docker, CI/CD, Git). Xây dựng Benchmark Dataset.</Description>
+        <Result>Đã hoàn thiện tài liệu thiết kế, cấu hình chuẩn CI/CD và kiến trúc Core Backend. Triển khai GCP và tạo bộ Dataset chuẩn.</Result>
+        <Status>Hoàn thành</Status>
+        <ProgressPercentage>100</ProgressPercentage>
+    </Member>
+    <Member>
+        <Id>TV2</Id>
+        <Role>Security &amp; User Management</Role>
+        <Description>Thiết kế CSDL người dùng. Chức năng Đăng ký, Đăng nhập, Refresh Token, Đăng xuất. Cấu hình Spring Security, JWT Auth, RBAC (STUDENT, ADMIN). Xây dựng Audit Log.</Description>
+        <Result>Đã hoàn thành luồng xác thực bảo mật JWT, phân quyền và ghi log hệ thống. Mọi API đều được bảo vệ.</Result>
+        <Status>Hoàn thành</Status>
+        <ProgressPercentage>100</ProgressPercentage>
+    </Member>
+    <Member>
+        <Id>TV3</Id>
+        <Role>Document Processing &amp; Data Ingestion</Role>
+        <Description>Xây dựng luồng Upload tài liệu (Parse PDF/TXT, Cắt Chunk, Gọi API sinh Vector, Lưu Supabase &amp; Qdrant). Xây dựng GUI quản lý tài liệu. Thu thập tài liệu học tập.</Description>
+        <Result>Luồng xử lý file thành công, chunking chuẩn xác ngữ nghĩa Tiếng Việt, vector hóa và đồng bộ lên Qdrant hoàn chỉnh.</Result>
+        <Status>Hoàn thành</Status>
+        <ProgressPercentage>100</ProgressPercentage>
+    </Member>
+    <Member>
+        <Id>TV4</Id>
+        <Role>RAG Orchestrator</Role>
+        <Description>Tích hợp Qdrant &amp; LangChain4j. Xây dựng Chat Session &amp; Memory. Triển khai luồng RAG (Query Rewriting bằng Groq API, Vector Search, Prompting) &amp; A/B Testing ẩn danh.</Description>
+        <Result>Pipeline RAG hoạt động mượt mà, xử lý truy vấn siêu tốc và truy xuất đúng ngữ cảnh môn học từ Qdrant.</Result>
+        <Status>Hoàn thành</Status>
+        <ProgressPercentage>100</ProgressPercentage>
+    </Member>
+    <Member>
+        <Id>TV5</Id>
+        <Role>Fine-tuning &amp; AI Bridge</Role>
+        <Description>Chuẩn bị dữ liệu huấn luyện, Fine-tune LLM bằng QLoRA. Xây dựng FastAPI Server, đóng gói Docker. Tích hợp WebClient nối Java với Python. Chạy luồng Fine-tuning.</Description>
+        <Result>API FastAPI phản hồi ổn định. Mô hình Fine-tune cho kết quả tốt, giao tiếp với Java Backend không có độ trễ bất thường.</Result>
+        <Status>Hoàn thành</Status>
+        <ProgressPercentage>100</ProgressPercentage>
+    </Member>
+    <Member>
+        <Id>TV6</Id>
+        <Role>Analytics &amp; Evaluation</Role>
+        <Description>Thiết kế bảng Đánh giá, API Feedback, Blind Test voting. Xây dựng Dashboard thống kê (Latency, Satisfaction) và công cụ Evaluate tự động (Faithfulness, Relevancy).</Description>
+        <Result>Đã thu thập đủ số liệu metric, giao diện Dashboard hiển thị biểu đồ đối sánh RAG vs Fine-tuning rõ ràng, trực quan.</Result>
+        <Status>Hoàn thành</Status>
+        <ProgressPercentage>100</ProgressPercentage>
+    </Member>
+</ProjectProgress>
