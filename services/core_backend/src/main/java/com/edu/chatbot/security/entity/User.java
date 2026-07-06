@@ -1,8 +1,8 @@
 package com.edu.chatbot.security.entity;
 
 import com.edu.chatbot.common.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.edu.chatbot.security.enums.Role;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,6 +13,24 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class User extends BaseEntity {
+
+    @Column(name = "username", unique = true, length = 50)
     private String username;
+
+    @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "full_name", length = 100)
+    private String fullName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+    
+    @Column(name = "is_active")
+    @Builder.Default
+    private boolean isActive = true;
 }

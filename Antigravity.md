@@ -50,6 +50,10 @@ Khi đọc mã nguồn hoặc nhận yêu cầu viết code từ repo này, AI p
 2. **Xử lý Tiếng Việt UTF-8:** Khi sinh mã cho các bộ cắt chữ (text splitter) hoặc prompt template, đảm bảo tương thích 100% với tiếng Việt có dấu. Khi cắt văn bản (chunking), phải ưu tiên cắt theo dấu câu (`.`, `?`, `!`) để tránh bẻ gãy các từ ghép tiếng Việt.
 3. **Cơ chế Stateless Authentication:** Không sử dụng HTTP Session. Tất cả các API ngoại trừ cổng mở `/api/auth/**` đều phải đi qua `JwtAuthenticationFilter` và lấy thông tin user hiện tại từ `SecurityContextHolder` thông qua annotation `@AuthenticationPrincipal`.
 4. **Cơ chế Mock dữ liệu:** Nếu một chức năng cần gọi Dependency Service từ một thành viên khác chưa hoàn thiện, hãy tự động tạo một Interface và một Class triển khai tạm thời (Mock Implementation) trả về dữ liệu giả định để đảm bảo ứng dụng luôn biên dịch (compile) thành công.
+5. **Quy tắc Tôn trọng Lãnh thổ (Database Owner Matrix Enforced):** Tuyệt đối KHÔNG SỬA TRỰC TIẾP vào Entity hoặc Repository do thành viên khác làm chủ (VD: TV4 không được sửa DocumentChunk của TV3). Thay vào đó:
+    - Mọi giao tiếp liên module phải thông qua **DTO (Data Transfer Object)** và các hàm public từ **Service** của module sở hữu.
+    - Nếu cần thêm trường dữ liệu, phải yêu cầu thành viên sở hữu bảng đó (Owner) thêm vào.
+    - Các file Cấu hình (`@Configuration`) hoặc Bean dùng chung phải được đẩy vào thư mục `common`, tuyệt đối không sao chép lại (duplicate) sang thư mục của mình để tránh lỗi `ConflictingBeanDefinitionException`.
 
 ---
 

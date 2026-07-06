@@ -1,0 +1,104 @@
+### =================================================================
+### 1. TEST PYTHON EMBEDDING SERVICE (Cổng 8001)
+### =================================================================
+
+### Kiểm tra sức khoẻ (Health Check) của Embedding Service
+GET http://localhost:8001/health
+Accept: application/json
+
+###
+
+### Sinh vector cho một câu văn bản
+POST http://localhost:8001/api/embed
+Content-Type: application/json
+
+{
+  "texts": ["Làm thế nào để khởi tạo một ArrayList trong Java?"],
+  "prefix": "query: "
+}
+
+### =================================================================
+### 2. TEST JAVA SPRING BOOT SERVICE (Cổng 8080)
+### =================================================================
+
+### Đăng ký tài khoản (Tạo user để test)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "password123",
+  "fullName": "Người Dùng Test"
+}
+
+###
+
+### Đăng nhập để lấy Token
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### Gán token vào biến môi trường của file HTTP (Yêu cầu Extension REST Client)
+@authToken = {{login.response.body.token}}
+
+###
+
+### Tạo một Session Chat mới (Cần Token)
+# @name createSession
+POST http://localhost:8080/api/chat/sessions
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "subjectId": 1,
+  "title": "Chat về Lập trình Java"
+}
+
+###
+
+@sessionId = {{createSession.response.body.id}}
+
+### Gửi tin nhắn và nhận phản hồi RAG (Có thể sẽ gọi ngầm sang Python Embedding)
+POST http://localhost:8080/api/chat/sessions/{{sessionId}}/messages
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "content": "Phân biệt sự khác nhau giữa ArrayList và LinkedList trong Java?"
+}
+
+### =================================================================
+### 3. TEST MODAL FINE-TUNING INFERENCE (Cloud Serverless GPU)
+### =================================================================
+# Điền URL endpoint của bạn vào file .env.http.local (KHÔNG commit file này):
+# MODAL_GENERATE_URL = https://<your-workspace>--finetune-api-model-generate.modal.run
+# MODAL_HEALTH_URL   = https://<your-workspace>--finetune-api-model-health.modal.run
+# MODAL_TOKEN        = <your-modal-token-id>:<your-modal-token-secret>
+
+@MODAL_HEALTH_URL = {{$dotenv MODAL_HEALTH_URL}}
+@MODAL_GENERATE_URL = {{$dotenv MODAL_GENERATE_URL}}
+@MODAL_TOKEN = {{$dotenv MODAL_TOKEN}}
+
+### Kiểm tra sức khoẻ (Health Check) của Modal Service
+GET {{MODAL_HEALTH_URL}}
+Accept: application/json
+Authorization: Bearer {{MODAL_TOKEN}}
+
+###
+
+### Gửi prompt trực tiếp lên Modal để sinh kết quả (Test GPU T4)
+POST {{MODAL_GENERATE_URL}}
+Content-Type: application/json
+Authorization: Bearer {{MODAL_TOKEN}}
+
+{
+  "prompt": "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nBạn là trợ lý học thuật chuyên về lập trình Java. Hãy trả lời câu hỏi bằng tiếng Việt.<|eot_id|>\n<|start_header_id|>user<|end_header_id|>\n\nMục tiêu chính của cuốn sách Think Java là gì?<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n\n",
+  "max_new_tokens": 128,
+  "temperature": 0.7
+}

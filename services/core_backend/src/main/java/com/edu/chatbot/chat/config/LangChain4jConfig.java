@@ -11,7 +11,7 @@ import java.time.Duration;
 @Configuration
 public class LangChain4jConfig {
 
-    @Value("${llm.api-key}")
+    @Value("${llm.api-key:dummy-key}")
     private String llmApiKey;
 
     @Value("${llm.base-url}")
@@ -23,7 +23,7 @@ public class LangChain4jConfig {
     @Value("${llm.max-tokens:2048}")
     private int llmMaxTokens;
 
-    @Value("${groq.api-key}")
+    @Value("${groq.api-key:dummy-key}")
     private String groqApiKey;
 
     @Value("${groq.base-url}")
@@ -31,6 +31,15 @@ public class LangChain4jConfig {
 
     @Value("${groq.rewriting-model}")
     private String groqRewritingModel;
+
+    @Value("${openrouter.api-key:dummy-key}")
+    private String openRouterApiKey;
+
+    @Value("${openrouter.base-url:https://openrouter.ai/api/v1}")
+    private String openRouterBaseUrl;
+
+    @Value("${openrouter.eval-model:google/gemma-4-31b-it:free}")
+    private String openRouterEvalModel;
 
     @Bean
     public ChatLanguageModel chatModel() {
@@ -51,6 +60,17 @@ public class LangChain4jConfig {
                 .modelName(groqRewritingModel)
                 .maxTokens(1024)
                 .timeout(Duration.ofSeconds(30))
+                .build();
+    }
+
+    @Bean("evalModel")
+    public ChatLanguageModel evalModel() {
+        return OpenAiChatModel.builder()
+                .apiKey(openRouterApiKey)
+                .baseUrl(openRouterBaseUrl)
+                .modelName(openRouterEvalModel)
+                .maxTokens(1024)
+                .timeout(Duration.ofSeconds(120)) // Auto Eval can be slow
                 .build();
     }
 }

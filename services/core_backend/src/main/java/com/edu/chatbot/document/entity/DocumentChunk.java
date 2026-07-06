@@ -1,13 +1,12 @@
 package com.edu.chatbot.document.entity;
 
 import com.edu.chatbot.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "document_chunks")
+@Table(name = "document_chunks",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"document_id", "chunk_index"}))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,10 +14,13 @@ import lombok.*;
 @Builder
 public class DocumentChunk extends BaseEntity {
 
-    // Mock entity để TV4 có thể compile. TV3 sẽ hoàn thiện sau.
-    @Column(name = "content", columnDefinition = "TEXT")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_id", nullable = false)
+    private Document document;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "chunk_index")
+    @Column(name = "chunk_index", nullable = false)
     private Integer chunkIndex;
 }

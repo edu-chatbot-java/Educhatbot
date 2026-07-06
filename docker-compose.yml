@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  embedding-service:
+    build:
+      context: ./services/embedding_service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+    volumes:
+      # Mount thư mục cache của HuggingFace để không phải tải lại model mỗi khi bật Docker
+      - ./services/embedding_service/hf_cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  core-backend:
+    build:
+      context: ./services/core_backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Cổng của Spring Boot
+    env_file:
+      - .env
+    environment:
+      # Ghi đè lại URL của embedding service trong file .env để kết nối qua network nội bộ của Docker
+      - EMBEDDING_SERVICE_URL=http://embedding-service:8001/api/embed
+      # Giới hạn RAM (Heap) của bản thân Spring Boot xuống khoảng 512MB
+      - JAVA_TOOL_OPTIONS=-Xmx512m
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    depends_on:
+      - embedding-service

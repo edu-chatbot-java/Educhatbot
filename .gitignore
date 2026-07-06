@@ -1,6 +1,7 @@
 # Environment Variables (Secrets)
 .env
 *.env
+.env.http.local
 application-local.yml
 
 # IDEs
@@ -55,6 +56,30 @@ onnx_model/
 # Logs
 *.log
 logs/
+implementation_plan.md
 
-.agents/
-.prompt/
+
+# Misc
+hf_cache/
+issues/
+logs/
+*.log
+issue_*.md
+issue_final_*
+
+#md
+deploy_gcr_backend.md
+setup_colab_llm.md
+setup_gcp_vm.md
+SSH-VMmodel.md
+test_hf_api.py
+fake_jira_scrum.csv
+
+#frontend demo
+frontend-demo
+*/node_modules/
+
+#report
+overleaf-templates/
+report_tex/
+chart.md
