@@ -275,7 +275,7 @@ export default function AdminDashboard() {
                   </tr>
                 ) : users.length > 0 ? (
                   users.map(user => (
-                    <tr key={user.id} className={`hover:bg-muted/20 transition-colors ${!user.isActive ? 'opacity-60' : ''}`}>
+                    <tr key={user.id} className={`hover:bg-muted/20 transition-colors ${(user.active === false || user.isActive === false) ? 'opacity-60' : ''}`}>
                       <td className="px-6 py-4 text-muted-foreground">#{user.id}</td>
                       <td className="px-6 py-4 font-medium">{user.fullName || 'Chưa cập nhật'}</td>
                       <td className="px-6 py-4">{user.username}</td>
@@ -283,18 +283,18 @@ export default function AdminDashboard() {
                         <select 
                           value={user.role} 
                           onChange={(e) => handleChangeRole(user.id, e.target.value)}
-                          className={`px-2 py-1.5 rounded text-xs font-medium border-none cursor-pointer outline-none ${
-                            user.role === 'ROLE_ADMIN' ? 'bg-destructive/10 text-destructive' : 
-                            user.role === 'ROLE_TEACHER' ? 'bg-blue-500/10 text-blue-500' : 'bg-emerald-500/10 text-emerald-500'
+                          className={`px-2 py-1.5 rounded text-xs font-medium border-none cursor-pointer outline-none appearance-none bg-transparent ${
+                            user.role === 'ROLE_ADMIN' ? 'text-red-500 bg-red-500/10' : 
+                            user.role === 'ROLE_TEACHER' ? 'text-blue-500 bg-blue-500/10' : 'text-emerald-500 bg-emerald-500/10'
                           }`}
                         >
-                          <option value="ROLE_STUDENT">STUDENT</option>
-                          <option value="ROLE_TEACHER">TEACHER</option>
-                          <option value="ROLE_ADMIN">ADMIN</option>
+                          <option value="ROLE_STUDENT" className="bg-background text-foreground">STUDENT</option>
+                          <option value="ROLE_TEACHER" className="bg-background text-foreground">TEACHER</option>
+                          <option value="ROLE_ADMIN" className="bg-background text-foreground">ADMIN</option>
                         </select>
                       </td>
                       <td className="px-6 py-4">
-                        {user.isActive ? (
+                        {(user.active !== false && user.isActive !== false) ? (
                           <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-500"><Unlock size={14}/> Hoạt động</span>
                         ) : (
                           <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><Lock size={14}/> Đã khóa</span>
@@ -304,9 +304,9 @@ export default function AdminDashboard() {
                         <button 
                           onClick={() => handleToggleStatus(user.id)}
                           className="p-1.5 rounded-md hover:bg-muted text-muted-foreground transition-colors"
-                          title={user.isActive ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}
+                          title={(user.active !== false && user.isActive !== false) ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}
                         >
-                          {user.isActive ? <Lock size={16} /> : <Unlock size={16} />}
+                          {(user.active !== false && user.isActive !== false) ? <Lock size={16} /> : <Unlock size={16} />}
                         </button>
                         <button 
                           onClick={() => handleDeleteUser(user.id)}
