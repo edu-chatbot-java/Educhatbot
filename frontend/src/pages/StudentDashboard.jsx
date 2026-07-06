@@ -12,6 +12,14 @@ import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
 
+  const onTypeRef = useRef(onType);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onTypeRef.current = onType;
+    onCompleteRef.current = onComplete;
+  }, [onType, onComplete]);
+
   useEffect(() => {
     if (!isNew) {
       setDisplayedText(content);
@@ -22,15 +30,15 @@ const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
     const interval = setInterval(() => {
       setDisplayedText(content.slice(0, i + 1));
       i++;
-      if (i % 5 === 0 && onType) onType(); // Scroll less aggressively
+      if (i % 5 === 0 && onTypeRef.current) onTypeRef.current(); // Scroll less aggressively
       if (i >= content.length) {
         clearInterval(interval);
-        if (onComplete) onComplete();
+        if (onCompleteRef.current) onCompleteRef.current();
       }
     }, 15);
 
     return () => clearInterval(interval);
-  }, [content, isNew, onType, onComplete]);
+  }, [content, isNew]);
 
   return (
     <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none w-full break-words">
@@ -78,14 +86,17 @@ export default function StudentDashboard() {
   const chatContainerRef = useRef(null);
   const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
 
-  const scrollToBottom = useCallback(() => {
-    if (isAutoScrollEnabled) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = useCallback((smooth = true) => {
+    if (isAutoScrollEnabled && chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto'
+      });
     }
   }, [isAutoScrollEnabled]);
 
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom(true);
   }, [messages, isTyping, scrollToBottom]);
 
   useEffect(() => {
@@ -316,7 +327,7 @@ export default function StudentDashboard() {
                   <TypewriterMessage
                     content={msg.content}
                     isNew={msg.isNew}
-                    onType={scrollToBottom}
+                    onType={() => scrollToBottom(false)}
                     onComplete={() => {
                       setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, isNew: false } : m));
                     }}
