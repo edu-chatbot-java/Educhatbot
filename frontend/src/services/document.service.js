@@ -13,7 +13,7 @@ export const documentService = {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.data.data;
+    return response.data?.success !== undefined ? response.data.data : response.data;
   },
   
   getDocuments: async (subjectId = null, status = null, page = 0, size = 10) => {
@@ -22,26 +22,26 @@ export const documentService = {
     if (status) params.status = status;
     
     const response = await api.get('/documents', { params });
-    return response.data.data;
+    return response.data?.success !== undefined ? response.data.data : response.data;
   },
 
   getDocumentStatus: async (id) => {
     const response = await api.get(`/documents/${id}/status`);
-    return response.data.data;
+    return response.data?.success !== undefined ? response.data.data : response.data;
   },
 
   deleteDocument: async (id) => {
     const response = await api.delete(`/documents/${id}`);
-    return response.data.data;
+    return response.data?.success !== undefined ? response.data.data : response.data;
   },
 
   reprocessDocument: async (id) => {
     const response = await api.post(`/documents/${id}/reprocess`);
-    return response.data.data;
+    return response.data?.success !== undefined ? response.data.data : response.data;
   },
 
   getSubjects: async () => {
     const response = await api.get('/subjects');
-    return response.data.data;
+    return response.data?.success !== undefined ? response.data.data : response.data;
   }
 };

@@ -5,12 +5,17 @@ export const authService = {
     const response = await api.post('/auth/login', credentials);
     const apiResponse = response.data;
     
-    // Đọc dữ liệu từ trường 'data' của ApiResponse trả về từ Backend
-    if (apiResponse && apiResponse.success && apiResponse.data) {
-      const authData = apiResponse.data;
+    // Xử lý cả 2 trường hợp: 
+    // 1. Backend mới (có bọc trong ApiResponse {success, data})
+    // 2. Backend cũ (Cloud Run hiện tại đang trả về trực tiếp {token, role})
+    const authData = (apiResponse && apiResponse.success !== undefined && apiResponse.data) 
+                      ? apiResponse.data 
+                      : apiResponse;
+
+    if (authData && authData.token) {
       localStorage.setItem('token', authData.token);
-      localStorage.setItem('userRole', authData.role.replace('ROLE_', ''));
-      return authData; // Trả về object chứa token/role gốc để AuthPage.jsx sử dụng bình thường
+      localStorage.setItem('userRole', authData.role ? authData.role.replace('ROLE_', '') : 'STUDENT');
+      return authData; // Trả về object chứa token/role gốc để AuthPage.jsx sử dụng
     }
     return null;
   },

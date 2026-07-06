@@ -11,4 +11,7 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     
     // Lấy 10 tin nhắn gần nhất của phiên để làm Context
     List<ChatMessage> findTop10BySessionIdOrderByCreatedAtDesc(Long sessionId);
+    
+    // Lấy danh sách tin nhắn theo điểm đánh giá
+    List<ChatMessage> findByUserRating(Integer rating);
 }

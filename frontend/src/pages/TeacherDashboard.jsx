@@ -9,9 +9,6 @@ export default function TeacherDashboard() {
   // Subject Management State
   const [subjects, setSubjects] = useState([]);
   const [selectedSubjectCode, setSelectedSubjectCode] = useState('');
-  const [isAddingSubject, setIsAddingSubject] = useState(false);
-  const [newSubjectCode, setNewSubjectCode] = useState('');
-  const [newSubjectName, setNewSubjectName] = useState('');
 
   // Document Management State
   const [documents, setDocuments] = useState([]);
@@ -67,33 +64,6 @@ export default function TeacherDashboard() {
     } else {
       setDocuments([]);
     }
-  };
-
-  const handleAddSubject = () => {
-    if (!newSubjectCode.trim() || !newSubjectName.trim()) {
-      alert('Vui lòng nhập đầy đủ Mã môn học và Tên môn học!');
-      return;
-    }
-    const code = newSubjectCode.trim().toUpperCase();
-    if (subjects.find(s => s.code === code)) {
-      alert('Mã môn học này đã tồn tại!');
-      return;
-    }
-    
-    // Note: Backend does not have a public API to create subjects via UI,
-    // so we mock local-only creation for mock-subject testing.
-    const mockNewSubject = {
-      id: Math.floor(Math.random() * 1000) + 100, // mock ID
-      code,
-      name: newSubjectName.trim()
-    };
-
-    setSubjects([...subjects, mockNewSubject]);
-    setSelectedSubjectCode(code);
-    setIsAddingSubject(false);
-    setNewSubjectCode('');
-    setNewSubjectName('');
-    setDocuments([]); // Empty documents for new mock subject
   };
 
   const handleFileChange = (e) => {
@@ -253,58 +223,19 @@ export default function TeacherDashboard() {
               <div className="space-y-3">
                 <label className="text-sm font-medium flex items-center justify-between">
                   <span>Môn học phụ trách <span className="text-destructive">*</span></span>
-                  {!isAddingSubject && (
-                    <button 
-                      onClick={() => setIsAddingSubject(true)}
-                      className="text-xs flex items-center gap-1 text-primary hover:text-primary/80 transition-colors bg-primary/10 px-2 py-1 rounded"
-                    >
-                      <Plus size={14} /> Thêm môn mới
-                    </button>
-                  )}
                 </label>
 
-                {isAddingSubject ? (
-                  <div className="bg-muted/30 p-3 rounded-lg border border-border space-y-3 animate-in fade-in zoom-in-95">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs font-semibold">Tạo môn học mới</span>
-                      <button onClick={() => setIsAddingSubject(false)} className="text-muted-foreground hover:text-destructive">
-                        <X size={14} />
-                      </button>
-                    </div>
-                    <input 
-                      type="text" 
-                      placeholder="Mã môn (VD: JAVA_OOP)" 
-                      value={newSubjectCode}
-                      onChange={(e) => setNewSubjectCode(e.target.value)}
-                      className="w-full p-2 bg-background border border-input rounded-md text-sm focus:ring-2 focus:ring-primary outline-none uppercase"
-                    />
-                    <input 
-                      type="text" 
-                      placeholder="Tên môn học (VD: Lập trình Java)" 
-                      value={newSubjectName}
-                      onChange={(e) => setNewSubjectName(e.target.value)}
-                      className="w-full p-2 bg-background border border-input rounded-md text-sm focus:ring-2 focus:ring-primary outline-none"
-                    />
-                    <button 
-                      onClick={handleAddSubject}
-                      className="w-full flex items-center justify-center gap-2 py-2 bg-secondary text-secondary-foreground rounded-md text-sm font-medium hover:bg-secondary/80 transition-colors"
-                    >
-                      <Save size={16} /> Lưu môn học
-                    </button>
-                  </div>
-                ) : (
-                  <select 
-                    value={selectedSubjectCode}
-                    onChange={(e) => handleSubjectChange(e.target.value)}
-                    className="w-full p-2.5 bg-background border border-input rounded-md text-sm focus:ring-2 focus:ring-primary outline-none"
-                  >
-                    {subjects.map(subj => (
-                      <option key={subj.code} value={subj.code}>
-                        [{subj.code}] {subj.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
+                <select 
+                  value={selectedSubjectCode}
+                  onChange={(e) => handleSubjectChange(e.target.value)}
+                  className="w-full p-2.5 bg-background border border-input rounded-md text-sm focus:ring-2 focus:ring-primary outline-none"
+                >
+                  {subjects.map(subj => (
+                    <option key={subj.code} value={subj.code}>
+                      [{subj.code}] {subj.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               
               <div 
