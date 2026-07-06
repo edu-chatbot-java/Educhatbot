@@ -46,7 +46,7 @@ class AuthControllerTest {
         request.setFullName("Student Demo");
         request.setUsername("studentdemo");
 
-        AuthResponse mockResponse = new AuthResponse("mock-access-token", "mock-refresh-token");
+        AuthResponse mockResponse = new AuthResponse("mock-access-token", "mock-refresh-token", "ROLE_STUDENT");
         when(authService.register(any(RegisterRequest.class))).thenReturn(mockResponse);
 
         mockMvc.perform(post("/api/auth/register")
@@ -65,7 +65,7 @@ class AuthControllerTest {
         request.setEmail("student@chatbot.edu.vn");
         request.setPassword("password123");
 
-        AuthResponse mockResponse = new AuthResponse("mock-access-token", "mock-refresh-token");
+        AuthResponse mockResponse = new AuthResponse("mock-access-token", "mock-refresh-token", "ROLE_STUDENT");
         when(authService.login(any(LoginRequest.class))).thenReturn(mockResponse);
 
         mockMvc.perform(post("/api/auth/login")
