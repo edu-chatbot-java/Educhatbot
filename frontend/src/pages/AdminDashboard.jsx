@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Settings, Users, Search, 
-  FileText, Monitor, Star, Play, Shield
+  FileText, Monitor, Star, Play, Shield, Trash2, Lock, Unlock, Edit
 } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts';
 import { adminService } from '../services/admin.service';
@@ -92,6 +92,35 @@ export default function AdminDashboard() {
     } catch (err) {
       alert("Xuất dữ liệu thất bại! Vui lòng kiểm tra lại mạng hoặc phân quyền.");
       console.error(err);
+    }
+  };
+
+  const handleToggleStatus = async (userId) => {
+    try {
+      await adminService.toggleUserStatus(userId);
+      loadDashboardData();
+    } catch (e) {
+      alert('Lỗi cập nhật trạng thái');
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if(window.confirm('Bạn có chắc chắn muốn xóa tài khoản này không? Mọi dữ liệu liên quan có thể bị mất.')) {
+      try {
+        await adminService.deleteUser(userId);
+        loadDashboardData();
+      } catch(e) {
+        alert('Lỗi xóa user');
+      }
+    }
+  };
+
+  const handleChangeRole = async (userId, newRole) => {
+    try {
+      await adminService.changeRole(userId, newRole);
+      loadDashboardData();
+    } catch(e) {
+      alert('Lỗi phân quyền');
     }
   };
 
@@ -233,34 +262,65 @@ export default function AdminDashboard() {
                   <th className="px-6 py-3 font-medium">Họ & Tên</th>
                   <th className="px-6 py-3 font-medium">Username</th>
                   <th className="px-6 py-3 font-medium">Vai trò (Role)</th>
+                  <th className="px-6 py-3 font-medium">Trạng thái</th>
+                  <th className="px-6 py-3 font-medium text-right">Hành động</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {loading ? (
                   <tr>
-                    <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground animate-pulse">
+                    <td colSpan="6" className="px-6 py-8 text-center text-muted-foreground animate-pulse">
                       Đang tải dữ liệu người dùng...
                     </td>
                   </tr>
                 ) : users.length > 0 ? (
                   users.map(user => (
-                    <tr key={user.id} className="hover:bg-muted/20 transition-colors">
+                    <tr key={user.id} className={`hover:bg-muted/20 transition-colors ${!user.isActive ? 'opacity-60' : ''}`}>
                       <td className="px-6 py-4 text-muted-foreground">#{user.id}</td>
                       <td className="px-6 py-4 font-medium">{user.fullName || 'Chưa cập nhật'}</td>
                       <td className="px-6 py-4">{user.username}</td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          user.role === 'ROLE_ADMIN' ? 'bg-destructive/10 text-destructive' : 
-                          user.role === 'ROLE_TEACHER' ? 'bg-blue-500/10 text-blue-500' : 'bg-emerald-500/10 text-emerald-500'
-                        }`}>
-                          {user.role?.replace('ROLE_', '')}
-                        </span>
+                        <select 
+                          value={user.role} 
+                          onChange={(e) => handleChangeRole(user.id, e.target.value)}
+                          className={`px-2 py-1.5 rounded text-xs font-medium border-none cursor-pointer outline-none ${
+                            user.role === 'ROLE_ADMIN' ? 'bg-destructive/10 text-destructive' : 
+                            user.role === 'ROLE_TEACHER' ? 'bg-blue-500/10 text-blue-500' : 'bg-emerald-500/10 text-emerald-500'
+                          }`}
+                        >
+                          <option value="ROLE_STUDENT">STUDENT</option>
+                          <option value="ROLE_TEACHER">TEACHER</option>
+                          <option value="ROLE_ADMIN">ADMIN</option>
+                        </select>
+                      </td>
+                      <td className="px-6 py-4">
+                        {user.isActive ? (
+                          <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-500"><Unlock size={14}/> Hoạt động</span>
+                        ) : (
+                          <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><Lock size={14}/> Đã khóa</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-right space-x-2">
+                        <button 
+                          onClick={() => handleToggleStatus(user.id)}
+                          className="p-1.5 rounded-md hover:bg-muted text-muted-foreground transition-colors"
+                          title={user.isActive ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}
+                        >
+                          {user.isActive ? <Lock size={16} /> : <Unlock size={16} />}
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteUser(user.id)}
+                          className="p-1.5 rounded-md hover:bg-destructive/10 text-destructive transition-colors"
+                          title="Xóa tài khoản"
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">
+                    <td colSpan="6" className="px-6 py-8 text-center text-muted-foreground">
                       Không có dữ liệu người dùng
                     </td>
                   </tr>

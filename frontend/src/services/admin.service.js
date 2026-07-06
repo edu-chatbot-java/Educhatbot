@@ -41,5 +41,17 @@ export const adminService = {
    */
   evaluate: () => {
     return api.post('/analytics/evaluate');
+  },
+
+  changeRole: (userId, role) => {
+    return api.put(`/admin/users/${userId}/role`, { role });
+  },
+
+  toggleUserStatus: (userId) => {
+    return api.put(`/admin/users/${userId}/toggle-status`);
+  },
+
+  deleteUser: (userId) => {
+    return api.delete(`/admin/users/${userId}`);
   }
 };
