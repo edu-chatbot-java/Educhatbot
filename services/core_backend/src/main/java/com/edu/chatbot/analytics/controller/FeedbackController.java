@@ -4,17 +4,18 @@ import com.edu.chatbot.analytics.dto.FeedbackRequest;
 import com.edu.chatbot.analytics.service.AnalyticsService;
 import com.edu.chatbot.common.dto.ApiResponse; // Class do TV1 viết
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/feedback")
-@RequiredArgsConstructor
 public class FeedbackController {
 
     private final AnalyticsService analyticsService;
 
+    public FeedbackController(AnalyticsService analyticsService) {
+        this.analyticsService = analyticsService;
+    }
     @PostMapping("/submit")
     public ApiResponse<String> submitFeedback(
             @Valid @RequestBody FeedbackRequest request,
