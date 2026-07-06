@@ -1,9 +1,67 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   MessageSquare, Plus, Send, ThumbsUp, ThumbsDown, Star, ChevronDown, 
-  FileText, Monitor, AlertCircle
+  FileText, Monitor, AlertCircle, CheckCircle2, XCircle
 } from 'lucide-react';
 import { chatService } from '../services/chat.service';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  
+  useEffect(() => {
+    if (!isNew) {
+      setDisplayedText(content);
+      return;
+    }
+    
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(content.slice(0, i + 1));
+      i++;
+      if (i % 5 === 0 && onType) onType(); // Scroll less aggressively
+      if (i >= content.length) {
+        clearInterval(interval);
+        if (onComplete) onComplete();
+      }
+    }, 15);
+
+    return () => clearInterval(interval);
+  }, [content, isNew, onType, onComplete]);
+
+  return (
+    <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none w-full break-words">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          code({node, inline, className, children, ...props}) {
+            const match = /language-(\w+)/.exec(className || '')
+            return !inline && match ? (
+              <SyntaxHighlighter
+                {...props}
+                style={materialLight}
+                language={match[1]}
+                PreTag="div"
+                className="rounded-md my-2 text-[13px] border border-border/50 shadow-sm"
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            ) : (
+              <code {...props} className={`${className} bg-muted px-1.5 py-0.5 rounded text-[13px] font-mono text-primary`}>
+                {children}
+              </code>
+            )
+          }
+        }}
+      >
+        {displayedText}
+      </ReactMarkdown>
+    </div>
+  );
+};
 
 export default function StudentDashboard() {
   const [activeSubject, setActiveSubject] = useState('JAVA_OOP');
@@ -20,15 +78,15 @@ export default function StudentDashboard() {
   const chatContainerRef = useRef(null);
   const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     if (isAutoScrollEnabled) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, [isAutoScrollEnabled]);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping]);
+  }, [messages, isTyping, scrollToBottom]);
 
   useEffect(() => {
     // Load sessions on mount
@@ -102,7 +160,8 @@ export default function StudentDashboard() {
           content: chatResponse.message.content,
           mode: chatResponse.message.approach,
           id: chatResponse.message.id,
-          sources: chatResponse.message.sources
+          sources: chatResponse.message.sources,
+          isNew: true
         }]);
       }
     } catch (error) {
@@ -209,28 +268,47 @@ export default function StudentDashboard() {
                       BLIND TEST: Đánh giá mô hình
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="border border-border rounded-lg p-4 bg-background">
-                        <div className="text-xs font-bold text-muted-foreground mb-2 uppercase">Câu trả lời A</div>
-                        <p className="text-sm">{msg.answerA}</p>
+                      <div className="border border-border rounded-xl p-5 bg-background shadow-sm hover:border-primary/50 transition-colors">
+                        <div className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">A</span> Câu trả lời
+                        </div>
+                        <div className="text-sm prose prose-sm dark:prose-invert">
+                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.answerA}</ReactMarkdown>
+                        </div>
                       </div>
-                      <div className="border border-border rounded-lg p-4 bg-background">
-                        <div className="text-xs font-bold text-muted-foreground mb-2 uppercase">Câu trả lời B</div>
-                        <p className="text-sm">{msg.answerB}</p>
+                      <div className="border border-border rounded-xl p-5 bg-background shadow-sm hover:border-primary/50 transition-colors">
+                        <div className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">B</span> Câu trả lời
+                        </div>
+                        <div className="text-sm prose prose-sm dark:prose-invert">
+                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.answerB}</ReactMarkdown>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center mt-4 p-3 bg-muted/30 rounded-lg border border-border/50">
-                      <span className="text-sm font-medium mb-3">Bình chọn câu trả lời tốt nhất để tiếp tục</span>
+                    <div className="flex flex-col items-center mt-6 p-4 bg-muted/50 rounded-xl border border-border/50">
+                      <span className="text-sm font-semibold mb-4 text-foreground/80">Bạn thấy câu trả lời nào tốt hơn?</span>
                       <div className="flex gap-3 w-full">
-                        <button className="flex-1 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-md transition-colors text-sm font-medium">Chọn A</button>
-                        <button className="flex-1 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-md transition-colors text-sm font-medium">Chọn B</button>
-                        <button className="flex-1 py-2 bg-background border border-border hover:border-destructive hover:text-destructive rounded-md transition-colors text-sm font-medium">Cả hai đều tệ</button>
+                        <button onClick={() => handleFeedback(msg.id, 'CHOOSE_A')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-primary hover:text-primary rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
+                          <CheckCircle2 size={16} /> Chọn A
+                        </button>
+                        <button onClick={() => handleFeedback(msg.id, 'CHOOSE_B')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-primary hover:text-primary rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
+                          <CheckCircle2 size={16} /> Chọn B
+                        </button>
+                        <button onClick={() => handleFeedback(msg.id, 'BOTH_BAD')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-destructive hover:text-destructive rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
+                          <XCircle size={16} /> Cả hai đều tệ
+                        </button>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none">
-                    <pre className="whitespace-pre-wrap font-sans">{msg.content}</pre>
-                  </div>
+                  <TypewriterMessage 
+                    content={msg.content} 
+                    isNew={msg.isNew} 
+                    onType={scrollToBottom}
+                    onComplete={() => {
+                      setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, isNew: false } : m));
+                    }}
+                  />
                 )}
 
                 {msg.role === 'bot' && msg.sources && (
