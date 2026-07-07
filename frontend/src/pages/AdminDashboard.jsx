@@ -127,15 +127,15 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="flex-1 w-full bg-zinc-50 min-h-screen text-zinc-900 font-sans flex flex-col">
-      <div className="max-w-[1400px] mx-auto w-full px-6 py-10 md:py-16 flex-1 flex flex-col">
+    <div className="flex-1 w-full bg-zinc-50 h-full overflow-y-auto text-zinc-900 font-sans flex flex-col">
+      <div className="max-w-[1400px] mx-auto w-full px-6 py-8 md:py-12 flex-1 flex flex-col">
         
         {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
         >
           <div>
             <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-zinc-950">
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="flex space-x-2 bg-zinc-100 p-1.5 rounded-xl w-max mb-10"
+          className="flex space-x-2 bg-zinc-100 p-1.5 rounded-xl w-max mb-6"
         >
           {tabs.map((tab) => (
             <button 
