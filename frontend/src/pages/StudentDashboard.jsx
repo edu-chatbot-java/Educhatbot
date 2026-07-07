@@ -78,11 +78,30 @@ const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
   );
 };
 
+const SUBJECT_OPTIONS = [
+  { code: 'JAVA_OOP', name: 'Java OOP' },
+  { code: 'DSA', name: 'Data Structures & Algorithms' },
+  { code: 'CSHARP_BASIC', name: 'C# Basic' }
+];
+
 export default function StudentDashboard() {
   const [activeSubject, setActiveSubject] = useState('JAVA_OOP');
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showNewChatModal, setShowNewChatModal] = useState(false);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const [sessions, setSessions] = useState([]);
   const [activeSession, setActiveSession] = useState(null);
@@ -220,7 +239,7 @@ export default function StudentDashboard() {
   };
 
   return (
-    <div className="flex-1 flex overflow-hidden relative w-full h-screen bg-zinc-50 text-zinc-900 font-sans">
+    <div className="flex-1 flex overflow-hidden relative w-full h-full bg-zinc-50 text-zinc-900 font-sans">
 
       {/* Sidebar */}
       <div className="w-[280px] border-r border-zinc-200 bg-zinc-50/50 hidden md:flex flex-col flex-shrink-0">
@@ -414,8 +433,9 @@ export default function StudentDashboard() {
         </div>
 
         {/* Input Area */}
-        <div className="shrink-0 bg-white border-t border-zinc-100 p-4 md:p-6 pb-8 md:pb-8">
-          <div className="max-w-3xl mx-auto relative flex items-end bg-zinc-50 border border-zinc-200 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-zinc-900 focus-within:border-transparent transition-all">
+        <div className="shrink-0  p-1 ">
+          <div className="max-w-3xl mx-auto relative flex items-center bg-zinc-50 border border-zinc-200/80 rounded-[28px] p-1.5 pr-2 pl-4 focus-within:bg-white focus-within:border-zinc-900/30 focus-within:ring-4 focus-within:ring-zinc-900/5 shadow-sm transition-all duration-300">
+
             <textarea
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
@@ -426,18 +446,34 @@ export default function StudentDashboard() {
                 }
               }}
               placeholder="Ask anything about the subject..."
-              className="w-full max-h-32 min-h-[56px] pl-5 pr-14 py-4 bg-transparent text-zinc-900 placeholder:text-zinc-400 focus:outline-none resize-none text-sm leading-relaxed"
+              className="flex-1 max-h-32 min-h-[38px] py-2 px-2.5 bg-transparent text-zinc-900 placeholder:text-zinc-400/80 focus:outline-none resize-none text-sm leading-relaxed"
               rows={1}
             />
-            <button
-              onClick={handleSend}
-              disabled={!chatInput.trim() || isTyping}
-              className="absolute right-2 bottom-2 p-2 bg-zinc-900 text-white rounded-xl disabled:opacity-30 disabled:bg-zinc-200 disabled:text-zinc-500 hover:bg-zinc-800 transition-colors focus:outline-none"
-            >
-              <Send size={16} />
-            </button>
+
+            <div className="flex items-center gap-1.5 shrink-0">
+              {chatInput.trim().length > 0 && (
+                <button
+                  onClick={() => setChatInput('')}
+                  className="text-[10px] font-bold text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-wider px-2 py-1.5 rounded-lg hover:bg-zinc-200/20"
+                >
+                  Clear
+                </button>
+              )}
+
+              <button
+                onClick={handleSend}
+                disabled={!chatInput.trim() || isTyping}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 outline-none ${
+                  chatInput.trim() && !isTyping
+                    ? 'bg-zinc-950 text-white hover:bg-zinc-900 hover:scale-[1.05] active:scale-95 shadow-sm'
+                    : 'bg-transparent text-zinc-300 cursor-not-allowed'
+                }`}
+              >
+                <Send size={13} className={chatInput.trim() && !isTyping ? 'stroke-[2.5] ml-0.5' : 'ml-0.5'} />
+              </button>
+            </div>
           </div>
-          <div className="text-center mt-3 text-[11px] text-zinc-400 font-medium">
+          <div className="text-center mt-3 text-[10px] text-zinc-400 font-semibold tracking-wide select-none uppercase">
             AI can make mistakes. Always verify important information.
           </div>
         </div>
@@ -456,24 +492,53 @@ export default function StudentDashboard() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white border border-zinc-200 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+              className="bg-white border border-zinc-200 rounded-2xl shadow-2xl w-full max-w-sm"
             >
-              <div className="p-5 border-b border-zinc-100 flex justify-between items-center bg-zinc-50/50">
+              <div className="p-5 border-b border-zinc-100 flex justify-between items-center bg-zinc-50/50 rounded-t-2xl">
                 <h3 className="font-medium text-zinc-900">New Session</h3>
                 <button onClick={() => setShowNewChatModal(false)} className="text-zinc-400 hover:text-zinc-900 focus:outline-none">✕</button>
               </div>
               <div className="p-6 space-y-5">
-                <div className="space-y-2">
+                <div className="space-y-2 relative" ref={dropdownRef}>
                   <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Select Subject</label>
-                  <select
-                    className="w-full p-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all"
-                    value={activeSubject}
-                    onChange={(e) => setActiveSubject(e.target.value)}
+                  <button
+                    type="button"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full flex items-center justify-between p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 font-semibold focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-left shadow-sm hover:bg-zinc-100/50"
                   >
-                    <option value="JAVA_OOP">Java OOP</option>
-                    <option value="DSA">Data Structures & Algorithms</option>
-                    <option value="CSHARP_BASIC">C# Basic</option>
-                  </select>
+                    <span>
+                      {activeSubject === 'JAVA_OOP' ? 'Java OOP' : activeSubject === 'DSA' ? 'Data Structures & Algorithms' : 'C# Basic'}
+                    </span>
+                    <ChevronDown size={14} className={`text-zinc-500 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute z-20 w-full mt-1.5 bg-white border border-zinc-200 rounded-xl shadow-lg overflow-hidden py-1 max-h-48 overflow-y-auto"
+                      >
+                        {SUBJECT_OPTIONS.map(subj => (
+                          <button
+                            key={subj.code}
+                            type="button"
+                            onClick={() => {
+                              setActiveSubject(subj.code);
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-xs hover:bg-zinc-50 transition-colors flex flex-col gap-0.5 ${
+                              activeSubject === subj.code ? 'bg-zinc-50 font-bold text-zinc-950' : 'text-zinc-600'
+                            }`}
+                          >
+                            <span className="truncate w-full">{subj.name}</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
                 <button
                   onClick={handleCreateSession}
