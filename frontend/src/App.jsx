@@ -12,23 +12,28 @@ import { authService } from './services/auth.service';
 function Layout({ children, theme, toggleTheme, onLogout, userRole }) {
   return (
     <div className={`h-screen flex flex-col bg-background text-foreground transition-colors duration-300 font-sans overflow-hidden`}>
-      <header className="h-16 flex items-center justify-between px-6 border-b border-border bg-card">
+      <header className="h-16 flex items-center justify-between px-6 border-b border-border/50 bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold">E</div>
-          <span className="text-xl font-bold tracking-tight">EduBot AI</span>
+          <div className="w-8 h-8 rounded bg-gradient-to-tr from-primary to-violet-600 flex items-center justify-center text-primary-foreground font-bold shadow-md shadow-primary/20">E</div>
+          <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80">EduBot AI</span>
         </div>
         <div className="flex items-center gap-4">
           {onLogout && userRole === 'ADMIN' && (
             <div className="flex gap-4 mr-4 text-sm font-medium">
-              <a href="/admin" className="hover:text-primary transition-colors">Admin Dashboard</a>
-              <a href="/embedding" className="hover:text-primary transition-colors">Embedding Center</a>
+              <a href="/admin" className="hover:text-primary transition-all duration-200 py-1.5 px-3 rounded-lg hover:bg-muted">Admin Dashboard</a>
+              <a href="/embedding" className="hover:text-primary transition-all duration-200 py-1.5 px-3 rounded-lg hover:bg-muted">Embedding Center</a>
             </div>
           )}
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-muted transition-colors">
+          {onLogout && userRole && (
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+              {userRole === 'ADMIN' ? '👑 Admin' : userRole === 'TEACHER' ? '👨‍🏫 Giảng viên' : '👨‍🎓 Sinh viên'}
+            </span>
+          )}
+          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-muted transition-colors border border-border/50">
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           {onLogout && (
-            <button onClick={onLogout} className="p-2 rounded-full hover:bg-muted transition-colors text-destructive">
+            <button onClick={onLogout} className="p-2 rounded-full hover:bg-muted transition-colors text-destructive border border-destructive/20 hover:bg-destructive/10">
               <LogOut size={20} />
             </button>
           )}
@@ -81,7 +86,7 @@ export default function App() {
           path="/student" 
           element={
             isAuthenticated && userRole === 'STUDENT' ? (
-              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout}>
+              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} userRole={userRole}>
                 <StudentDashboard />
               </Layout>
             ) : <Navigate to="/" />
@@ -91,7 +96,7 @@ export default function App() {
           path="/admin" 
           element={
             isAuthenticated && userRole === 'ADMIN' ? (
-              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout}>
+              <Layout theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} userRole={userRole}>
                 <AdminDashboard />
               </Layout>
             ) : <Navigate to="/" />
