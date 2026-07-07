@@ -7,35 +7,45 @@ import { chatService } from '../services/chat.service';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneLight, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const markdownComponents = {
-  pre: ({ children }) => <>{children}</>,
-  code({node, inline, className, children, ...props}) {
-    const match = /language-(\w+)/.exec(className || '')
-    const lang = match ? match[1] : '';
-    return !inline ? (
-      <SyntaxHighlighter
-        {...props}
-        style={oneLight}
-        customStyle={{ backgroundColor: '#f3f3f3', padding: '1rem' }}
-        codeTagProps={{ style: { backgroundColor: 'transparent' } }}
-        language={lang}
-        PreTag="div"
-        className="not-prose rounded-xl my-4 text-[13px] border border-zinc-200 shadow-sm overflow-hidden"
-      >
-        {String(children).replace(/\n$/, '')}
-      </SyntaxHighlighter>
-    ) : (
-      <code {...props} className={`${className || ''} bg-[#f3f3f3] text-zinc-900 px-1.5 py-0.5 rounded-md text-[13px] font-mono before:content-none after:content-none`}>
-        {children}
-      </code>
-    )
-  }
-};
+function makeMarkdownComponents(isDark) {
+  return {
+    pre: ({ children }) => <>{children}</>,
+    code({node, inline, className, children, ...props}) {
+      const match = /language-(\w+)/.exec(className || '')
+      const lang = match ? match[1] : '';
+      return !inline ? (
+        <SyntaxHighlighter
+          {...props}
+          style={isDark ? vscDarkPlus : oneLight}
+          customStyle={{
+            backgroundColor: isDark ? '#1e1e2e' : '#f3f3f3',
+            padding: '1rem',
+            margin: 0
+          }}
+          codeTagProps={{ style: { backgroundColor: 'transparent' } }}
+          language={lang}
+          PreTag="div"
+          className={`not-prose rounded-xl my-4 text-[13px] shadow-sm overflow-hidden ${
+            isDark ? 'border border-zinc-700' : 'border border-zinc-200'
+          }`}
+        >
+          {String(children).replace(/\n$/, '')}
+        </SyntaxHighlighter>
+      ) : (
+        <code {...props} className={`${className || ''} px-1.5 py-0.5 rounded-md text-[13px] font-mono before:content-none after:content-none ${
+          isDark ? 'bg-zinc-800 text-zinc-200' : 'bg-[#f3f3f3] text-zinc-900'
+        }`}>
+          {children}
+        </code>
+      )
+    }
+  };
+}
 
-const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
+const TypewriterMessage = ({ content, isNew, onType, onComplete, mdComponents }) => {
   const [displayedText, setDisplayedText] = useState('');
 
   const onTypeRef = useRef(onType);
@@ -70,7 +80,7 @@ const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
     <div className="text-sm leading-relaxed prose prose-zinc prose-p:text-zinc-900 prose-li:text-zinc-900 prose-headings:text-zinc-900 max-w-none w-full break-words">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        components={markdownComponents}
+        components={mdComponents}
       >
         {displayedText}
       </ReactMarkdown>
@@ -84,7 +94,8 @@ const SUBJECT_OPTIONS = [
   { code: 'CSHARP_BASIC', name: 'C# Basic' }
 ];
 
-export default function StudentDashboard() {
+export default function StudentDashboard({ isDark = false }) {
+  const mdComponents = React.useMemo(() => makeMarkdownComponents(isDark), [isDark]);
   const [activeSubject, setActiveSubject] = useState('JAVA_OOP');
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -339,7 +350,7 @@ export default function StudentDashboard() {
                             <span className="w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-900 flex items-center justify-center shadow-sm">A</span> Response
                           </div>
                           <div className="text-sm prose prose-zinc prose-p:text-zinc-900 prose-li:text-zinc-900 max-w-none">
-                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{msg.answerA}</ReactMarkdown>
+                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>{msg.answerA}</ReactMarkdown>
                           </div>
                         </div>
                         <div className="border border-zinc-200 rounded-xl p-5 bg-zinc-50/50">
@@ -347,7 +358,7 @@ export default function StudentDashboard() {
                             <span className="w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-900 flex items-center justify-center shadow-sm">B</span> Response
                           </div>
                           <div className="text-sm prose prose-zinc prose-p:text-zinc-900 prose-li:text-zinc-900 max-w-none">
-                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{msg.answerB}</ReactMarkdown>
+                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>{msg.answerB}</ReactMarkdown>
                           </div>
                         </div>
                       </div>
@@ -370,6 +381,7 @@ export default function StudentDashboard() {
                     <TypewriterMessage
                       content={msg.content}
                       isNew={msg.isNew}
+                      mdComponents={mdComponents}
                       onType={() => scrollToBottom(false)}
                       onComplete={() => {
                         setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, isNew: false } : m));
