@@ -1,7 +1,7 @@
 package com.edu.chatbot.chat.service.impl;
 
 import com.edu.chatbot.chat.client.EmbeddingClient;
-import com.edu.chatbot.chat.client.FineTuningClient;
+import com.edu.chatbot.finetune.client.FineTuningClient;
 import com.edu.chatbot.chat.client.QdrantSearchClient;
 import com.edu.chatbot.chat.dto.request.ChatRequest;
 import com.edu.chatbot.chat.dto.response.ChatResponseDTO;
@@ -235,7 +235,7 @@ public class ChatServiceImpl implements ChatService {
                 .build();
         messageRepository.save(userMsg);
 
-        String answer = fineTuningClient.generateResponse(request.getQuestion());
+        String answer = fineTuningClient.generate(request.getQuestion());
         long latencyMs = System.currentTimeMillis() - startTime;
 
         ChatMessage botMsg = ChatMessage.builder()

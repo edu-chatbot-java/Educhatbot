@@ -1,7 +1,7 @@
 package com.edu.chatbot.chat.service.impl;
 
 import com.edu.chatbot.chat.client.EmbeddingClient;
-import com.edu.chatbot.chat.client.FineTuningClient;
+import com.edu.chatbot.finetune.client.FineTuningClient;
 import com.edu.chatbot.chat.client.QdrantSearchClient;
 import com.edu.chatbot.chat.dto.request.ChatRequest;
 import com.edu.chatbot.chat.dto.response.ChatResponseDTO;
@@ -89,12 +89,12 @@ class ChatServiceImplTest {
         mockSession.setId(1L);
 
         when(sessionRepository.findById(1L)).thenReturn(Optional.of(mockSession));
-        when(fineTuningClient.generateResponse(anyString())).thenReturn("Finetune Answer");
+        when(fineTuningClient.generate(anyString())).thenReturn("Finetune Answer");
 
         ChatResponseDTO response = chatService.processFineTuneMessage(request, 1L);
 
         assertNotNull(response);
         assertEquals("Finetune Answer", response.getMessage().getContent());
-        verify(fineTuningClient, times(1)).generateResponse(anyString());
+        verify(fineTuningClient, times(1)).generate(anyString());
     }
 }
