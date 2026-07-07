@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { UploadCloud, FileText, Database, CheckCircle, Plus, X, Save, RefreshCw, Loader2, AlertCircle, Trash2 } from 'lucide-react';
+import { UploadCloud, FileText, Database, CheckCircle, Plus, X, Save, RefreshCw, Loader2, AlertCircle, Trash2, ChevronDown } from 'lucide-react';
 import { documentService } from '../services/document.service';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -16,6 +16,20 @@ export default function TeacherDashboard() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [documentTitle, setDocumentTitle] = useState('');
   const fileInputRef = useRef(null);
+  
+  // Custom Dropdown State & Ref
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Helper to load subjects
   const loadSubjects = async () => {
@@ -197,21 +211,21 @@ export default function TeacherDashboard() {
   const currentSubject = subjects.find(s => s.code === selectedSubjectCode);
 
   return (
-    <div className="flex-1 w-full bg-zinc-50 min-h-screen text-zinc-900 font-sans">
-      <div className="max-w-[1400px] mx-auto w-full px-6 py-10 md:py-16">
+    <div className="flex-1 w-full bg-zinc-50 h-full overflow-hidden text-zinc-900 font-sans flex flex-col">
+      <div className="max-w-[1400px] mx-auto w-full px-6 py-6 md:py-8 flex flex-col flex-1 overflow-hidden">
         
         {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6 shrink-0"
         >
           <div>
             <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-zinc-950">
               Course Documents
             </h1>
-            <p className="text-zinc-500 text-lg mt-3 max-w-xl leading-relaxed">
+            <p className="text-zinc-500 text-sm mt-2 max-w-xl leading-relaxed">
               Upload, manage, and synchronize your course materials with the AI vector database.
             </p>
           </div>
@@ -225,42 +239,71 @@ export default function TeacherDashboard() {
           </button>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 overflow-hidden items-stretch">
           
           {/* Left Column: Upload Document (5 cols) */}
           <motion.div 
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 flex flex-col space-y-6"
+            className="lg:col-span-5 flex flex-col h-full overflow-hidden"
           >
-            <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 md:p-8 flex flex-col h-full">
-              <h3 className="font-medium text-lg text-zinc-900 mb-6 flex items-center gap-2">
-                <UploadCloud size={18} className="text-zinc-400" /> 
+            <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-4 md:p-5 flex flex-col h-full overflow-hidden">
+              <h3 className="font-medium text-base text-zinc-900 mb-3 shrink-0 flex items-center gap-2">
+                <UploadCloud size={16} className="text-zinc-400" /> 
                 Upload Material
               </h3>
               
-              <div className="space-y-6 flex-1 flex flex-col">
-                <div className="space-y-2.5">
+              <div className="space-y-3 flex-1 flex flex-col overflow-hidden">
+                <div className="space-y-1.5 shrink-0 relative" ref={dropdownRef}>
                   <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider flex items-center justify-between">
                     <span>Subject <span className="text-red-500">*</span></span>
                   </label>
-                  <select 
-                    value={selectedSubjectCode}
-                    onChange={(e) => handleSubjectChange(e.target.value)}
-                    className="w-full p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-zinc-900"
+                  
+                  <button
+                    type="button"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full flex items-center justify-between p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 font-semibold focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-left shadow-sm hover:bg-zinc-100/50"
                   >
-                    {subjects.map(subj => (
-                      <option key={subj.code} value={subj.code}>
-                        [{subj.code}] {subj.name}
-                      </option>
-                    ))}
-                  </select>
+                    <span>
+                      {currentSubject ? `[${currentSubject.code}] ${currentSubject.name}` : 'Select a subject'}
+                    </span>
+                    <ChevronDown size={14} className={`text-zinc-500 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute z-20 w-full mt-1.5 bg-white border border-zinc-200 rounded-xl shadow-lg overflow-hidden py-1 max-h-48 overflow-y-auto"
+                      >
+                        {subjects.map(subj => (
+                          <button
+                            key={subj.code}
+                            type="button"
+                            onClick={() => {
+                              handleSubjectChange(subj.code);
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-xs hover:bg-zinc-50 transition-colors flex flex-col gap-0.5 ${
+                              selectedSubjectCode === subj.code ? 'bg-zinc-50 font-bold text-zinc-950' : 'text-zinc-600'
+                            }`}
+                          >
+                            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">{subj.code}</span>
+                            <span className="truncate w-full">{subj.name}</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
                 
                 <div 
                   onClick={() => !isUploading && fileInputRef.current.click()}
-                  className={`relative flex-1 min-h-[220px] border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center transition-all ${
+                  className={`relative flex-1 min-h-[90px] border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center transition-all ${
                     isUploading 
                       ? 'border-zinc-200 bg-zinc-50 cursor-not-allowed opacity-70' 
                       : 'border-zinc-200 bg-zinc-50 hover:bg-zinc-100/50 hover:border-zinc-300 cursor-pointer group'
@@ -282,14 +325,14 @@ export default function TeacherDashboard() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="space-y-3 w-full"
+                        className="space-y-2 w-full"
                       >
-                        <div className="w-12 h-12 rounded-full bg-zinc-900 text-white flex items-center justify-center mx-auto shadow-sm">
-                          <FileText size={20} />
+                        <div className="w-9 h-9 rounded-full bg-zinc-900 text-white flex items-center justify-center mx-auto shadow-sm">
+                          <FileText size={16} />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-zinc-900 truncate max-w-[220px] mx-auto px-4">{selectedFile.name}</p>
-                          <p className="text-xs text-zinc-500 mt-1">{getFileSizeFormatted(selectedFile.size)}</p>
+                          <p className="text-xs font-medium text-zinc-900 truncate max-w-[200px] mx-auto px-4">{selectedFile.name}</p>
+                          <p className="text-[10px] text-zinc-500 mt-0.5">{getFileSizeFormatted(selectedFile.size)}</p>
                         </div>
                       </motion.div>
                     ) : (
@@ -300,11 +343,11 @@ export default function TeacherDashboard() {
                         exit={{ opacity: 0 }}
                         className="flex flex-col items-center"
                       >
-                        <div className="w-12 h-12 rounded-full bg-white border border-zinc-200 text-zinc-400 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:text-zinc-900 transition-all duration-300 shadow-sm">
-                          <UploadCloud size={20} />
+                        <div className="w-9 h-9 rounded-full bg-white border border-zinc-200 text-zinc-400 flex items-center justify-center mb-2 group-hover:scale-105 group-hover:text-zinc-900 transition-all duration-300 shadow-sm">
+                          <UploadCloud size={16} />
                         </div>
-                        <p className="text-sm font-medium text-zinc-900 mb-1">Click to select document</p>
-                        <p className="text-xs text-zinc-500">Supported: PDF, TXT (Max 50MB)</p>
+                        <p className="text-xs font-medium text-zinc-900 mb-0.5">Click to select document</p>
+                        <p className="text-[10px] text-zinc-500">Supported: PDF, TXT (Max 50MB)</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -316,7 +359,7 @@ export default function TeacherDashboard() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="space-y-2.5 overflow-hidden"
+                      className="space-y-1.5 overflow-hidden"
                     >
                       <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Display Title <span className="text-red-500">*</span></label>
                       <div className="flex gap-2">
@@ -325,11 +368,11 @@ export default function TeacherDashboard() {
                           placeholder="Enter a clear title" 
                           value={documentTitle}
                           onChange={(e) => setDocumentTitle(e.target.value)}
-                          className="flex-1 p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                          className="flex-1 p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                         />
                         <button 
                           onClick={() => { setSelectedFile(null); setDocumentTitle(''); }}
-                          className="px-5 bg-white border border-zinc-200 text-zinc-700 font-medium rounded-xl text-sm hover:bg-zinc-50 hover:border-zinc-300 transition-all focus:outline-none"
+                          className="px-3 bg-white border border-zinc-200 text-zinc-700 font-medium rounded-xl text-xs hover:bg-zinc-50 hover:border-zinc-300 transition-all focus:outline-none"
                         >
                           Clear
                         </button>
@@ -364,13 +407,13 @@ export default function TeacherDashboard() {
                   <button 
                     onClick={handleUpload} 
                     disabled={!selectedFile}
-                    className={`w-full py-3.5 rounded-xl font-medium text-sm mt-2 transition-all focus:outline-none flex items-center justify-center gap-2 ${
+                    className={`w-full py-2.5 rounded-xl font-medium text-xs mt-1 transition-all focus:outline-none flex items-center justify-center gap-2 ${
                       selectedFile 
                         ? 'bg-zinc-900 text-white hover:bg-zinc-800 active:scale-[0.98] focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2' 
                         : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
                     }`}
                   >
-                    {selectedFile ? <><UploadCloud size={16} /> Upload & Process</> : 'Upload Document'}
+                    {selectedFile ? <><UploadCloud size={14} /> Upload & Process</> : 'Upload Document'}
                   </button>
                 )}
               </div>
@@ -382,9 +425,9 @@ export default function TeacherDashboard() {
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-7 flex flex-col"
+            className="lg:col-span-7 flex flex-col h-full overflow-hidden"
           >
-            <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full min-h-[500px]">
+            <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
               
               <div className="p-6 md:px-8 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
                 <h3 className="font-medium text-lg text-zinc-900 flex items-center gap-2">
