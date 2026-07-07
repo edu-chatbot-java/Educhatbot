@@ -7,7 +7,33 @@ import { chatService } from '../services/chat.service';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const markdownComponents = {
+  pre: ({ children }) => <>{children}</>,
+  code({node, inline, className, children, ...props}) {
+    const match = /language-(\w+)/.exec(className || '')
+    const lang = match ? match[1] : '';
+    return !inline ? (
+      <SyntaxHighlighter
+        {...props}
+        style={oneLight}
+        customStyle={{ backgroundColor: '#f3f3f3', padding: '1rem' }}
+        codeTagProps={{ style: { backgroundColor: 'transparent' } }}
+        language={lang}
+        PreTag="div"
+        className="not-prose rounded-xl my-4 text-[13px] border border-zinc-200 shadow-sm overflow-hidden"
+      >
+        {String(children).replace(/\n$/, '')}
+      </SyntaxHighlighter>
+    ) : (
+      <code {...props} className={`${className || ''} bg-[#f3f3f3] text-zinc-900 px-1.5 py-0.5 rounded-md text-[13px] font-mono before:content-none after:content-none`}>
+        {children}
+      </code>
+    )
+  }
+};
 
 const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -41,29 +67,10 @@ const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
   }, [content, isNew]);
 
   return (
-    <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none w-full break-words">
+    <div className="text-sm leading-relaxed prose prose-zinc prose-p:text-zinc-900 prose-li:text-zinc-900 prose-headings:text-zinc-900 max-w-none w-full break-words">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        components={{
-          code({node, inline, className, children, ...props}) {
-            const match = /language-(\w+)/.exec(className || '')
-            return !inline && match ? (
-              <SyntaxHighlighter
-                {...props}
-                style={materialLight}
-                language={match[1]}
-                PreTag="div"
-                className="rounded-md my-2 text-[13px] border border-border/50 shadow-sm"
-              >
-                {String(children).replace(/\n$/, '')}
-              </SyntaxHighlighter>
-            ) : (
-              <code {...props} className={`${className} bg-muted px-1.5 py-0.5 rounded text-[13px] font-mono text-primary`}>
-                {children}
-              </code>
-            )
-          }
-        }}
+        components={markdownComponents}
       >
         {displayedText}
       </ReactMarkdown>
@@ -213,34 +220,42 @@ export default function StudentDashboard() {
   };
 
   return (
-    <div className="flex-1 flex overflow-hidden relative w-full h-full">
+    <div className="flex-1 flex overflow-hidden relative w-full h-screen bg-zinc-50 text-zinc-900 font-sans">
+
       {/* Sidebar */}
-      <div className="w-64 border-r border-border bg-card/50 flex flex-col hidden md:flex">
-        <div className="p-4 border-b border-border">
+      <div className="w-[280px] border-r border-zinc-200 bg-zinc-50/50 hidden md:flex flex-col flex-shrink-0">
+        <div className="p-5">
           <button
             onClick={() => setShowNewChatModal(true)}
-            className="w-full flex items-center justify-center gap-2 py-2 bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 rounded-md transition-colors font-medium"
+            className="w-full flex items-center justify-center gap-2 py-2.5 bg-white text-zinc-900 border border-zinc-200 hover:border-zinc-300 hover:shadow-sm rounded-xl transition-all font-medium text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900"
           >
-            <Plus size={18} /> Chat mới
+            <Plus size={16} /> New Chat
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-3 space-y-6">
+
+        <div className="flex-1 overflow-y-auto px-3 pb-6 space-y-8">
           {[1, 2, 3].map(subjectId => {
             const subjectName = subjectId === 1 ? 'JAVA_OOP' : subjectId === 2 ? 'DSA' : 'CSHARP_BASIC';
             const subjectSessions = sessions.filter(s => s.subjectId === subjectId);
             if (subjectSessions.length === 0) return null;
             return (
               <div key={subjectId}>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">{subjectName}</h3>
-                <div className="space-y-1">
+                <h3 className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-2 px-3">
+                  {subjectName.replace('_', ' ')}
+                </h3>
+                <div className="space-y-0.5">
                   {subjectSessions.map(session => (
                     <button
                       key={session.id}
                       onClick={() => handleSelectSession(session)}
-                      className={`w-full text-left px-3 py-2 rounded-md text-sm hover:bg-muted truncate transition-colors ${activeSession?.id === session.id ? 'bg-muted text-primary' : 'text-foreground/80'}`}
+                      className={`w-full text-left px-3 py-2.5 rounded-lg text-sm truncate transition-colors focus:outline-none flex items-center gap-2.5 ${
+                        activeSession?.id === session.id
+                          ? 'bg-zinc-200/50 text-zinc-900 font-medium'
+                          : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
+                      }`}
                     >
-                      <MessageSquare size={14} className="inline mr-2 opacity-50" />
-                      {session.title || 'Phiên hỏi đáp ' + session.id}
+                      <MessageSquare size={14} className={activeSession?.id === session.id ? 'text-zinc-700' : 'text-zinc-400'} />
+                      <span className="truncate">{session.title || 'Session ' + session.id}</span>
                     </button>
                   ))}
                 </div>
@@ -251,12 +266,15 @@ export default function StudentDashboard() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-background h-full overflow-hidden">
+      <div className="flex-1 flex flex-col bg-white h-full overflow-hidden relative shadow-[-4px_0_24px_rgba(0,0,0,0.02)]">
+
         {/* Top Nav */}
-        <div className="h-14 border-b border-border flex items-center px-4 justify-between bg-background shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-muted-foreground">Môn học hiện tại:</span>
-            <span className="text-sm font-semibold text-primary px-2 py-1 bg-primary/10 rounded-md">{activeSubject}</span>
+        <div className="h-16 border-b border-zinc-100 flex items-center px-6 justify-between bg-white/80 backdrop-blur-md shrink-0 z-10">
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-zinc-500">Current Subject:</span>
+            <span className="text-xs font-semibold text-zinc-700 px-2.5 py-1 bg-zinc-100 rounded-md tracking-wide">
+              {activeSubject}
+            </span>
           </div>
         </div>
 
@@ -264,181 +282,210 @@ export default function StudentDashboard() {
         <div
           ref={chatContainerRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto p-4 space-y-6"
+          className="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 scroll-smooth"
         >
-          {messages.map((msg, i) => (
-            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] rounded-2xl p-4 shadow-sm ${
-                msg.role === 'user'
-                  ? 'bg-primary text-primary-foreground rounded-tr-sm'
-                  : 'bg-card border border-border text-card-foreground rounded-tl-sm'
-              }`}>
-                {msg.role === 'bot' && !msg.isABTest && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Monitor size={12} className="text-primary" />
+          <AnimatePresence initial={false}>
+            {messages.map((msg, i) => (
+              <motion.div
+                key={msg.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`max-w-[85%] md:max-w-[75%] px-5 py-4 ${
+                  msg.role === 'user'
+                    ? 'bg-[#e8f3fe] text-zinc-900 rounded-2xl rounded-tr-sm shadow-sm'
+                    : 'bg-white border border-zinc-200 text-zinc-900 rounded-2xl rounded-tl-sm shadow-sm'
+                }`}>
+                  {msg.role === 'bot' && !msg.isABTest && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-5 h-5 rounded-full bg-zinc-100 flex items-center justify-center">
+                        <Monitor size={10} className="text-zinc-600" />
+                      </div>
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider bg-zinc-50 px-2 py-0.5 rounded-full border border-zinc-200">
+                        {msg.mode} Mode
+                      </span>
                     </div>
-                    <span className="text-xs font-semibold text-primary uppercase tracking-wider bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-                      {msg.mode} Mode
-                    </span>
-                  </div>
-                )}
+                  )}
 
-                {msg.isABTest ? (
-                  <div className="space-y-4">
-                    <div className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
-                      <AlertCircle size={16} className="text-accent-foreground" />
-                      BLIND TEST: Đánh giá mô hình
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="border border-border rounded-xl p-5 bg-background shadow-sm hover:border-primary/50 transition-colors">
-                        <div className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
-                          <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">A</span> Câu trả lời
+                  {msg.isABTest ? (
+                    <div className="space-y-5">
+                      <div className="text-xs font-bold text-zinc-400 flex items-center gap-2 tracking-wide uppercase">
+                        <AlertCircle size={14} className="text-amber-500" />
+                        Model Blind Test
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="border border-zinc-200 rounded-xl p-5 bg-zinc-50/50">
+                          <div className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-wider flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-900 flex items-center justify-center shadow-sm">A</span> Response
+                          </div>
+                          <div className="text-sm prose prose-zinc prose-p:text-zinc-900 prose-li:text-zinc-900 max-w-none">
+                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{msg.answerA}</ReactMarkdown>
+                          </div>
                         </div>
-                        <div className="text-sm prose prose-sm dark:prose-invert">
-                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.answerA}</ReactMarkdown>
+                        <div className="border border-zinc-200 rounded-xl p-5 bg-zinc-50/50">
+                          <div className="text-[10px] font-bold text-zinc-500 mb-3 uppercase tracking-wider flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-white border border-zinc-200 text-zinc-900 flex items-center justify-center shadow-sm">B</span> Response
+                          </div>
+                          <div className="text-sm prose prose-zinc prose-p:text-zinc-900 prose-li:text-zinc-900 max-w-none">
+                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{msg.answerB}</ReactMarkdown>
+                          </div>
                         </div>
                       </div>
-                      <div className="border border-border rounded-xl p-5 bg-background shadow-sm hover:border-primary/50 transition-colors">
-                        <div className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
-                          <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">B</span> Câu trả lời
-                        </div>
-                        <div className="text-sm prose prose-sm dark:prose-invert">
-                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.answerB}</ReactMarkdown>
+                      <div className="flex flex-col items-center mt-6 p-5 bg-zinc-50 rounded-xl border border-zinc-100">
+                        <span className="text-sm font-medium mb-4 text-zinc-700">Which response is better?</span>
+                        <div className="flex flex-wrap md:flex-nowrap gap-3 w-full justify-center">
+                          <button onClick={() => handleABTestSubmit(msg.id, 'CHOOSE_A')} className="flex-1 py-2.5 bg-white border border-zinc-200 hover:border-zinc-900 hover:shadow-sm rounded-lg transition-all text-sm font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-zinc-900 text-zinc-700">
+                            Choose A
+                          </button>
+                          <button onClick={() => handleABTestSubmit(msg.id, 'CHOOSE_B')} className="flex-1 py-2.5 bg-white border border-zinc-200 hover:border-zinc-900 hover:shadow-sm rounded-lg transition-all text-sm font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-zinc-900 text-zinc-700">
+                            Choose B
+                          </button>
+                          <button onClick={() => handleABTestSubmit(msg.id, 'BOTH_BAD')} className="flex-1 py-2.5 bg-white border border-zinc-200 hover:border-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all text-sm font-medium flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-zinc-700">
+                            Both Poor
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center mt-6 p-4 bg-muted/50 rounded-xl border border-border/50">
-                      <span className="text-sm font-semibold mb-4 text-foreground/80">Bạn thấy câu trả lời nào tốt hơn?</span>
-                      <div className="flex gap-3 w-full">
-                        <button onClick={() => handleABTestSubmit(msg.id, 'CHOOSE_A')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-primary hover:text-primary rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
-                          <CheckCircle2 size={16} /> Chọn A
-                        </button>
-                        <button onClick={() => handleABTestSubmit(msg.id, 'CHOOSE_B')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-primary hover:text-primary rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
-                          <CheckCircle2 size={16} /> Chọn B
-                        </button>
-                        <button onClick={() => handleABTestSubmit(msg.id, 'BOTH_BAD')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-destructive hover:text-destructive rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
-                          <XCircle size={16} /> Cả hai đều tệ
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <TypewriterMessage
-                    content={msg.content}
-                    isNew={msg.isNew}
-                    onType={() => scrollToBottom(false)}
-                    onComplete={() => {
-                      setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, isNew: false } : m));
-                    }}
-                  />
-                )}
+                  ) : (
+                    <TypewriterMessage
+                      content={msg.content}
+                      isNew={msg.isNew}
+                      onType={() => scrollToBottom(false)}
+                      onComplete={() => {
+                        setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, isNew: false } : m));
+                      }}
+                    />
+                  )}
 
-                {msg.role === 'bot' && msg.sources && (
-                  <div className="mt-4 border border-border/50 rounded-lg overflow-hidden">
-                    <div className="bg-muted/30 px-3 py-2 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors">
-                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                        <FileText size={14} /> Nguồn trích dẫn (Sources)
-                      </div>
-                      <ChevronDown size={14} className="text-muted-foreground" />
-                    </div>
-                    <div className="p-2 space-y-1 bg-background/50">
-                      {msg.sources.map((src, idx) => (
-                        <div key={idx} className="text-xs text-muted-foreground flex items-center gap-2 p-1 hover:bg-muted rounded transition-colors">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary/50"></span>
-                          {src}
+                  {msg.role === 'bot' && msg.sources && msg.sources.length > 0 && (
+                    <div className="mt-5 pt-4 border-t border-zinc-100">
+                      <details className="group">
+                        <summary className="flex items-center gap-2 text-xs font-medium text-zinc-500 cursor-pointer list-none select-none hover:text-zinc-900 transition-colors">
+                          <FileText size={12} /> View Sources
+                          <ChevronDown size={12} className="transition-transform group-open:rotate-180" />
+                        </summary>
+                        <div className="mt-3 space-y-1.5 pl-1">
+                          {msg.sources.map((src, idx) => (
+                            <div key={idx} className="text-[11px] text-zinc-500 flex items-start gap-2">
+                              <span className="w-1 h-1 rounded-full bg-zinc-300 mt-1.5 shrink-0"></span>
+                              <span className="break-all">{src}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </details>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {msg.role === 'bot' && !msg.isABTest && (
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
-                    <div className="flex gap-1">
-                      {[1,2,3,4,5].map(star => (
-                        <button key={star} onClick={() => handleRate(msg.id, star)} className="text-muted-foreground hover:text-yellow-400 transition-colors">
-                          <Star size={16} />
-                        </button>
-                      ))}
+                  {msg.role === 'bot' && !msg.isABTest && (
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-zinc-100">
+                      <div className="flex gap-0.5">
+                        {[1,2,3,4,5].map(star => (
+                          <button key={star} onClick={() => handleRate(msg.id, star)} className="p-1 text-zinc-300 hover:text-zinc-900 transition-colors focus:outline-none">
+                            <Star size={14} className="fill-current hover:fill-zinc-900" />
+                          </button>
+                        ))}
+                      </div>
+                      <div className="flex gap-1">
+                        <button onClick={() => handleFeedback(msg.id, 'THUMBS_UP')} className="p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-md transition-colors focus:outline-none"><ThumbsUp size={14} /></button>
+                        <button onClick={() => handleFeedback(msg.id, 'THUMBS_DOWN')} className="p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-md transition-colors focus:outline-none"><ThumbsDown size={14} /></button>
+                      </div>
                     </div>
-                    <div className="flex gap-2">
-                      <button onClick={() => handleFeedback(msg.id, 'THUMBS_UP')} className="p-1 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded transition-colors"><ThumbsUp size={16} /></button>
-                      <button onClick={() => handleFeedback(msg.id, 'THUMBS_DOWN')} className="p-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-colors"><ThumbsDown size={16} /></button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-          {isTyping && (
-            <div className="flex justify-start">
-              <div className="bg-card border border-border rounded-2xl rounded-tl-sm p-4 shadow-sm flex items-center gap-2">
-                <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
+                  )}
+                </div>
+              </motion.div>
+            ))}
+
+            {isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex justify-start"
+              >
+                <div className="bg-white border border-zinc-200 rounded-2xl rounded-tl-sm px-5 py-4 shadow-sm flex items-center gap-1.5 h-12">
+                  <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <div ref={messagesEndRef} className="h-4" />
         </div>
 
         {/* Input Area */}
-        <div className="shrink-0 bg-background border-t border-border/50 p-4 pb-6">
-          <div className="max-w-3xl mx-auto relative flex items-center">
-            <input
-              type="text"
+        <div className="shrink-0 bg-white border-t border-zinc-100 p-4 md:p-6 pb-8 md:pb-8">
+          <div className="max-w-3xl mx-auto relative flex items-end bg-zinc-50 border border-zinc-200 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-zinc-900 focus-within:border-transparent transition-all">
+            <textarea
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Hỏi bất cứ điều gì về môn học..."
-              className="w-full pl-4 pr-12 py-3 bg-muted text-foreground border border-border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              placeholder="Ask anything about the subject..."
+              className="w-full max-h-32 min-h-[56px] pl-5 pr-14 py-4 bg-transparent text-zinc-900 placeholder:text-zinc-400 focus:outline-none resize-none text-sm leading-relaxed"
+              rows={1}
             />
             <button
               onClick={handleSend}
               disabled={!chatInput.trim() || isTyping}
-              className="absolute right-2 p-2 bg-primary text-primary-foreground rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+              className="absolute right-2 bottom-2 p-2 bg-zinc-900 text-white rounded-xl disabled:opacity-30 disabled:bg-zinc-200 disabled:text-zinc-500 hover:bg-zinc-800 transition-colors focus:outline-none"
             >
               <Send size={16} />
             </button>
           </div>
-          <div className="text-center mt-2 text-[10px] text-muted-foreground">
-            EduBot AI có thể mắc lỗi. Vui lòng kiểm tra lại thông tin quan trọng.
+          <div className="text-center mt-3 text-[11px] text-zinc-400 font-medium">
+            AI can make mistakes. Always verify important information.
           </div>
         </div>
       </div>
 
       {/* New Chat Modal */}
-      {showNewChatModal && (
-        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="p-4 border-b border-border flex justify-between items-center bg-muted/20">
-              <h3 className="font-semibold">Tạo phiên Chat mới</h3>
-              <button onClick={() => setShowNewChatModal(false)} className="text-muted-foreground hover:text-foreground">✕</button>
-            </div>
-            <div className="p-6 space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Chọn môn học (Subject)</label>
-                <select
-                  className="w-full p-2 bg-background border border-input rounded-md focus:ring-2 focus:ring-primary outline-none"
-                  value={activeSubject}
-                  onChange={(e) => setActiveSubject(e.target.value)}
-                >
-                  <option value="JAVA_OOP">JAVA_OOP</option>
-                  <option value="DSA">DSA</option>
-                  <option value="CSHARP_BASIC">CSHARP_BASIC</option>
-                </select>
+      <AnimatePresence>
+        {showNewChatModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-zinc-950/20 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="bg-white border border-zinc-200 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+            >
+              <div className="p-5 border-b border-zinc-100 flex justify-between items-center bg-zinc-50/50">
+                <h3 className="font-medium text-zinc-900">New Session</h3>
+                <button onClick={() => setShowNewChatModal(false)} className="text-zinc-400 hover:text-zinc-900 focus:outline-none">✕</button>
               </div>
-              <button
-                onClick={handleCreateSession}
-                className="w-full py-2 bg-primary text-primary-foreground rounded-md font-medium mt-2 hover:bg-primary/90"
-              >
-                Bắt đầu
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              <div className="p-6 space-y-5">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Select Subject</label>
+                  <select
+                    className="w-full p-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all"
+                    value={activeSubject}
+                    onChange={(e) => setActiveSubject(e.target.value)}
+                  >
+                    <option value="JAVA_OOP">Java OOP</option>
+                    <option value="DSA">Data Structures & Algorithms</option>
+                    <option value="CSHARP_BASIC">C# Basic</option>
+                  </select>
+                </div>
+                <button
+                  onClick={handleCreateSession}
+                  className="w-full py-3 bg-zinc-900 text-white rounded-xl font-medium text-sm hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 transition-all"
+                >
+                  Start Chat
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
