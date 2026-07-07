@@ -19,6 +19,7 @@ public class UserDTO {
     private String fullName;
     private String username;
     private Role role;
+    private boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -29,6 +30,7 @@ public class UserDTO {
                 .fullName(user.getFullName())
                 .username(user.getUsername())
                 .role(user.getRole())
+                .isActive(user.isActive())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

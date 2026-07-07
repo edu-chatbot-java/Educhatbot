@@ -6,7 +6,7 @@ export const adminService = {
    * API: GET /api/analytics/dashboard
    */
   getDashboardStats: () => {
-    return api.get('/api/analytics/dashboard');
+    return api.get('/analytics/dashboard');
   },
 
   /**
@@ -14,7 +14,7 @@ export const adminService = {
    * API: GET /api/analytics/export/jsonl
    */
   exportJsonl: () => {
-    return api.get('/api/analytics/export/jsonl', {
+    return api.get('/analytics/export/jsonl', {
       responseType: 'blob' // Quan trọng để tải file về
     });
   },
@@ -24,7 +24,7 @@ export const adminService = {
    * API: POST /api/finetune/test/chat
    */
   testFineTuneChat: (payload) => {
-    return api.post('/api/finetune/test/chat', payload);
+    return api.post('/finetune/test/chat', payload);
   },
 
   /**
@@ -32,7 +32,7 @@ export const adminService = {
    * API: GET /api/admin/users
    */
   getUsers: (page = 0, size = 10) => {
-    return api.get(`/api/admin/users?page=${page}&size=${size}`);
+    return api.get(`/admin/users?page=${page}&size=${size}`);
   },
 
   /**
@@ -40,6 +40,18 @@ export const adminService = {
    * API: POST /api/analytics/evaluate
    */
   evaluate: () => {
-    return api.post('/api/analytics/evaluate');
+    return api.post('/analytics/evaluate');
+  },
+
+  changeRole: (userId, role) => {
+    return api.put(`/admin/users/${userId}/role`, { role });
+  },
+
+  toggleUserStatus: (userId) => {
+    return api.put(`/admin/users/${userId}/toggle-status`);
+  },
+
+  deleteUser: (userId) => {
+    return api.delete(`/admin/users/${userId}`);
   }
 };

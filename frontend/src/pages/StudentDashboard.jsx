@@ -1,9 +1,75 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  MessageSquare, Plus, Send, ThumbsUp, ThumbsDown, Star, ChevronDown, 
-  FileText, Monitor, AlertCircle
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  MessageSquare, Plus, Send, ThumbsUp, ThumbsDown, Star, ChevronDown,
+  FileText, Monitor, AlertCircle, CheckCircle2, XCircle
 } from 'lucide-react';
 import { chatService } from '../services/chat.service';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+const TypewriterMessage = ({ content, isNew, onType, onComplete }) => {
+  const [displayedText, setDisplayedText] = useState('');
+
+  const onTypeRef = useRef(onType);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onTypeRef.current = onType;
+    onCompleteRef.current = onComplete;
+  }, [onType, onComplete]);
+
+  useEffect(() => {
+    if (!isNew) {
+      setDisplayedText(content);
+      return;
+    }
+
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(content.slice(0, i + 1));
+      i++;
+      if (i % 5 === 0 && onTypeRef.current) onTypeRef.current(); // Scroll less aggressively
+      if (i >= content.length) {
+        clearInterval(interval);
+        if (onCompleteRef.current) onCompleteRef.current();
+      }
+    }, 15);
+
+    return () => clearInterval(interval);
+  }, [content, isNew]);
+
+  return (
+    <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none w-full break-words">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          code({node, inline, className, children, ...props}) {
+            const match = /language-(\w+)/.exec(className || '')
+            return !inline && match ? (
+              <SyntaxHighlighter
+                {...props}
+                style={materialLight}
+                language={match[1]}
+                PreTag="div"
+                className="rounded-md my-2 text-[13px] border border-border/50 shadow-sm"
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            ) : (
+              <code {...props} className={`${className} bg-muted px-1.5 py-0.5 rounded text-[13px] font-mono text-primary`}>
+                {children}
+              </code>
+            )
+          }
+        }}
+      >
+        {displayedText}
+      </ReactMarkdown>
+    </div>
+  );
+};
 
 export default function StudentDashboard() {
   const [activeSubject, setActiveSubject] = useState('JAVA_OOP');
@@ -13,22 +79,25 @@ export default function StudentDashboard() {
 
   const [sessions, setSessions] = useState([]);
   const [activeSession, setActiveSession] = useState(null);
-  
+
   const [messages, setMessages] = useState([]);
-  
+
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
 
-  const scrollToBottom = () => {
-    if (isAutoScrollEnabled) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = useCallback((smooth = true) => {
+    if (isAutoScrollEnabled && chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto'
+      });
     }
-  };
+  }, [isAutoScrollEnabled]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, isTyping]);
+    scrollToBottom(true);
+  }, [messages, isTyping, scrollToBottom]);
 
   useEffect(() => {
     // Load sessions on mount
@@ -84,7 +153,7 @@ export default function StudentDashboard() {
     setChatInput('');
     setIsTyping(true);
     setIsAutoScrollEnabled(true); // Force auto-scroll to bottom when sending
-    
+
     try {
       const chatResponse = await chatService.sendMessage(activeSession.id, input, "RAG");
       setIsTyping(false);
@@ -102,7 +171,8 @@ export default function StudentDashboard() {
           content: chatResponse.message.content,
           mode: chatResponse.message.approach,
           id: chatResponse.message.id,
-          sources: chatResponse.message.sources
+          sources: chatResponse.message.sources,
+          isNew: true
         }]);
       }
     } catch (error) {
@@ -130,12 +200,24 @@ export default function StudentDashboard() {
     }
   };
 
+  const handleABTestSubmit = async (id, choice) => {
+    try {
+      // Backend validates rating between 1 and 5. We use 1 for BOTH_BAD, and 5 for a positive choice (A or B).
+      const rating = choice === 'BOTH_BAD' ? 1 : 5;
+      await chatService.rateMessage(id, rating, choice);
+      alert(`Đã gửi lựa chọn: ${choice === 'CHOOSE_A' ? 'Chọn A' : choice === 'CHOOSE_B' ? 'Chọn B' : 'Cả hai đều tệ'}`);
+    } catch (error) {
+      console.error(error);
+      alert('Lỗi khi gửi đánh giá');
+    }
+  };
+
   return (
     <div className="flex-1 flex overflow-hidden relative w-full h-full">
       {/* Sidebar */}
       <div className="w-64 border-r border-border bg-card/50 flex flex-col hidden md:flex">
         <div className="p-4 border-b border-border">
-          <button 
+          <button
             onClick={() => setShowNewChatModal(true)}
             className="w-full flex items-center justify-center gap-2 py-2 bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 rounded-md transition-colors font-medium"
           >
@@ -152,8 +234,8 @@ export default function StudentDashboard() {
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">{subjectName}</h3>
                 <div className="space-y-1">
                   {subjectSessions.map(session => (
-                    <button 
-                      key={session.id} 
+                    <button
+                      key={session.id}
                       onClick={() => handleSelectSession(session)}
                       className={`w-full text-left px-3 py-2 rounded-md text-sm hover:bg-muted truncate transition-colors ${activeSession?.id === session.id ? 'bg-muted text-primary' : 'text-foreground/80'}`}
                     >
@@ -179,7 +261,7 @@ export default function StudentDashboard() {
         </div>
 
         {/* Chat Content */}
-        <div 
+        <div
           ref={chatContainerRef}
           onScroll={handleScroll}
           className="flex-1 overflow-y-auto p-4 space-y-6"
@@ -187,8 +269,8 @@ export default function StudentDashboard() {
           {messages.map((msg, i) => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[80%] rounded-2xl p-4 shadow-sm ${
-                msg.role === 'user' 
-                  ? 'bg-primary text-primary-foreground rounded-tr-sm' 
+                msg.role === 'user'
+                  ? 'bg-primary text-primary-foreground rounded-tr-sm'
                   : 'bg-card border border-border text-card-foreground rounded-tl-sm'
               }`}>
                 {msg.role === 'bot' && !msg.isABTest && (
@@ -201,7 +283,7 @@ export default function StudentDashboard() {
                     </span>
                   </div>
                 )}
-                
+
                 {msg.isABTest ? (
                   <div className="space-y-4">
                     <div className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
@@ -209,28 +291,47 @@ export default function StudentDashboard() {
                       BLIND TEST: Đánh giá mô hình
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="border border-border rounded-lg p-4 bg-background">
-                        <div className="text-xs font-bold text-muted-foreground mb-2 uppercase">Câu trả lời A</div>
-                        <p className="text-sm">{msg.answerA}</p>
+                      <div className="border border-border rounded-xl p-5 bg-background shadow-sm hover:border-primary/50 transition-colors">
+                        <div className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">A</span> Câu trả lời
+                        </div>
+                        <div className="text-sm prose prose-sm dark:prose-invert">
+                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.answerA}</ReactMarkdown>
+                        </div>
                       </div>
-                      <div className="border border-border rounded-lg p-4 bg-background">
-                        <div className="text-xs font-bold text-muted-foreground mb-2 uppercase">Câu trả lời B</div>
-                        <p className="text-sm">{msg.answerB}</p>
+                      <div className="border border-border rounded-xl p-5 bg-background shadow-sm hover:border-primary/50 transition-colors">
+                        <div className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">B</span> Câu trả lời
+                        </div>
+                        <div className="text-sm prose prose-sm dark:prose-invert">
+                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.answerB}</ReactMarkdown>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center mt-4 p-3 bg-muted/30 rounded-lg border border-border/50">
-                      <span className="text-sm font-medium mb-3">Bình chọn câu trả lời tốt nhất để tiếp tục</span>
+                    <div className="flex flex-col items-center mt-6 p-4 bg-muted/50 rounded-xl border border-border/50">
+                      <span className="text-sm font-semibold mb-4 text-foreground/80">Bạn thấy câu trả lời nào tốt hơn?</span>
                       <div className="flex gap-3 w-full">
-                        <button className="flex-1 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-md transition-colors text-sm font-medium">Chọn A</button>
-                        <button className="flex-1 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-md transition-colors text-sm font-medium">Chọn B</button>
-                        <button className="flex-1 py-2 bg-background border border-border hover:border-destructive hover:text-destructive rounded-md transition-colors text-sm font-medium">Cả hai đều tệ</button>
+                        <button onClick={() => handleABTestSubmit(msg.id, 'CHOOSE_A')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-primary hover:text-primary rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
+                          <CheckCircle2 size={16} /> Chọn A
+                        </button>
+                        <button onClick={() => handleABTestSubmit(msg.id, 'CHOOSE_B')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-primary hover:text-primary rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
+                          <CheckCircle2 size={16} /> Chọn B
+                        </button>
+                        <button onClick={() => handleABTestSubmit(msg.id, 'BOTH_BAD')} className="flex-1 py-2.5 bg-background border-2 border-border hover:border-destructive hover:text-destructive rounded-lg transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
+                          <XCircle size={16} /> Cả hai đều tệ
+                        </button>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none">
-                    <pre className="whitespace-pre-wrap font-sans">{msg.content}</pre>
-                  </div>
+                  <TypewriterMessage
+                    content={msg.content}
+                    isNew={msg.isNew}
+                    onType={() => scrollToBottom(false)}
+                    onComplete={() => {
+                      setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, isNew: false } : m));
+                    }}
+                  />
                 )}
 
                 {msg.role === 'bot' && msg.sources && (
@@ -285,15 +386,15 @@ export default function StudentDashboard() {
         {/* Input Area */}
         <div className="shrink-0 bg-background border-t border-border/50 p-4 pb-6">
           <div className="max-w-3xl mx-auto relative flex items-center">
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Hỏi bất cứ điều gì về môn học..." 
+              placeholder="Hỏi bất cứ điều gì về môn học..."
               className="w-full pl-4 pr-12 py-3 bg-muted text-foreground border border-border rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
             />
-            <button 
+            <button
               onClick={handleSend}
               disabled={!chatInput.trim() || isTyping}
               className="absolute right-2 p-2 bg-primary text-primary-foreground rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
@@ -318,7 +419,7 @@ export default function StudentDashboard() {
             <div className="p-6 space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Chọn môn học (Subject)</label>
-                <select 
+                <select
                   className="w-full p-2 bg-background border border-input rounded-md focus:ring-2 focus:ring-primary outline-none"
                   value={activeSubject}
                   onChange={(e) => setActiveSubject(e.target.value)}
@@ -328,7 +429,7 @@ export default function StudentDashboard() {
                   <option value="CSHARP_BASIC">CSHARP_BASIC</option>
                 </select>
               </div>
-              <button 
+              <button
                 onClick={handleCreateSession}
                 className="w-full py-2 bg-primary text-primary-foreground rounded-md font-medium mt-2 hover:bg-primary/90"
               >

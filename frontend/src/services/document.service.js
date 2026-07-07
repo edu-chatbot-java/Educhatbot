@@ -1,16 +1,47 @@
-import axios from 'axios';
+import api from './api';
 
 export const documentService = {
-  uploadDocument: async (file, subjectId) => {
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // formData.append('subjectId', subjectId);
-    // const response = await axios.post('/api/documents/upload', formData);
-    // return response.data;
+  uploadDocument: async (file, title, subjectId, uploadedBy = 'Teacher') => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', title);
+    formData.append('subjectId', subjectId);
+    formData.append('uploadedBy', uploadedBy);
+
+    const response = await api.post('/documents/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data?.success !== undefined ? response.data.data : response.data;
   },
   
-  getDocuments: async (page = 0, size = 10) => {
-    // const response = await axios.get(`/api/documents?page=${page}&size=${size}`);
-    // return response.data;
+  getDocuments: async (subjectId = null, status = null, page = 0, size = 10) => {
+    const params = { page, size };
+    if (subjectId) params.subjectId = subjectId;
+    if (status) params.status = status;
+    
+    const response = await api.get('/documents', { params });
+    return response.data?.success !== undefined ? response.data.data : response.data;
+  },
+
+  getDocumentStatus: async (id) => {
+    const response = await api.get(`/documents/${id}/status`);
+    return response.data?.success !== undefined ? response.data.data : response.data;
+  },
+
+  deleteDocument: async (id) => {
+    const response = await api.delete(`/documents/${id}`);
+    return response.data?.success !== undefined ? response.data.data : response.data;
+  },
+
+  reprocessDocument: async (id) => {
+    const response = await api.post(`/documents/${id}/reprocess`);
+    return response.data?.success !== undefined ? response.data.data : response.data;
+  },
+
+  getSubjects: async () => {
+    const response = await api.get('/subjects');
+    return response.data?.success !== undefined ? response.data.data : response.data;
   }
 };
