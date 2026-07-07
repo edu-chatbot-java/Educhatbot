@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { UploadCloud, FileText, Database, CheckCircle, Plus, X, Save, RefreshCw } from 'lucide-react';
+import { UploadCloud, FileText, Database, CheckCircle, Plus, X, Save, RefreshCw, Loader2, AlertCircle, Trash2 } from 'lucide-react';
 import { documentService } from '../services/document.service';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function TeacherDashboard() {
   const [isUploading, setIsUploading] = useState(false);
@@ -196,195 +197,299 @@ export default function TeacherDashboard() {
   const currentSubject = subjects.find(s => s.code === selectedSubjectCode);
 
   return (
-    <div className="flex-1 flex flex-col bg-muted/10 overflow-y-auto p-6">
-      <div className="max-w-4xl mx-auto w-full space-y-6">
-        <div className="flex justify-between items-start">
+    <div className="flex-1 w-full bg-zinc-50 min-h-screen text-zinc-900 font-sans">
+      <div className="max-w-[1400px] mx-auto w-full px-6 py-10 md:py-16">
+        
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+        >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Teacher Dashboard</h1>
-            <p className="text-muted-foreground text-sm mt-1">Giao diện dành riêng cho Giảng viên tải lên tài liệu môn học</p>
+            <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-zinc-950">
+              Course Documents
+            </h1>
+            <p className="text-zinc-500 text-lg mt-3 max-w-xl leading-relaxed">
+              Upload, manage, and synchronize your course materials with the AI vector database.
+            </p>
           </div>
           <button 
             onClick={() => currentSubject && fetchDocuments(currentSubject.id)} 
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-background border border-border hover:bg-muted text-xs font-medium rounded-lg shadow-sm transition-colors"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-zinc-200 text-zinc-700 font-medium rounded-full hover:border-zinc-300 hover:text-zinc-900 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-zinc-900"
             title="Làm mới danh sách"
           >
-            <RefreshCw size={14} /> Làm mới
+            <RefreshCw size={16} /> 
+            <span>Refresh</span>
           </button>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Left Column: Upload Document */}
-          <div className="bg-card border border-border rounded-xl shadow-sm p-6 flex flex-col">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <UploadCloud size={18} className="text-primary" /> Tải tài liệu môn học
-            </h3>
-            
-            <div className="space-y-4 flex-1">
-              <div className="space-y-3">
-                <label className="text-sm font-medium flex items-center justify-between">
-                  <span>Môn học phụ trách <span className="text-destructive">*</span></span>
-                </label>
-
-                <select 
-                  value={selectedSubjectCode}
-                  onChange={(e) => handleSubjectChange(e.target.value)}
-                  className="w-full p-2.5 bg-background border border-input rounded-md text-sm focus:ring-2 focus:ring-primary outline-none"
-                >
-                  {subjects.map(subj => (
-                    <option key={subj.code} value={subj.code}>
-                      [{subj.code}] {subj.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          
+          {/* Left Column: Upload Document (5 cols) */}
+          <motion.div 
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 flex flex-col space-y-6"
+          >
+            <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 md:p-8 flex flex-col h-full">
+              <h3 className="font-medium text-lg text-zinc-900 mb-6 flex items-center gap-2">
+                <UploadCloud size={18} className="text-zinc-400" /> 
+                Upload Material
+              </h3>
               
-              <div 
-                onClick={() => !isUploading && fileInputRef.current.click()}
-                className="border-2 border-dashed border-border rounded-lg p-8 flex flex-col items-center justify-center text-center bg-muted/10 hover:bg-muted/30 transition-colors cursor-pointer group"
-              >
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  onChange={handleFileChange} 
-                  style={{ display: 'none' }} 
-                  accept=".pdf,.txt"
-                  disabled={isUploading}
-                />
+              <div className="space-y-6 flex-1 flex flex-col">
+                <div className="space-y-2.5">
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider flex items-center justify-between">
+                    <span>Subject <span className="text-red-500">*</span></span>
+                  </label>
+                  <select 
+                    value={selectedSubjectCode}
+                    onChange={(e) => handleSubjectChange(e.target.value)}
+                    className="w-full p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-zinc-900"
+                  >
+                    {subjects.map(subj => (
+                      <option key={subj.code} value={subj.code}>
+                        [{subj.code}] {subj.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 
-                {selectedFile ? (
-                  <div className="space-y-1">
-                    <FileText size={32} className="text-primary mx-auto mb-2" />
-                    <p className="text-sm font-semibold truncate max-w-[220px] mx-auto">{selectedFile.name}</p>
-                    <p className="text-xs text-muted-foreground">{getFileSizeFormatted(selectedFile.size)}</p>
-                  </div>
-                ) : (
-                  <>
-                    <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <FileText size={24} />
-                    </div>
-                    <p className="text-sm font-medium mb-1">Click để tải lên Slide / Bài giảng</p>
-                    <p className="text-xs text-muted-foreground">PDF, TXT (Tối đa 50MB)</p>
-                  </>
-                )}
-              </div>
-              
-              {selectedFile && !isUploading && (
-                <div className="space-y-2 animate-in fade-in duration-200">
-                  <label className="text-sm font-medium">Tiêu đề hiển thị <span className="text-destructive">*</span></label>
-                  <div className="flex gap-2">
-                    <input 
-                      type="text" 
-                      placeholder="Nhập tiêu đề hiển thị" 
-                      value={documentTitle}
-                      onChange={(e) => setDocumentTitle(e.target.value)}
-                      className="flex-1 p-2 bg-background border border-input rounded-md text-sm focus:ring-2 focus:ring-primary outline-none"
-                    />
-                    <button 
-                      onClick={() => { setSelectedFile(null); setDocumentTitle(''); }}
-                      className="px-3 bg-secondary text-secondary-foreground rounded-md text-sm hover:bg-secondary/80 transition-colors"
-                    >
-                      Hủy
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {isUploading ? (
-                <div className="space-y-2 mt-4 animate-in fade-in">
-                  <div className="flex justify-between text-xs font-medium">
-                    <span>Đang xử lý & phân tích tài liệu (nhúng Vector)...</span>
-                    <span>{uploadProgress}%</span>
-                  </div>
-                  <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                    <div className="h-full bg-primary transition-all duration-200" style={{ width: `${uploadProgress}%` }}></div>
-                  </div>
-                  <p className="text-[10px] text-muted-foreground text-center animate-pulse">
-                    Hệ thống đang trích xuất văn bản và đồng bộ hóa với cơ sở dữ liệu Vector (khoảng 5-15 giây)...
-                  </p>
-                </div>
-              ) : (
-                <button 
-                  onClick={handleUpload} 
-                  disabled={!selectedFile}
-                  className={`w-full py-2.5 rounded-md font-medium text-sm mt-4 transition-colors ${
-                    selectedFile 
-                      ? 'bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer' 
-                      : 'bg-muted text-muted-foreground cursor-not-allowed'
+                <div 
+                  onClick={() => !isUploading && fileInputRef.current.click()}
+                  className={`relative flex-1 min-h-[220px] border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center transition-all ${
+                    isUploading 
+                      ? 'border-zinc-200 bg-zinc-50 cursor-not-allowed opacity-70' 
+                      : 'border-zinc-200 bg-zinc-50 hover:bg-zinc-100/50 hover:border-zinc-300 cursor-pointer group'
                   }`}
                 >
-                  Tải lên tài liệu
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Right Column: Uploaded Documents */}
-          <div className="bg-card border border-border rounded-xl shadow-sm p-6 flex flex-col max-h-[500px] overflow-hidden">
-            <h3 className="font-semibold mb-4 flex items-center gap-2 flex-shrink-0">
-              <Database size={18} className="text-emerald-500" /> Danh sách tài liệu của môn
-            </h3>
-            
-            <div className="space-y-3 overflow-y-auto flex-1 pr-1">
-              {documents.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground text-sm">
-                  Chưa có tài liệu nào được tải lên cho môn học này.
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleFileChange} 
+                    style={{ display: 'none' }} 
+                    accept=".pdf,.txt"
+                    disabled={isUploading}
+                  />
+                  
+                  <AnimatePresence mode="wait">
+                    {selectedFile ? (
+                      <motion.div 
+                        key="has-file"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="space-y-3 w-full"
+                      >
+                        <div className="w-12 h-12 rounded-full bg-zinc-900 text-white flex items-center justify-center mx-auto shadow-sm">
+                          <FileText size={20} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-zinc-900 truncate max-w-[220px] mx-auto px-4">{selectedFile.name}</p>
+                          <p className="text-xs text-zinc-500 mt-1">{getFileSizeFormatted(selectedFile.size)}</p>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div 
+                        key="no-file"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex flex-col items-center"
+                      >
+                        <div className="w-12 h-12 rounded-full bg-white border border-zinc-200 text-zinc-400 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:text-zinc-900 transition-all duration-300 shadow-sm">
+                          <UploadCloud size={20} />
+                        </div>
+                        <p className="text-sm font-medium text-zinc-900 mb-1">Click to select document</p>
+                        <p className="text-xs text-zinc-500">Supported: PDF, TXT (Max 50MB)</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              ) : (
-                documents.map(doc => (
-                  <div key={doc.id} className="flex items-center justify-between p-3 bg-muted/20 border border-border rounded-lg gap-2">
-                    <div className="flex items-center gap-3 overflow-hidden">
-                      <FileText size={16} className={`${
-                        doc.status === 'READY' ? 'text-emerald-500' :
-                        doc.status === 'PROCESSING' ? 'text-blue-500 animate-pulse' :
-                        'text-destructive'
-                      }`} />
-                      <div className="overflow-hidden">
-                        <p className="text-sm font-medium truncate max-w-[200px]" title={doc.title}>{doc.title}</p>
-                        <p className="text-xs text-muted-foreground truncate">
-                          {getFileSizeFormatted(doc.fileSize)} • {doc.fileType}
-                        </p>
+                
+                <AnimatePresence>
+                  {selectedFile && !isUploading && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="space-y-2.5 overflow-hidden"
+                    >
+                      <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Display Title <span className="text-red-500">*</span></label>
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          placeholder="Enter a clear title" 
+                          value={documentTitle}
+                          onChange={(e) => setDocumentTitle(e.target.value)}
+                          className="flex-1 p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                        />
+                        <button 
+                          onClick={() => { setSelectedFile(null); setDocumentTitle(''); }}
+                          className="px-5 bg-white border border-zinc-200 text-zinc-700 font-medium rounded-xl text-sm hover:bg-zinc-50 hover:border-zinc-300 transition-all focus:outline-none"
+                        >
+                          Clear
+                        </button>
                       </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
+                {isUploading ? (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-4 pt-2"
+                  >
+                    <div className="flex justify-between items-center text-xs font-medium text-zinc-700">
+                      <span className="flex items-center gap-2">
+                        <Loader2 size={12} className="animate-spin text-zinc-400" />
+                        Processing vector embeddings...
+                      </span>
+                      <span className="tabular-nums">{uploadProgress}%</span>
                     </div>
-                    
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {doc.status === 'PROCESSING' && (
-                        <span className="text-[10px] bg-blue-500/10 text-blue-600 px-2 py-0.5 rounded font-medium animate-pulse">
-                          Đang xử lý
-                        </span>
-                      )}
-                      {doc.status === 'READY' && (
-                        <span className="text-[10px] bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded font-medium">
-                          Sẵn sàng
-                        </span>
-                      )}
-                      {doc.status === 'ERROR' && (
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] bg-destructive/10 text-destructive px-2 py-0.5 rounded font-medium">
-                            Lỗi
-                          </span>
+                    <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
+                      <motion.div 
+                        className="h-full bg-zinc-900" 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${uploadProgress}%` }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </div>
+                  </motion.div>
+                ) : (
+                  <button 
+                    onClick={handleUpload} 
+                    disabled={!selectedFile}
+                    className={`w-full py-3.5 rounded-xl font-medium text-sm mt-2 transition-all focus:outline-none flex items-center justify-center gap-2 ${
+                      selectedFile 
+                        ? 'bg-zinc-900 text-white hover:bg-zinc-800 active:scale-[0.98] focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2' 
+                        : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
+                    }`}
+                  >
+                    {selectedFile ? <><UploadCloud size={16} /> Upload & Process</> : 'Upload Document'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Uploaded Documents (7 cols) */}
+          <motion.div 
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 flex flex-col"
+          >
+            <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full min-h-[500px]">
+              
+              <div className="p-6 md:px-8 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
+                <h3 className="font-medium text-lg text-zinc-900 flex items-center gap-2">
+                  <Database size={18} className="text-zinc-400" /> 
+                  Document Index
+                </h3>
+                <div className="text-xs font-medium text-zinc-500 bg-white border border-zinc-200 px-2.5 py-1 rounded-full shadow-sm">
+                  {documents.length} items
+                </div>
+              </div>
+              
+              <div className="overflow-y-auto flex-1 bg-white">
+                <div className="divide-y divide-zinc-100">
+                  {documents.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-center px-6">
+                      <div className="w-12 h-12 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center mb-4 text-zinc-300">
+                        <Database size={20} />
+                      </div>
+                      <h4 className="text-sm font-medium text-zinc-900 mb-1">No documents found</h4>
+                      <p className="text-xs text-zinc-500 max-w-[250px]">
+                        Upload course materials to start populating the AI knowledge base.
+                      </p>
+                    </div>
+                  ) : (
+                    documents.map((doc, i) => (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: i * 0.05 }}
+                        key={doc.id} 
+                        className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 md:px-8 hover:bg-zinc-50/50 transition-colors gap-4"
+                      >
+                        <div className="flex items-start gap-4 overflow-hidden">
+                          <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
+                            doc.status === 'READY' ? 'bg-zinc-900 border-zinc-900 text-white' :
+                            doc.status === 'PROCESSING' ? 'bg-white border-zinc-200 text-zinc-400' :
+                            'bg-red-50 border-red-100 text-red-500'
+                          }`}>
+                            {doc.status === 'READY' ? <FileText size={14} /> :
+                             doc.status === 'PROCESSING' ? <Loader2 size={14} className="animate-spin" /> :
+                             <AlertCircle size={14} />}
+                          </div>
+                          
+                          <div className="overflow-hidden">
+                            <p className="text-sm font-medium text-zinc-900 truncate mb-1 pr-4" title={doc.title}>
+                              {doc.title}
+                            </p>
+                            <div className="flex items-center gap-3 text-[11px] text-zinc-500 font-medium">
+                              <span className="uppercase tracking-wider">{doc.fileType}</span>
+                              <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
+                              <span>{getFileSizeFormatted(doc.fileSize)}</span>
+                              
+                              {/* Mobile Status Badge */}
+                              <div className="sm:hidden ml-auto">
+                                {doc.status === 'PROCESSING' && <span className="text-zinc-500">Processing...</span>}
+                                {doc.status === 'READY' && <span className="text-emerald-600">Indexed</span>}
+                                {doc.status === 'ERROR' && <span className="text-red-500">Failed</span>}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 pl-12 sm:pl-0 shrink-0">
+                          {/* Desktop Status Badge */}
+                          <div className="hidden sm:block">
+                            {doc.status === 'PROCESSING' && (
+                              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-full">
+                                <Loader2 size={10} className="animate-spin" /> Processing
+                              </span>
+                            )}
+                            {doc.status === 'READY' && (
+                              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100/50">
+                                <CheckCircle size={10} /> Indexed
+                              </span>
+                            )}
+                            {doc.status === 'ERROR' && (
+                              <div className="flex items-center gap-2">
+                                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-red-700 bg-red-50 px-2.5 py-1 rounded-full border border-red-100/50">
+                                  Failed
+                                </span>
+                                <button
+                                  onClick={() => handleReprocess(doc.id)}
+                                  className="text-[11px] font-medium text-zinc-500 hover:text-zinc-900 hover:underline transition-colors focus:outline-none"
+                                >
+                                  Retry
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          
                           <button
-                            onClick={() => handleReprocess(doc.id)}
-                            className="text-[10px] px-2 py-0.5 bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20 rounded transition-colors font-medium"
-                            title="Thử lại"
+                            onClick={() => handleDelete(doc.id)}
+                            className="p-2 sm:opacity-0 sm:group-hover:opacity-100 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all focus:outline-none focus:opacity-100"
+                            title="Remove document"
                           >
-                            Xử lý lại
+                            <Trash2 size={16} />
                           </button>
                         </div>
-                      )}
-                      
-                      <button
-                        onClick={() => handleDelete(doc.id)}
-                        className="p-1 hover:bg-destructive/10 text-muted-foreground hover:text-destructive rounded transition-colors"
-                        title="Xóa tài liệu"
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
+                      </motion.div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
