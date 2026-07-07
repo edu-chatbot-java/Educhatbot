@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function TeacherDashboard() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  
+
   // Subject Management State
   const [subjects, setSubjects] = useState([]);
   const [selectedSubjectCode, setSelectedSubjectCode] = useState('');
@@ -16,7 +16,7 @@ export default function TeacherDashboard() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [documentTitle, setDocumentTitle] = useState('');
   const fileInputRef = useRef(null);
-  
+
   // Custom Dropdown State & Ref
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -102,7 +102,7 @@ export default function TeacherDashboard() {
 
     setIsUploading(true);
     setUploadProgress(10);
-    
+
     try {
       const currentSubject = subjects.find(s => s.code === selectedSubjectCode);
       if (!currentSubject || !currentSubject.id) {
@@ -213,9 +213,9 @@ export default function TeacherDashboard() {
   return (
     <div className="flex-1 w-full bg-zinc-50 h-full overflow-hidden text-zinc-900 font-sans flex flex-col">
       <div className="max-w-[1400px] mx-auto w-full px-6 py-6 md:py-8 flex flex-col flex-1 overflow-hidden">
-        
+
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -229,20 +229,20 @@ export default function TeacherDashboard() {
               Upload, manage, and synchronize your course materials with the AI vector database.
             </p>
           </div>
-          <button 
-            onClick={() => currentSubject && fetchDocuments(currentSubject.id)} 
+          <button
+            onClick={() => currentSubject && fetchDocuments(currentSubject.id)}
             className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-zinc-200 text-zinc-700 font-medium rounded-full hover:border-zinc-300 hover:text-zinc-900 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-zinc-900"
             title="Làm mới danh sách"
           >
-            <RefreshCw size={16} /> 
+            <RefreshCw size={16} />
             <span>Refresh</span>
           </button>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 overflow-hidden items-stretch">
-          
+
           {/* Left Column: Upload Document (5 cols) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -250,20 +250,20 @@ export default function TeacherDashboard() {
           >
             <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-4 md:p-5 flex flex-col h-full overflow-hidden">
               <h3 className="font-medium text-base text-zinc-900 mb-3 shrink-0 flex items-center gap-2">
-                <UploadCloud size={16} className="text-zinc-400" /> 
+                <UploadCloud size={16} className="text-zinc-400" />
                 Upload Material
               </h3>
-              
+
               <div className="space-y-3 flex-1 flex flex-col overflow-hidden">
                 <div className="space-y-1.5 shrink-0 relative" ref={dropdownRef}>
                   <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider flex items-center justify-between">
                     <span>Subject <span className="text-red-500">*</span></span>
                   </label>
-                  
+
                   <button
                     type="button"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="w-full flex items-center justify-between p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 font-semibold focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-left shadow-sm hover:bg-zinc-100/50"
+                    className="w-[calc(100%-0.5rem)] mx-auto flex items-center justify-between p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 font-semibold focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-left shadow-sm hover:bg-zinc-100/50"
                   >
                     <span>
                       {currentSubject ? `[${currentSubject.code}] ${currentSubject.name}` : 'Select a subject'}
@@ -300,27 +300,27 @@ export default function TeacherDashboard() {
                     )}
                   </AnimatePresence>
                 </div>
-                
-                <div 
+
+                <div
                   onClick={() => !isUploading && fileInputRef.current.click()}
                   className={`relative flex-1 min-h-[90px] border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center transition-all ${
-                    isUploading 
-                      ? 'border-zinc-200 bg-zinc-50 cursor-not-allowed opacity-70' 
+                    isUploading
+                      ? 'border-zinc-200 bg-zinc-50 cursor-not-allowed opacity-70'
                       : 'border-zinc-200 bg-zinc-50 hover:bg-zinc-100/50 hover:border-zinc-300 cursor-pointer group'
                   }`}
                 >
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    onChange={handleFileChange} 
-                    style={{ display: 'none' }} 
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
                     accept=".pdf,.txt"
                     disabled={isUploading}
                   />
-                  
+
                   <AnimatePresence mode="wait">
                     {selectedFile ? (
-                      <motion.div 
+                      <motion.div
                         key="has-file"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -336,7 +336,7 @@ export default function TeacherDashboard() {
                         </div>
                       </motion.div>
                     ) : (
-                      <motion.div 
+                      <motion.div
                         key="no-file"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -352,10 +352,10 @@ export default function TeacherDashboard() {
                     )}
                   </AnimatePresence>
                 </div>
-                
+
                 <AnimatePresence>
                   {selectedFile && !isUploading && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
@@ -363,14 +363,14 @@ export default function TeacherDashboard() {
                     >
                       <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Display Title <span className="text-red-500">*</span></label>
                       <div className="flex gap-2">
-                        <input 
-                          type="text" 
-                          placeholder="Enter a clear title" 
+                        <input
+                          type="text"
+                          placeholder="Enter a clear title"
                           value={documentTitle}
                           onChange={(e) => setDocumentTitle(e.target.value)}
                           className="flex-1 p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                         />
-                        <button 
+                        <button
                           onClick={() => { setSelectedFile(null); setDocumentTitle(''); }}
                           className="px-3 bg-white border border-zinc-200 text-zinc-700 font-medium rounded-xl text-xs hover:bg-zinc-50 hover:border-zinc-300 transition-all focus:outline-none"
                         >
@@ -380,9 +380,9 @@ export default function TeacherDashboard() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-                
+
                 {isUploading ? (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="space-y-4 pt-2"
@@ -395,8 +395,8 @@ export default function TeacherDashboard() {
                       <span className="tabular-nums">{uploadProgress}%</span>
                     </div>
                     <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
-                      <motion.div 
-                        className="h-full bg-zinc-900" 
+                      <motion.div
+                        className="h-full bg-zinc-900"
                         initial={{ width: 0 }}
                         animate={{ width: `${uploadProgress}%` }}
                         transition={{ duration: 0.3 }}
@@ -404,12 +404,12 @@ export default function TeacherDashboard() {
                     </div>
                   </motion.div>
                 ) : (
-                  <button 
-                    onClick={handleUpload} 
+                  <button
+                    onClick={handleUpload}
                     disabled={!selectedFile}
                     className={`w-full py-2.5 rounded-xl font-medium text-xs mt-1 transition-all focus:outline-none flex items-center justify-center gap-2 ${
-                      selectedFile 
-                        ? 'bg-zinc-900 text-white hover:bg-zinc-800 active:scale-[0.98] focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2' 
+                      selectedFile
+                        ? 'bg-zinc-900 text-white hover:bg-zinc-800 active:scale-[0.98] focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2'
                         : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
                     }`}
                   >
@@ -421,24 +421,24 @@ export default function TeacherDashboard() {
           </motion.div>
 
           {/* Right Column: Uploaded Documents (7 cols) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-7 flex flex-col h-full overflow-hidden"
           >
             <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
-              
+
               <div className="p-6 md:px-8 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
                 <h3 className="font-medium text-lg text-zinc-900 flex items-center gap-2">
-                  <Database size={18} className="text-zinc-400" /> 
+                  <Database size={18} className="text-zinc-400" />
                   Document Index
                 </h3>
                 <div className="text-xs font-medium text-zinc-500 bg-white border border-zinc-200 px-2.5 py-1 rounded-full shadow-sm">
                   {documents.length} items
                 </div>
               </div>
-              
+
               <div className="overflow-y-auto flex-1 bg-white">
                 <div className="divide-y divide-zinc-100">
                   {documents.length === 0 ? (
@@ -453,11 +453,11 @@ export default function TeacherDashboard() {
                     </div>
                   ) : (
                     documents.map((doc, i) => (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: i * 0.05 }}
-                        key={doc.id} 
+                        key={doc.id}
                         className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 md:px-8 hover:bg-zinc-50/50 transition-colors gap-4"
                       >
                         <div className="flex items-start gap-4 overflow-hidden">
@@ -470,7 +470,7 @@ export default function TeacherDashboard() {
                              doc.status === 'PROCESSING' ? <Loader2 size={14} className="animate-spin" /> :
                              <AlertCircle size={14} />}
                           </div>
-                          
+
                           <div className="overflow-hidden">
                             <p className="text-sm font-medium text-zinc-900 truncate mb-1 pr-4" title={doc.title}>
                               {doc.title}
@@ -479,7 +479,7 @@ export default function TeacherDashboard() {
                               <span className="uppercase tracking-wider">{doc.fileType}</span>
                               <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
                               <span>{getFileSizeFormatted(doc.fileSize)}</span>
-                              
+
                               {/* Mobile Status Badge */}
                               <div className="sm:hidden ml-auto">
                                 {doc.status === 'PROCESSING' && <span className="text-zinc-500">Processing...</span>}
@@ -489,7 +489,7 @@ export default function TeacherDashboard() {
                             </div>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 pl-12 sm:pl-0 shrink-0">
                           {/* Desktop Status Badge */}
                           <div className="hidden sm:block">
@@ -517,7 +517,7 @@ export default function TeacherDashboard() {
                               </div>
                             )}
                           </div>
-                          
+
                           <button
                             onClick={() => handleDelete(doc.id)}
                             className="p-2 sm:opacity-0 sm:group-hover:opacity-100 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all focus:outline-none focus:opacity-100"

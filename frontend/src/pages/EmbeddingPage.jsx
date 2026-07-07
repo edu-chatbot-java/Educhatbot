@@ -261,7 +261,7 @@ export default function EmbeddingPage() {
                   <button
                     type="button"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className=" flex items-center justify-between ml-1 mr-1 p-3.5 bg-white border border-zinc-200 rounded-xl text-xs text-zinc-900 font-semibold focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-left shadow-sm hover:bg-zinc-100/50"
+                    className="w-[calc(100%-0.5rem)] mx-auto flex items-center justify-between p-3.5 bg-white border border-zinc-200 rounded-xl text-xs text-zinc-900 font-semibold focus:ring-2 focus:ring-zinc-900 focus:bg-white outline-none transition-all text-left shadow-sm hover:bg-zinc-100/50"
                   >
                     <span>
                       {subjects.find(s => s.code === selectedSubjectCode)
