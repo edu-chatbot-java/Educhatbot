@@ -5,17 +5,13 @@ export const authService = {
     const response = await api.post('/auth/login', credentials);
     const apiResponse = response.data;
     
-    // Xử lý cả 2 trường hợp: 
-    // 1. Backend mới (có bọc trong ApiResponse {success, data})
-    // 2. Backend cũ (Cloud Run hiện tại đang trả về trực tiếp {token, role})
-    const authData = (apiResponse && apiResponse.success !== undefined && apiResponse.data) 
-                      ? apiResponse.data 
-                      : apiResponse;
-
-    if (authData && authData.token) {
+    // Đọc dữ liệu từ trường 'data' của ApiResponse trả về từ Backend
+    if (apiResponse && apiResponse.success && apiResponse.data) {
+      const authData = apiResponse.data;
       localStorage.setItem('token', authData.token);
-      localStorage.setItem('userRole', authData.role ? authData.role.replace('ROLE_', '') : 'STUDENT');
-      return authData; // Trả về object chứa token/role gốc để AuthPage.jsx sử dụng
+      localStorage.setItem('refreshToken', authData.refreshToken); // Lưu Refresh Token
+      localStorage.setItem('userRole', authData.role.replace('ROLE_', ''));
+      return authData; // Trả về object chứa token/role gốc để AuthPage.jsx sử dụng bình thường
     }
     return null;
   },
@@ -25,8 +21,30 @@ export const authService = {
     return response.data;
   },
 
-  logout: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
+  refreshToken: async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      throw new Error('No refresh token found');
+    }
+    const response = await api.post('/auth/refresh', { refreshToken });
+    const apiResponse = response.data;
+    if (apiResponse && apiResponse.success && apiResponse.data) {
+      const authData = apiResponse.data;
+      localStorage.setItem('token', authData.accessToken || authData.token); // Lưu Access Token mới
+      return authData.accessToken || authData.token;
+    }
+    throw new Error('Refresh token invalid');
+  },
+
+  logout: async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (error) {
+      console.error('Lỗi khi gọi API đăng xuất:', error);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken'); // Xóa Refresh Token
+      localStorage.removeItem('userRole');
+    }
   }
 };
