@@ -82,6 +82,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(Long userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            auditLogService.logAction("ĐĂNG XUẤT", user.getEmail(), "Đăng xuất khỏi hệ thống thành công");
+        });
         refreshTokenService.deleteByUserId(userId);
     }
 }
