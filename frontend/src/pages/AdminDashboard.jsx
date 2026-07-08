@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Settings, Users, Search, 
-  FileText, Monitor, Star, Play, Shield, Trash2, Lock, Unlock, Edit
+  FileText, Monitor, Star, Play, Shield, Trash2, Lock, Unlock,
+  ChevronLeft, ChevronRight, Activity
 } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts';
 import { adminService } from '../services/admin.service';
 import EmbeddingPage from './EmbeddingPage';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminDashboard() {
   // --- STATE ---
@@ -25,13 +27,12 @@ export default function AdminDashboard() {
   // --- FETCH DATA ---
   useEffect(() => {
     loadDashboardData();
-  }, [currentPage]); // Load lại dữ liệu mỗi khi currentPage thay đổi
+  }, [currentPage]);
 
   const loadDashboardData = async () => {
     try {
       setLoading(true);
       
-      // 1. Gọi API thống kê tổng quan và biểu đồ
       const statsRes = await adminService.getDashboardStats(); 
       if (statsRes && statsRes.data) {
         setStats({
@@ -40,21 +41,18 @@ export default function AdminDashboard() {
           totalChats: statsRes.data.totalChatSessions || 14205
         });
         
-        // Backend chưa có API trả về mảng history, nên ta dùng số liệu tổng quan để render biểu đồ thực tế
         setLatencyData([
-          { name: 'Hiện tại', rag: statsRes.data.ragAverageLatencyMs || 120, ft: statsRes.data.finetuneAverageLatencyMs || 45 }
+          { name: 'Current', rag: statsRes.data.ragAverageLatencyMs || 120, ft: statsRes.data.finetuneAverageLatencyMs || 45 }
         ]);
         
         const ragWin = statsRes.data.ragWinRatePercentage || 65;
         setWinRateData([
-          { name: 'Tổng quan', rag: ragWin, ft: 100 - ragWin }
+          { name: 'Overall', rag: ragWin, ft: 100 - ragWin }
         ]);
       }
 
-      // Gọi API danh sách người dùng có phân trang
       const usersRes = await adminService.getUsers(currentPage, 10);
       
-      // Xử lý an toàn: tương thích với cả Backend mới (ApiResponse) và cũ
       const apiData = usersRes.data?.success !== undefined ? usersRes.data.data : usersRes.data;
       const usersList = apiData?.content || apiData || [];
       
@@ -62,8 +60,7 @@ export default function AdminDashboard() {
       setTotalPages(apiData?.totalPages || 1);
 
     } catch (err) {
-      console.error("Lỗi khi tải dữ liệu Dashboard:", err);
-      // Fallback mock data tạm thời để giao diện không bị trắng nếu API lỗi
+      console.error("Error loading dashboard data:", err);
       setLatencyData([
         { name: 'Q1', rag: 120, ft: 45 }, { name: 'Q2', rag: 150, ft: 50 },
       ]);
@@ -79,7 +76,6 @@ export default function AdminDashboard() {
     try {
       const response = await adminService.exportJsonl();
       
-      // Logic xử lý tải file Blob từ Browser
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -88,9 +84,9 @@ export default function AdminDashboard() {
       link.click();
       link.remove();
       
-      alert("Xuất dữ liệu thành công!");
+      alert("Data exported successfully!");
     } catch (err) {
-      alert("Xuất dữ liệu thất bại! Vui lòng kiểm tra lại mạng hoặc phân quyền.");
+      alert("Failed to export data. Please check permissions.");
       console.error(err);
     }
   };
@@ -100,17 +96,17 @@ export default function AdminDashboard() {
       await adminService.toggleUserStatus(userId);
       loadDashboardData();
     } catch (e) {
-      alert('Lỗi cập nhật trạng thái');
+      alert('Error updating status');
     }
   };
 
   const handleDeleteUser = async (userId) => {
-    if(window.confirm('Bạn có chắc chắn muốn xóa tài khoản này không? Mọi dữ liệu liên quan có thể bị mất.')) {
+    if(window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
       try {
         await adminService.deleteUser(userId);
         loadDashboardData();
       } catch(e) {
-        alert('Lỗi xóa user');
+        alert('Error deleting user');
       }
     }
   };
@@ -120,119 +116,153 @@ export default function AdminDashboard() {
       await adminService.changeRole(userId, newRole);
       loadDashboardData();
     } catch(e) {
-      alert('Lỗi phân quyền');
+      alert('Error updating role');
     }
   };
 
+  const tabs = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'documents', label: 'Documents' },
+    { id: 'users', label: 'Users' }
+  ];
+
   return (
-    <div className="flex-1 flex flex-col bg-muted/10 overflow-y-auto">
-      <div className="p-6 max-w-7xl mx-auto w-full space-y-6">
+    <div className="flex-1 w-full bg-zinc-50 h-full overflow-y-auto text-zinc-900 font-sans flex flex-col">
+      <div className="max-w-[1400px] mx-auto w-full px-6 py-8 md:py-12 flex-1 flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <motion.div 
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
+        >
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Admin Dashboard</h1>
             <p className="text-muted-foreground text-sm mt-1">Quản lý người dùng và theo dõi hiệu suất AI</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-md shadow-sm text-sm font-medium hover:bg-muted transition-colors">
-            <Settings size={16} /> Cài đặt hệ thống
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-zinc-200 text-zinc-700 font-medium rounded-full hover:border-zinc-300 hover:text-zinc-900 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-zinc-900">
+            <Settings size={16} /> 
+            <span>Settings</span>
           </button>
-        </div>
+        </motion.div>
 
         {/* Tabs Menu */}
-        <div className="flex space-x-1 bg-muted/50 p-1 rounded-lg w-max border border-border">
-          <button 
-            onClick={() => setActiveTab('overview')} 
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${activeTab === 'overview' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-          >
-            Tổng quan (Overview)
-          </button>
-          <button 
-            onClick={() => setActiveTab('documents')} 
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${activeTab === 'documents' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-          >
-            Tài liệu (Documents)
-          </button>
-          <button 
-            onClick={() => setActiveTab('users')} 
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${activeTab === 'users' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-          >
-            Người dùng (Users)
-          </button>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="flex space-x-2 bg-zinc-100 p-1.5 rounded-xl w-max mb-6"
+        >
+          {tabs.map((tab) => (
+            <button 
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)} 
+              className={`relative px-6 py-2.5 text-sm font-medium rounded-lg transition-colors focus:outline-none ${
+                activeTab === tab.id ? 'text-zinc-900' : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              {activeTab === tab.id && (
+                <motion.div 
+                  layoutId="active-tab-indicator"
+                  className="absolute inset-0 bg-white rounded-lg shadow-sm border border-zinc-200/50"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{tab.label}</span>
+            </button>
+          ))}
+        </motion.div>
 
-        {/* Tab Content: OVERVIEW */}
-        {activeTab === 'overview' && (
-          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
-            {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-card border border-border p-6 rounded-xl shadow-sm">
-            <div className="flex items-center gap-3 mb-2 text-primary">
-              <Monitor size={20} />
-              <p className="text-sm font-medium text-muted-foreground">Độ trễ trung bình (RAG)</p>
-            </div>
-            <h3 className="text-2xl font-bold mt-1">
-              {loading ? "..." : `${stats.avgLatency}ms`}
-            </h3>
-          </div>
-          <div className="bg-card border border-border p-6 rounded-xl shadow-sm">
-            <div className="flex items-center gap-3 mb-2 text-yellow-500">
-              <Star size={20} />
-              <p className="text-sm font-medium text-muted-foreground">Tỉ lệ hài lòng (Rating)</p>
-            </div>
-            <h3 className="text-2xl font-bold mt-1">
-              {loading ? "..." : `${stats.rating} / 5.0`}
-            </h3>
-          </div>
-          <div className="bg-card border border-border p-6 rounded-xl shadow-sm">
-            <div className="flex items-center gap-3 mb-2 text-blue-500">
-              <Users size={20} />
-              <p className="text-sm font-medium text-muted-foreground">Tổng lượt tương tác</p>
-            </div>
-            <h3 className="text-2xl font-bold mt-1">
-              {loading ? "..." : stats.totalChats.toLocaleString()}
-            </h3>
-          </div>
-        </div>
+        <div className="flex-1 w-full relative">
+          <AnimatePresence mode="wait">
+            {/* OVERVIEW TAB */}
+            {activeTab === 'overview' && (
+              <motion.div 
+                key="overview"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-10"
+              >
+                {/* Metrics Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white border border-zinc-200 p-8 rounded-2xl shadow-sm flex flex-col justify-between h-40">
+                    <div className="flex items-center gap-3 text-zinc-500">
+                      <Activity size={18} />
+                      <p className="text-sm font-medium">Avg RAG Latency</p>
+                    </div>
+                    <h3 className="text-4xl font-medium tracking-tight text-zinc-950">
+                      {loading ? "..." : `${stats.avgLatency}ms`}
+                    </h3>
+                  </div>
+                  <div className="bg-white border border-zinc-200 p-8 rounded-2xl shadow-sm flex flex-col justify-between h-40">
+                    <div className="flex items-center gap-3 text-zinc-500">
+                      <Star size={18} />
+                      <p className="text-sm font-medium">User Satisfaction</p>
+                    </div>
+                    <h3 className="text-4xl font-medium tracking-tight text-zinc-950">
+                      {loading ? "..." : `${stats.rating}`} <span className="text-2xl text-zinc-400 font-normal">/5.0</span>
+                    </h3>
+                  </div>
+                  <div className="bg-white border border-zinc-200 p-8 rounded-2xl shadow-sm flex flex-col justify-between h-40">
+                    <div className="flex items-center gap-3 text-zinc-500">
+                      <Users size={18} />
+                      <p className="text-sm font-medium">Total Interactions</p>
+                    </div>
+                    <h3 className="text-4xl font-medium tracking-tight text-zinc-950">
+                      {loading ? "..." : stats.totalChats.toLocaleString()}
+                    </h3>
+                  </div>
+                </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-card border border-border rounded-xl shadow-sm p-6">
-            <h3 className="font-semibold mb-6 flex items-center gap-2">
-              <Play size={18} className="text-primary" /> Latency: RAG vs Fine-tuning
-            </h3>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={latencyData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" fontSize={12} />
-                  <YAxis fontSize={12} />
-                  <RechartsTooltip contentStyle={{ borderRadius: '8px' }} />
-                  <Legend />
-                  <Line type="monotone" dataKey="rag" name="RAG (ms)" stroke="hsl(var(--primary))" strokeWidth={3} />
-                  <Line type="monotone" dataKey="ft" name="Fine-tuning (ms)" stroke="hsl(var(--destructive))" strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          
-          <div className="bg-card border border-border rounded-xl shadow-sm p-6">
-            <h3 className="font-semibold mb-4 text-sm">Tỉ lệ thắng (Win-rate Blind Test)</h3>
-            <div className="h-48 mt-8">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={winRateData} layout="vertical">
-                  <YAxis dataKey="name" type="category" fontSize={12} width={80} />
-                  <RechartsTooltip cursor={{fill: 'transparent'}} />
-                  <Legend verticalAlign="top" height={36} />
-                  <Bar dataKey="rag" name="RAG (%)" stackId="a" fill="hsl(var(--primary))" radius={[0, 0, 0, 0]} />
-                  <Bar dataKey="ft" name="Fine-tuning (%)" stackId="a" fill="hsl(var(--destructive))" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-        </div>
-        )}
+                {/* Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-8">
+                    <h3 className="font-medium text-lg text-zinc-900 mb-8 flex items-center gap-2">
+                      <Play size={16} className="text-zinc-400" /> Latency Profile
+                    </h3>
+                    <div className="h-[280px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={latencyData}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e4e4e7" />
+                          <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} tick={{fill: '#71717a'}} />
+                          <YAxis fontSize={12} tickLine={false} axisLine={false} tick={{fill: '#71717a'}} />
+                          <RechartsTooltip 
+                            contentStyle={{ borderRadius: '12px', border: '1px solid #e4e4e7', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }} 
+                            cursor={{stroke: '#e4e4e7', strokeWidth: 2}}
+                          />
+                          <Legend iconType="circle" wrapperStyle={{ fontSize: '13px', paddingTop: '10px' }} />
+                          <Line type="monotone" dataKey="rag" name="RAG (ms)" stroke="#18181b" strokeWidth={3} dot={{r: 4, strokeWidth: 2}} activeDot={{r: 6}} />
+                          <Line type="monotone" dataKey="ft" name="Fine-tuning (ms)" stroke="#a1a1aa" strokeWidth={3} dot={{r: 4, strokeWidth: 2}} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-8">
+                    <h3 className="font-medium text-lg text-zinc-900 mb-8">Win-rate Blind Test</h3>
+                    <div className="h-[280px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={winRateData} layout="vertical" barSize={32}>
+                          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e4e4e7" />
+                          <XAxis type="number" fontSize={12} tickLine={false} axisLine={false} tick={{fill: '#71717a'}} />
+                          <YAxis dataKey="name" type="category" fontSize={12} tickLine={false} axisLine={false} width={80} tick={{fill: '#71717a'}} />
+                          <RechartsTooltip 
+                            cursor={{fill: '#f4f4f5'}}
+                            contentStyle={{ borderRadius: '12px', border: '1px solid #e4e4e7', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }} 
+                          />
+                          <Legend iconType="circle" wrapperStyle={{ fontSize: '13px', paddingTop: '10px' }} />
+                          <Bar dataKey="rag" name="RAG (%)" stackId="a" fill="#18181b" radius={[4, 0, 0, 4]} />
+                          <Bar dataKey="ft" name="Fine-tuning (%)" stackId="a" fill="#d4d4d8" radius={[0, 4, 4, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
 
         {/* Data Table - Quản lý User */}
         <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
@@ -294,7 +324,11 @@ export default function AdminDashboard() {
                         {(user.active !== false && user.isActive !== false) ? (
                           <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-500"><Unlock size={14}/> Hoạt động</span>
                         ) : (
-                          <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><Lock size={14}/> Đã khóa</span>
+                          <tr>
+                            <td colSpan="6" className="px-6 py-12 text-center text-zinc-500">
+                              No users found in directory.
+                            </td>
+                          </tr>
                         )}
                       </td>
                       <td className="px-6 py-4 text-right space-x-2">
@@ -359,6 +393,24 @@ export default function AdminDashboard() {
           </div>
         )}
 
+            {/* DOCUMENTS TAB */}
+            {activeTab === 'documents' && (
+              <motion.div 
+                key="documents"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden"
+              >
+                {/* Embedded EmbeddingPage inherently has min-h-screen and bg-zinc-50, which looks perfect inside this container too because it will stretch, or we can let it be self-contained. Actually EmbeddingPage has its own max-w-1400px wrapper. To avoid double padding, let's just render it directly but handle it properly. */}
+                <div className="-mt-12 -mb-12">
+                  <EmbeddingPage />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
