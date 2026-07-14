@@ -14,4 +14,10 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     
     // Lấy danh sách tin nhắn theo điểm đánh giá
     List<ChatMessage> findByUserRating(Integer rating);
+
+    @org.springframework.data.jpa.repository.Query("SELECT AVG(m.userRating) FROM ChatMessage m WHERE m.userRating IS NOT NULL")
+    Double getAverageRating();
+
+    @org.springframework.data.jpa.repository.Query("SELECT AVG(m.latencyMs) FROM ChatMessage m WHERE m.approach = :approach")
+    Double getAverageLatencyByApproach(@org.springframework.data.repository.query.Param("approach") com.edu.chatbot.chat.entity.Approach approach);
 }
