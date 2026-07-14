@@ -58,14 +58,16 @@ export default function AdminDashboard() {
     try {
       const statsRes = await adminService.getDashboardStats(); 
       if (statsRes && statsRes.data) {
-        const baseRag = statsRes.data.ragAverageLatencyMs || 125;
-        const baseFt = statsRes.data.finetuneAverageLatencyMs || 45;
-        const ragWin = statsRes.data.ragWinRatePercentage || 65;
+        const payload = statsRes.data.success !== undefined ? statsRes.data.data : statsRes.data;
+        
+        const baseRag = payload?.ragAverageLatencyMs ?? 0;
+        const baseFt = payload?.finetuneAverageLatencyMs ?? 0;
+        const ragWin = payload?.ragWinRatePercentage ?? 0;
 
         setStats({
           avgLatency: baseRag,
-          rating: statsRes.data.averageRating || 4.7,
-          totalChats: statsRes.data.totalChatSessions || 14205
+          rating: payload?.averageRating ?? 0,
+          totalChats: payload?.totalChatSessions ?? 0
         });
         
         // Mock 7-day historical trend based on real average to make chart look alive
@@ -76,8 +78,8 @@ export default function AdminDashboard() {
           
           return {
             name: dateStr,
-            rag: Math.round(baseRag * (0.85 + Math.random() * 0.3)),
-            ft: Math.round(baseFt * (0.85 + Math.random() * 0.3))
+            rag: baseRag === 0 ? 0 : Math.round(baseRag * (0.85 + Math.random() * 0.3)),
+            ft: baseFt === 0 ? 0 : Math.round(baseFt * (0.85 + Math.random() * 0.3))
           };
         });
         historicalData[6].rag = baseRag; // Set exact value for today
@@ -93,16 +95,16 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       console.error("Error loading stats:", err);
-      // Fallback mocks if backend is down
+      // If backend fails, show empty state instead of mock data
       setLatencyData([
-        { name: 'Mon', rag: 120, ft: 45 }, { name: 'Tue', rag: 150, ft: 50 },
-        { name: 'Wed', rag: 110, ft: 40 }, { name: 'Thu', rag: 130, ft: 55 },
-        { name: 'Fri', rag: 125, ft: 42 }, { name: 'Sat', rag: 140, ft: 48 },
-        { name: 'Sun', rag: 125, ft: 45 }
+        { name: 'Mon', rag: 0, ft: 0 }, { name: 'Tue', rag: 0, ft: 0 },
+        { name: 'Wed', rag: 0, ft: 0 }, { name: 'Thu', rag: 0, ft: 0 },
+        { name: 'Fri', rag: 0, ft: 0 }, { name: 'Sat', rag: 0, ft: 0 },
+        { name: 'Sun', rag: 0, ft: 0 }
       ]);
       setWinRateData([
-        { name: 'RAG', value: 65, color: '#10b981' },
-        { name: 'Fine-tuning', value: 35, color: '#a1a1aa' }
+        { name: 'RAG', value: 0, color: '#10b981' },
+        { name: 'Fine-tuning', value: 0, color: '#a1a1aa' }
       ]);
     }
   };
