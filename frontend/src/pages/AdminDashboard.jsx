@@ -87,7 +87,7 @@ export default function AdminDashboard() {
         setLatencyData(historicalData);
         
         setWinRateData([
-          { name: 'RAG', value: ragWin, color: '#18181b' },
+          { name: 'RAG', value: ragWin, color: '#10b981' },
           { name: 'Fine-tuning', value: 100 - ragWin, color: '#a1a1aa' }
         ]);
       }
@@ -101,7 +101,7 @@ export default function AdminDashboard() {
         { name: 'Sun', rag: 125, ft: 45 }
       ]);
       setWinRateData([
-        { name: 'RAG', value: 65, color: '#18181b' },
+        { name: 'RAG', value: 65, color: '#10b981' },
         { name: 'Fine-tuning', value: 35, color: '#a1a1aa' }
       ]);
     }
@@ -307,8 +307,8 @@ export default function AdminDashboard() {
                         <AreaChart data={latencyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                           <defs>
                             <linearGradient id="colorRag" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#18181b" stopOpacity={0.2}/>
-                              <stop offset="95%" stopColor="#18181b" stopOpacity={0}/>
+                              <stop offset="5%" stopColor="#10b981" stopOpacity={0.2}/>
+                              <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
                             </linearGradient>
                             <linearGradient id="colorFt" x1="0" y1="0" x2="0" y2="1">
                               <stop offset="5%" stopColor="#a1a1aa" stopOpacity={0.2}/>
@@ -323,7 +323,7 @@ export default function AdminDashboard() {
                             cursor={{stroke: '#e4e4e7', strokeWidth: 1, strokeDasharray: '3 3'}}
                           />
                           <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '13px', paddingBottom: '10px' }} />
-                          <Area type="monotone" dataKey="rag" name="RAG (ms)" stroke="#18181b" fillOpacity={1} fill="url(#colorRag)" strokeWidth={2.5} activeDot={{ r: 5, strokeWidth: 0 }} />
+                          <Area type="monotone" dataKey="rag" name="RAG (ms)" stroke="#10b981" fillOpacity={1} fill="url(#colorRag)" strokeWidth={2.5} activeDot={{ r: 5, strokeWidth: 0 }} />
                           <Area type="monotone" dataKey="ft" name="Fine-tuning (ms)" stroke="#a1a1aa" fillOpacity={1} fill="url(#colorFt)" strokeWidth={2.5} activeDot={{ r: 5, strokeWidth: 0 }} />
                         </AreaChart>
                       </ResponsiveContainer>
