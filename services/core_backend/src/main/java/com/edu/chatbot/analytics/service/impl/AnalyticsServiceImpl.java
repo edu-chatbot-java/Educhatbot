@@ -49,14 +49,14 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     public DashboardResponse getDashboardStats() {
         log.info("Đang tổng hợp số liệu cho Dashboard...");
 
-        // 1. Lấy số liệu cơ bản từ FeedbackRepository
-        Double avgRating = feedbackRepo.getAverageRating();
+        // 1. Lấy số liệu rating thực tế từ chat_messages
+        Double avgRating = chatMessageRepo.getAverageRating();
         Long ragWins = feedbackRepo.countBlindTestWinsByApproach("RAG");
         Long finetuneWins = feedbackRepo.countBlindTestWinsByApproach("FINETUNE");
 
-        // 2. Lấy số liệu từ EvaluationResultRepository
-        Double ragAvgLatency = evalRepo.getAverageLatencyByApproach("RAG");
-        Double finetuneAvgLatency = evalRepo.getAverageLatencyByApproach("FINETUNE");
+        // 2. Lấy số liệu latency thực tế từ chat_messages
+        Double ragAvgLatency = chatMessageRepo.getAverageLatencyByApproach(com.edu.chatbot.chat.entity.Approach.RAG);
+        Double finetuneAvgLatency = chatMessageRepo.getAverageLatencyByApproach(com.edu.chatbot.chat.entity.Approach.FINETUNE);
         Double avgFaithfulness = evalRepo.getAverageFaithfulnessByApproach("RAG");
         Double avgRelevancy = evalRepo.getAverageRelevancyByApproach("FINETUNE");
         // 3. Tính toán tỷ lệ thắng (Win Rate) cho bài Test Mù (Blind Test)
