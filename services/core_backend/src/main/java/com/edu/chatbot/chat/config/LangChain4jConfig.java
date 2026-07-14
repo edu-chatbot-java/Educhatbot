@@ -32,14 +32,14 @@ public class LangChain4jConfig {
     @Value("${groq.rewriting-model}")
     private String groqRewritingModel;
 
-    @Value("${openrouter.api-key:dummy-key}")
-    private String openRouterApiKey;
+    @Value("${google.api-key:dummy-key}")
+    private String googleApiKey;
 
-    @Value("${openrouter.base-url:https://openrouter.ai/api/v1}")
-    private String openRouterBaseUrl;
+    @Value("${google.base-url:https://generativelanguage.googleapis.com/v1beta/openai/}")
+    private String googleBaseUrl;
 
-    @Value("${openrouter.eval-model:google/gemma-4-31b-it:free}")
-    private String openRouterEvalModel;
+    @Value("${google.eval-model:gemini-3.1-flash-lite-preview}")
+    private String googleEvalModel;
 
     @Bean
     public ChatLanguageModel chatModel() {
@@ -66,9 +66,9 @@ public class LangChain4jConfig {
     @Bean("evalModel")
     public ChatLanguageModel evalModel() {
         return OpenAiChatModel.builder()
-                .apiKey(openRouterApiKey)
-                .baseUrl(openRouterBaseUrl)
-                .modelName(openRouterEvalModel)
+                .apiKey(googleApiKey)
+                .baseUrl(googleBaseUrl)
+                .modelName(googleEvalModel)
                 .maxTokens(1024)
                 .timeout(Duration.ofSeconds(120)) // Auto Eval can be slow
                 .build();

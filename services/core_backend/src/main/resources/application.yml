@@ -84,8 +84,8 @@ huggingface:
     id: ${HF_MODEL_ID:thinhpg1420/llama3.1-8b-java-chatbot-lora}
 
 # ─── OpenRouter API (TV6 - Auto Evaluation / LLM-as-a-Judge) ───────────────────────────
-openrouter:
-  api-key: ${OPENROUTER_API_KEY:}
-  base-url: https://openrouter.ai/api/v1
-  eval-model: google/gemma-2-27b-it
+google:
+  api-key: ${GOOGLE_API_KEY:}
+  base-url: https://generativelanguage.googleapis.com/v1beta/openai/
+  eval-model: gemini-3.1-flash-lite-preview
 
