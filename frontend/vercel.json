@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://edu-backend-35971955178.asia-northeast3.run.app/api/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
